@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinTech Corp - Gestión de Cuentas</title>
+    <title>FinTech Corp - Gestión de Tarjetas</title>
 
     <!-- Bootstrap 5 CSS LOCAL -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
             -webkit-backdrop-filter: blur(12px);
         }
 
-        /* Luces ambientales traseras */
+        /* Luces ambientales traseras (Mismo estilo que Panel Principal) */
         .dashboard-glow {
             position: absolute;
             width: 500px;
@@ -54,7 +54,7 @@
             z-index: 0;
         }
 
-        /* Ajustes de navegación idénticos al Panel Principal y Tarjetas */
+        /* Ajustes de navegación idénticos al Panel Principal */
         .sidebar-link {
             color: #B9CACB;
             border-left: 4px solid transparent;
@@ -72,7 +72,7 @@
             box-shadow: -4px 0px 15px -2px rgba(0, 219, 231, 0.2);
         }
 
-        /* Estilización de Inputs y Selects oscuros */
+        /* Estilización de Inputs y Selects oscuros manteniendo el Look UI */
         .form-control-dark, .form-select-dark {
             border: 1px solid rgba(255, 255, 255, 0.05);
             color: #ffffff;
@@ -112,11 +112,11 @@
                 <a href="principal-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
                     <i class="bi bi-grid-1x2-fill fs-5"></i> <span>Panel principal</span>
                 </a>
-                <!-- Ítem Activo en esta vista -->
-                <a href="gestion-cuentas-usuario.jsp" class="sidebar-link active d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
+                <a href="gestion-cuentas-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
                     <i class="bi bi-bank fs-5"></i> <span>Cuentas</span>
                 </a>
-                <a href="gestion-tarjetas-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
+                <!-- Ítem Activo en esta vista -->
+                <a href="gestion-tarjetas-usuario.jsp" class="sidebar-link active d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
                     <i class="bi bi-credit-card fs-5"></i> <span>Tarjetas</span>
                 </a>
                 <a href="gestion-transferencia-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
@@ -149,20 +149,20 @@
         <!-- Título de la Sección -->
         <div class="row mb-4">
             <div class="col-12">
-                <h2 class="fw-bold display-6" style="color: #E1FDFF;">Gestión de cuentas</h2>
-                <p class="text-figma-muted m-0 fs-6 opacity-75">Maneja tus cuentas corporativas y los fondos proporcionados por la empresa</p>
+                <h2 class="fw-bold display-6" style="color: #E1FDFF;">Gestión de Tarjetas</h2>
+                <p class="text-figma-muted m-0 fs-6 opacity-75">Gestiona y da de alta tarjetas para tus cuentas institucionales.</p>
             </div>
         </div>
 
         <!-- BARRA DE BÚSQUEDA Y FILTRADO -->
         <div class="bg-figma-card rounded-4 p-3 mb-4 border backdrop-blur font-jakarta" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
             <form class="row g-3 align-items-end">
-                <!-- Buscar Cuenta -->
+                <!-- Buscar Tarjeta -->
                 <div class="col-12 col-md-8 col-lg-9">
-                    <label class="text-figma-gray fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 10px; letter-spacing: 1px;">Buscar cuenta</label>
+                    <label class="text-figma-gray fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 10px; letter-spacing: 1px;">Buscar tarjeta</label>
                     <div class="input-group rounded-2 overflow-hidden">
-                        <span class="input-group-text bg-figma-input border-0 text-secondary px-3"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control form-control-dark bg-figma-input py-2 text-figma-muted border-0 shadow-none" placeholder="Nombre de la cuenta...">
+                        <span class="input-group-text bg-figma-input border-0 text-secondary px-3"><i class="bi bi-credit-card"></i></span>
+                        <input type="text" class="form-control form-control-dark bg-figma-input py-2 text-figma-muted border-0 shadow-none" placeholder="Alias de la tarjeta...">
                     </div>
                 </div>
                 <!-- Estado Select -->
@@ -172,6 +172,7 @@
                         <option selected>Todos los estados</option>
                         <option value="1">Activas</option>
                         <option value="2">Inactivas</option>
+                        <option value="3">Bloqueadas</option>
                     </select>
                 </div>
             </form>
@@ -180,19 +181,19 @@
         <!-- REJILLA PRINCIPAL DE CONTENIDO -->
         <div class="row g-4 font-jakarta">
 
-            <!-- COLUMNA IZQUIERDA: Lista de Cuentas (Empty State) -->
+            <!-- COLUMNA IZQUIERDA: Lista de Tarjetas (Empty State) -->
             <div class="col-12 col-xl-8">
                 <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 min-vh-50 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
-                    <h3 class="fw-semibold text-white mb-5 fs-5">Mis cuentas</h3>
+                    <h3 class="fw-semibold text-white mb-5 fs-5">Mis tarjetas</h3>
 
                     <!-- Contenedor del Estado Vacío -->
                     <div class="d-flex flex-column align-items-center justify-content-center text-center my-auto py-5">
-                        <div class="position-relative mb-4 text-secondary opacity-25">
-                            <i class="bi bi-folder-fill" style="font-size: 5.5rem;"></i>
-                            <i class="bi bi-bar-chart-fill position-absolute text-figma-cyan fs-4" style="bottom: 12px; right: 22px;"></i>
+                        <div class="position-relative mb-4 text-secondary opacity-50">
+                            <i class="bi bi-wallet2 display-1"></i>
+                            <i class="bi bi-plus-circle-fill position-absolute bottom-0 end-0 text-figma-cyan fs-3 bg-dark rounded-circle"></i>
                         </div>
-                        <h4 class="h5 text-light fw-normal mb-2">Aún no hay cuentas registradas.</h4>
-                        <p class="text-figma-muted small mx-auto" style="max-width: 380px;">Aún no se han agregado datos para mostrar en esta vista.</p>
+                        <h4 class="h5 text-light fw-normal mb-2">No tienes tarjetas registradas aún.</h4>
+                        <p class="text-figma-muted small mx-auto" style="max-width: 380px;">Dales de alta para empezar a gestionar tus gastos institucionales.</p>
                     </div>
                 </div>
             </div>
@@ -200,15 +201,15 @@
             <!-- COLUMNA DERECHA: Detalle Lateral (Empty State) -->
             <div class="col-12 col-xl-4">
                 <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
-                    <h3 class="fw-semibold text-white mb-5 fs-5">Detalles de la cuenta</h3>
+                    <h3 class="fw-semibold text-white mb-5 fs-5">Detalles de la tarjeta</h3>
 
                     <!-- Contenedor del Estado Vacío del Detalle -->
                     <div class="d-flex flex-column align-items-center justify-content-center text-center my-auto py-5">
-                        <div class="position-relative mb-4 text-secondary opacity-25">
-                            <i class="bi bi-wallet2" style="font-size: 5rem;"></i>
+                        <div class="mb-4 text-secondary opacity-25">
+                            <i class="bi bi-credit-card-2-front" style="font-size: 5rem;"></i>
                         </div>
-                        <h4 class="h6 text-light fw-medium mb-2">Selecciona una cuenta</h4>
-                        <p class="text-figma-muted small mx-auto" style="max-width: 250px;">Los detalles de la cuenta seleccionada se mostrarán aquí.</p>
+                        <h4 class="h6 text-light fw-medium mb-2">Selecciona una tarjeta</h4>
+                        <p class="text-figma-muted small mx-auto" style="max-width: 250px;">Los detalles de la tarjeta seleccionada se mostrarán aquí.</p>
                     </div>
                 </div>
             </div>

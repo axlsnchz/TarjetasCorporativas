@@ -2,8 +2,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FinTech Corp - Panel Principal</title>
+  <title>FinTech Corp - Inicio de Sesi&oacute;n</title>
 
   <!-- Bootstrap 5 CSS LOCAL -->
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -12,382 +13,142 @@
   <link href="assets/icons/bootstrap-icons.css" rel="stylesheet">
 
   <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* Estilos estructurales y tipografía base */
     body {
       font-family: 'Inter', sans-serif;
       background-color: #0C0E12;
-      color: #E2E2E8;
-      min-height: 100vh;
-      overflow-x: hidden;
     }
 
-    /* Color Figma para textos secundarios */
-    .text-figma-muted {
-      color: #B9CACB !important;
+    /* Paleta de colores específicos del Figma */
+    .bg-figma-dark { background-color: #0C0E12 !important; }
+    .bg-figma-card { background-color: rgba(30, 32, 36, 0.50) !important; }
+    .bg-figma-form { background-color: #111318 !important; }
+    .bg-figma-input { background-color: #1A1C20 !important; }
+    .text-figma-cyan { color: #00DBE7 !important; }
+    .text-figma-muted { color: #B9CACB !important; }
+
+    /* Efectos Figma avanzados (No nativos en Bootstrap) */
+    .backdrop-blur {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
-    /* Luces ambientales de fondo */
-    .dashboard-glow {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: rgba(112, 0, 255, 0.03);
-      filter: blur(140px);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
+    /* Resplandores y luces ambientales traseras */
+    .bg-glow-purple {
+      position: absolute; width: 600px; height: 600px; left: 50%; top: 10%;
+      background: rgba(112, 0, 255, 0.04); filter: blur(120px); border-radius: 50%; z-index: 0;
     }
-
-    /* Layout general */
-    .wrapper {
-      display: flex;
-      min-height: 100vh;
+    .bg-glow-cyan {
+      position: absolute; width: 500px; height: 500px; left: 20%; top: 30%;
+      background: rgba(0, 242, 255, 0.04); filter: blur(120px); border-radius: 50%; z-index: 0;
     }
-
-    /* BARRA LATERAL (Sidebar) */
-    .sidebar {
-      width: 260px;
-      background-color: #0C0E12;
-      border-right: 1px solid rgba(58, 73, 75, 0.15);
-      backdrop-filter: blur(12px);
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 100;
-      padding: 32px 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100vh;
+    .banner-glow-1 {
+      position: absolute; width: 300px; height: 300px; left: -100px; top: -100px;
+      background: rgba(0, 242, 255, 0.08); filter: blur(70px); border-radius: 50%;
     }
-
-    .sidebar-brand h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #00DBE7;
-      line-height: 1.1;
-    }
-
-    .sidebar-menu .nav-link-custom {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 24px;
-      color: #B9CACB;
-      text-decoration: none;
-      font-size: 0.95rem;
-      border-left: 4px solid transparent;
-      transition: all 0.2s ease;
-    }
-
-    .sidebar-menu .nav-link-custom i {
-      font-size: 1.2rem;
-    }
-
-    .sidebar-menu .nav-link-custom:hover {
-      color: #00DBE7;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .sidebar-menu .nav-link-custom.active {
-      background: rgba(112, 0, 255, 0.12);
-      border-left-color: #00DBE7;
-      color: #00DBE7;
-      font-weight: 500;
-      box-shadow: -4px 0px 15px -2px rgba(0, 219, 231, 0.2);
-    }
-
-    .sidebar-footer {
-      padding: 0 24px;
-      width: 100%;
-    }
-
-    .btn-logout-custom {
-      border: 1px solid #3B494C;
-      color: #BAC9CC;
-      background: transparent;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.95rem;
-      transition: all 0.2s ease;
-      width: 100%;
-      text-align: center;
-    }
-
-    .btn-logout-custom:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: #FFF;
-      border-color: #5c6869;
-    }
-
-    /* CONTENIDO PRINCIPAL */
-    .main-content {
-      flex-grow: 1;
-      margin-left: 260px;
-      padding: 40px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .top-profile-bar {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-
-    .profile-icon {
-      font-size: 1.8rem;
-      color: #00DBE7;
-      cursor: pointer;
-    }
-
-    /* TARJETAS */
-    .dashboard-card {
-      background: #14171C;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 24px;
-      padding: 24px;
-      backdrop-filter: blur(10px);
-    }
-
-    /* NUEVA TARJETA DE AVISO (Figma Style) */
-    .notice-card {
-      background: #001415;
-      border: 1.5px solid rgba(0, 219, 231, 0.70);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0px 0px 28px -8px rgba(34, 211, 238, 0.40);
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    /* Filtros */
-    .pill-filter {
-      padding: 6px 16px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      border-radius: 50px;
-      cursor: pointer;
-      border: none;
-    }
-    .pill-filter.inactive {
-      background: #282A2E;
-      color: #E2E2E8;
-      border: 1px solid rgba(58, 73, 75, 0.30);
-    }
-    .pill-filter.active {
-      background: #00F2FF;
-      color: #00363A;
-    }
-
-    /* Buscador */
-    .search-container-custom {
-      position: relative;
-      width: 100%;
-    }
-    .search-container-custom i {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #6B7280;
-    }
-    .search-input-custom {
-      background: #0C0E12;
-      border: 1px solid rgba(58, 73, 75, 0.25);
-      border-radius: 50px;
-      padding: 10px 16px 10px 42px;
-      color: #E2E2E8;
-      font-size: 0.9rem;
-      width: 100%;
-    }
-
-    .empty-state-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 240px;
-    }
-    .empty-state-icon {
-      font-size: 3.5rem;
-      color: #4B4B52;
-      margin-bottom: 12px;
-    }
-
-    .days-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 10px;
-      margin-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding-top: 16px;
-    }
-    .day-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .banner-glow-2 {
+      position: absolute; width: 300px; height: 300px; right: -100px; bottom: -100px;
+      background: rgba(112, 0, 255, 0.08); filter: blur(70px); border-radius: 50%;
     }
   </style>
 </head>
-<body>
+<body class="d-flex justify-content-center align-items-center min-vh-100 p-3 p-md-4 overflow-x-hidden position-relative">
 
-<div class="wrapper">
-  <div class="dashboard-glow" style="left: 30%; top: 20%;"></div>
+<!-- Efectos de Fondo Ambientales -->
+<div class="bg-glow-purple"></div>
+<div class="bg-glow-cyan"></div>
 
-  <!-- BARRA LATERAL (SIDEBAR) -->
-  <nav class="sidebar">
-    <div class="w-100">
-      <div class="sidebar-brand px-4 mb-4">
-        <h1>FinTech<br>Corp</h1>
-        <div class="text-uppercase text-figma-muted" style="font-size: 0.7rem; letter-spacing: 0.6px; font-weight: 700;">
-          Banca Institucional
+<!-- Contenedor de la Tarjeta Principal (Totalmente Bootstrap) -->
+<div class="row g-0 rounded-5 overflow-hidden w-100 position-relative backdrop-blur bg-figma-card border border-white border-opacity-10"
+     style="max-width: 1100px; box-shadow: 0px 25px 50px -12px rgba(0, 242, 255, 0.05); z-index: 1;">
+
+  <!-- COLUMNA IZQUIERDA: Branding e Info -->
+  <div class="col-lg-6 bg-figma-dark position-relative overflow-hidden d-flex flex-column justify-content-between p-5 text-center">
+    <div class="banner-glow-1"></div>
+    <div class="banner-glow-2"></div>
+
+    <div class="my-auto position-relative" style="z-index: 1;">
+      <!-- Logo Principal con Brillo Figma -->
+      <div class="rounded-3 d-flex align-items-center justify-content-center mx-auto mb-4 text-dark fs-1"
+           style="width: 80px; height: 80px; background-color: #00DBE7; box-shadow: 0px 0px 25px rgba(0, 242, 255, 0.6);">
+        <i class="bi bi-building-columns-fill"></i>
+      </div>
+
+      <h1 class="display-5 fw-bold mb-3 text-figma-cyan">FinTech Corp</h1>
+      <p class="mx-auto mb-5 text-figma-muted style-normal" style="max-width: 380px; font-size: 0.95rem; line-height: 1.6;">
+        Administraci&oacute;n y control centralizado de fondos corporativos para equipos de trabajo.
+      </p>
+    </div>
+
+    <!-- Fila de Características (Usando Cards de Bootstrap limpias) -->
+    <div class="row g-2 position-relative w-100 mx-0 mt-4" style="z-index: 1;">
+      <div class="col-4">
+        <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
+          <i class="bi bi-shield-lock mb-1 fs-5 d-block"></i> CONTROL
         </div>
       </div>
-
-      <div class="sidebar-menu mt-5">
-        <a href="#" class="nav-link-custom active">
-          <i class="bi bi-grid-1x2-fill"></i> Panel principal
-        </a>
-        <a href="#" class="nav-link-custom">
-          <i class="bi bi-bank"></i> Cuentas
-        </a>
-        <a href="#" class="nav-link-custom">
-          <i class="bi bi-credit-card"></i> Tarjetas
-        </a>
-        <a href="#" class="nav-link-custom">
-          <i class="bi bi-arrow-left-right"></i> Transferencias
-        </a>
-        <a href="#" class="nav-link-custom">
-          <i class="bi bi-gear"></i> Configuraci&oacute;n
-        </a>
-      </div>
-    </div>
-
-    <div class="sidebar-footer">
-      <button class="btn-logout-custom">
-        Cerrar Sesi&oacute;n
-      </button>
-    </div>
-  </nav>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="main-content">
-
-    <div class="top-profile-bar">
-      <i class="bi bi-person-circle profile-icon"></i>
-    </div>
-
-    <div class="row mb-4">
-      <div class="col-12">
-        <h2 class="fw-bold" style="color: #E1FDFF; font-size: 2.5rem;">Panel Principal</h2>
-      </div>
-    </div>
-
-    <!-- SECCIÓN SUPERIOR: Saldo Total + Aviso Reemplazado -->
-    <div class="row g-4 mb-4 align-items-stretch">
-      <!-- Saldo Total -->
-      <div class="col-xl-4 col-lg-5">
-        <div class="dashboard-card h-100 d-flex flex-column justify-content-center">
-            <span class="text-uppercase fw-bold mb-1" style="color: #00DBE7; font-size: 0.75rem; letter-spacing: 1.2px;">
-              Saldo total
-            </span>
-          <h3 class="display-5 fw-bold m-0 text-white">$0.0</h3>
+      <div class="col-4">
+        <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
+          <i class="bi bi-sliders mb-1 fs-5 d-block"></i> FLEXIBLE
         </div>
       </div>
-
-      <!-- Panel de Aviso (Sustituto de viáticos, gasolina y bonos) -->
-      <div class="col-xl-8 col-lg-7">
-        <div class="notice-card">
-          <h4 class="fw-bold text-white mb-2" style="font-size: 1.4rem;">Bienvenido a FinTech Corp</h4>
-          <p class="m-0" style="color: #CBD5E1; font-size: 0.9rem; line-height: 1.6;">
-            Actualmente tu perfil no tiene cuentas corporativas asignadas. Tu administrador est&aacute; en
-            proceso de configurar tus accesos. En breve podr&aacute;s ver tus cuentas, saldos y tarjetas
-            disponibles aqu&iacute;.
-          </p>
+      <div class="col-4">
+        <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
+          <i class="bi bi-check-circle mb-1 fs-5 d-block"></i> EFICIENCIA
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- SECCIÓN INTERMEDIA: Gasto Semanal y Transacciones -->
-    <div class="row g-4 mb-4">
-      <!-- Gráfico Gasto Semanal -->
-      <div class="col-lg-7">
-        <div class="dashboard-card h-100 d-flex flex-column justify-content-between">
-          <div class="d-flex justify-content-between align-items-start mb-4">
-            <div>
-              <h4 class="fw-semibold text-white m-0" style="font-size: 1.35rem;">Gasto semanal</h4>
-              <p class="text-figma-muted m-0" style="font-size: 0.95rem;">An&aacute;lisis de los &uacute;ltimos 7 d&iacute;as</p>
-            </div>
-            <div class="d-flex gap-2">
-              <button class="pill-filter inactive">Diario</button>
-              <button class="pill-filter active">Semanal</button>
-            </div>
-          </div>
+  <!-- COLUMNA DERECHA: Formulario de Login -->
+  <div class="col-lg-6 bg-figma-form p-4 p-sm-5 d-flex flex-column justify-content-center">
+    <div class="mx-auto w-100" style="max-width: 400px;">
 
-          <div class="empty-state-container">
-            <i class="bi bi-graph-up-arrow empty-state-icon"></i>
-            <p class="text-figma-muted" style="font-size: 0.95rem; line-height: 1.5;">
-              A&uacute;n no se han agregado datos para<br>mostrar en esta vista.
-            </p>
-          </div>
-
-          <div class="days-row">
-            <span class="day-label text-figma-muted">Lun</span>
-            <span class="day-label text-figma-muted">Mar</span>
-            <span class="day-label text-figma-muted">Mi&eacute;</span>
-            <span class="day-label text-figma-muted">Jue</span>
-            <span class="day-label text-figma-muted">Vie</span>
-            <span class="day-label text-figma-muted">S&aacute;b</span>
-            <span class="day-label text-figma-muted">Dom</span>
-          </div>
-        </div>
+      <div class="mb-4">
+        <h2 class="fw-semibold mb-2 text-light" style="font-size: 1.5rem;">Bienvenido</h2>
+        <p class="text-figma-muted small" style="line-height: 1.5;">
+          Ingrese sus credenciales para acceder a su portal de gesti&oacute;n empresarial.
+        </p>
       </div>
 
-      <!-- Transacciones Recientes -->
-      <div class="col-lg-5">
-        <div class="dashboard-card h-100 d-flex flex-column">
-          <div class="mb-3">
-            <div class="search-container-custom">
-              <i class="bi bi-search"></i>
-              <input type="text" class="search-input-custom" placeholder="Buscar transacciones...">
-            </div>
-          </div>
-
-          <h4 class="fw-semibold text-white mb-4" style="font-size: 1.35rem;">Transacciones recientes</h4>
-
-          <div class="empty-state-container my-auto">
-            <i class="bi bi-wallet2 empty-state-icon"></i>
-            <p class="text-figma-muted" style="font-size: 0.95rem; line-height: 1.5;">
-              A&uacute;n no se han agregado datos para<br>mostrar en esta vista.
-            </p>
+      <form>
+        <!-- Input Correo Electrónico -->
+        <div class="mb-4">
+          <label class="text-figma-muted fw-bold small mb-2 d-block" style="letter-spacing: 0.8px; font-size: 0.75rem;">CORREO ELECTR&Oacute;NICO</label>
+          <div class="input-group rounded-2 overflow-hidden border-0 border-bottom border-2" style="border-color: #3A494B !important;">
+            <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted"><i class="bi bi-envelope"></i></span>
+            <input type="email" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="nombre@ejemplo.com" required style="font-size: 0.95rem;">
           </div>
         </div>
-      </div>
+
+        <!-- Input Contraseña -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="text-figma-muted fw-bold small m-0" style="letter-spacing: 0.8px; font-size: 0.75rem;">CONTRASE&Ntilde;A</label>
+            <a href="recucontrasena.jsp" class="text-figma-cyan fw-bold text-decoration-none small" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Olvid&eacute; mi contrase&ntilde;a</a>
+          </div>
+          <div class="input-group rounded-2 overflow-hiddepn border-0 border-bottom border-2" style="border-color: #3A494B !important;">
+            <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required style="font-size: 0.95rem;">
+            <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted" style="cursor: pointer;"><i class="bi bi-eye"></i></span>
+          </div>
+        </div>
+
+        <!-- Botón de Acción Principal Cyan -->
+        <button type="submit" class="btn btn-info rounded-pill w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 mt-4 text-dark"
+                style="background-color: #00F2FF; border: none; box-shadow: 0px 0px 20px rgba(0, 242, 255, 0.4);">
+          Iniciar Sesi&oacute;n <i class="bi bi-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="mt-5 pt-3 border-top border-secondary border-opacity-25"></div>
+
     </div>
+  </div>
 
-    <!-- SECCIÓN INFERIOR: Historial de Cuenta -->
-    <div class="row">
-      <div class="col-12">
-        <div class="dashboard-card text-center py-4">
-          <div class="mb-2" style="font-size: 1.5rem; color: #00DBE7;">
-            <i class="bi bi-bank"></i>
-          </div>
-          <h5 class="fw-semibold text-white m-0" style="font-size: 1rem;">Historial de cuenta</h5>
-          <p class="text-figma-muted m-0 small">Descargar estados mensuales</p>
-        </div>
-      </div>
-    </div>
-
-  </main>
 </div>
 
 <!-- Bootstrap Bundle JS LOCAL -->
