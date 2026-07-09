@@ -10,7 +10,7 @@
 <br/>
 <a href="login.jsp">Hello Servlet</a>
 <br>
-<a href="principal-usuario.jsp">Hello Servlet</a>
+<a href="empleado/principal-usuario.jsp">Hello Servlet</a>
 
 </body>
 </html>

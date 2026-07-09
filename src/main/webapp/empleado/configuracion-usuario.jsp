@@ -7,10 +7,10 @@
     <title>FinTech Corp - Configuración</title>
 
     <!-- Bootstrap 5 CSS LOCAL -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons LOCAL -->
-    <link href="assets/icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Google Fonts: Inter & Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,6 +22,16 @@
             background-color: #0C0E12;
             color: #E2E2E8;
         }
+
+        @media (min-width: 768px) {
+            nav {
+                position: fixed !important;
+                top: 0;
+                start: 0;
+                height: 100vh;
+            }
+        }
+
         .font-jakarta {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -109,6 +119,17 @@
             background-color: rgba(40, 42, 44, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        /* Responsividad para Header y Main Content en Móviles */
+        @media (max-width: 767.98px) {
+            .top-header {
+                left: 0 !important;
+            }
+            main {
+                margin-left: 0 !important;
+                padding: 95px 20px 40px 20px !important;
+            }
+        }
     </style>
 </head>
 <body class="overflow-x-hidden min-vh-100">
@@ -117,9 +138,15 @@
     <!-- Luz de fondo ambiental -->
     <div class="dashboard-glow" style="left: 30%; top: 20%;"></div>
 
-    <!-- BARRA LATERAL (SIDEBAR) - Estandarizada -->
-    <nav class="bg-figma-sidebar border-end position-fixed top-0 start-0 vh-100 d-flex flex-column justify-content-between py-4 backdrop-blur"
-         style="width: 260px; border-color: rgba(58, 73, 75, 0.15) !important; z-index: 100;">
+    <!-- BARRA LATERAL (SIDEBAR) - Estandarizada y Responsiva -->
+    <nav class="offcanvas-md offcanvas-start bg-figma-sidebar border-end py-4 backdrop-blur shadow"
+         id="sidebarUsuario" tabindex="-1" aria-labelledby="sidebarUsuarioLabel"
+         style="width: 260px; border-color: rgba(58, 73, 75, 0.15) !important; z-index: 1050;">
+
+        <!-- Botón de cierre para móvil -->
+        <div class="offcanvas-header d-md-none justify-content-end px-4 pt-2 pb-0">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarUsuario" aria-label="Close"></button>
+        </div>
 
         <div class="w-100">
             <!-- Brand / Logo -->
@@ -141,7 +168,7 @@
                 <a href="gestion-tarjetas-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
                     <i class="bi bi-credit-card fs-5"></i> <span>Tarjetas</span>
                 </a>
-                <a href="transferencias-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
+                <a href="gestion-transferencia-usuario.jsp" class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
                     <i class="bi bi-arrow-left-right fs-5"></i> <span>Transferencias</span>
                 </a>
                 <!-- Ítem Activo en esta vista -->
@@ -163,9 +190,12 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main class="flex-grow-1 position-relative" style="margin-left: 260px; padding: 115px 40px 40px 40px; z-index: 1;">
 
-        <!-- HEADER FIJO -->
-        <div class="position-fixed top-0 end-0 d-flex justify-content-end align-items-center px-4 backdrop-blur"
+        <!-- HEADER FIJO (Con botón de hamburguesa responsivo integrado) -->
+        <div class="position-fixed top-0 end-0 top-header d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
              style="left: 260px; height: 75px; background: rgba(12, 14, 18, 0.75); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
+            <button class="btn d-md-none text-figma-cyan fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarUsuario" aria-controls="sidebarUsuario" aria-label="Abrir menú">
+                <i class="bi bi-list"></i>
+            </button>
             <i class="bi bi-person-circle text-figma-cyan fs-3 role-button" style="cursor: pointer;"></i>
         </div>
 
@@ -209,7 +239,7 @@
 
                         <!-- Correo Electrónico -->
                         <div class="col-12 col-md-6">
-                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Correo Electrónico</label>
+                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Corro Electrónico</label>
                             <div class="input-group rounded-2 overflow-hidden">
                                 <input type="email" class="form-control form-control-dark py-2.5 shadow-none" value="ej.correo@gmail.com" readonly>
                                 <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
@@ -294,6 +324,6 @@
 </div>
 
 <!-- Bootstrap Bundle JS LOCAL -->
-<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
