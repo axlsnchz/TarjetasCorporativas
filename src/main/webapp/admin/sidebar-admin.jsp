@@ -61,7 +61,7 @@
 
         <!-- Menú de navegación con detección flexible (Soporta archivos .jsp y URLs de Servlets) -->
         <div class="d-flex flex-column gap-1 mt-4">
-            <a href="resumen-general.jsp"
+            <a href="principal-admin.jsp"
                class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= (uri.contains("resumen") || uri.contains("principal")) ? "active" : "" %>">
                 <i class="bi bi-grid-1x2-fill fs-5"></i> <span>Panel principal</span>
             </a>
@@ -71,12 +71,12 @@
                 <i class="bi bi-people-fill fs-5"></i> <span>Empleados</span>
             </a>
 
-            <a href="gestion-cuentas-admin.jsp"
+            <a href="gestion-cuentas.jsp"
                class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("cuenta") ? "active" : "" %>">
                 <i class="bi bi-bank fs-5"></i> <span>Cuentas</span>
             </a>
 
-            <a href="gestion-tarjetas-admin.jsp"
+            <a href="gestion-tarjetas.jsp"
                class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("tarjeta") ? "active" : "" %>">
                 <i class="bi bi-credit-card fs-5"></i> <span>Tarjetas</span>
             </a>
