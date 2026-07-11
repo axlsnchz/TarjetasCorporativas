@@ -1,10 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
-  // Detecta automáticamente la URL actual para activar el botón correcto
   String uri = request.getRequestURI();
 %>
 
-<!-- Estilos específicos y correcciones del Sidebar centralizados -->
 <style>
   #sidebarUsuario {
     height: 100vh !important;
@@ -24,7 +22,6 @@
 <nav class="offcanvas-md offcanvas-start bg-figma-sidebar border-end d-flex flex-column py-4 backdrop-blur shadow"
      id="sidebarUsuario" tabindex="-1" aria-labelledby="sidebarUsuarioLabel">
 
-  <!-- Botón de cierre para móvil -->
   <div class="offcanvas-header d-md-none justify-content-end px-4 pt-2 pb-0">
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarUsuario" aria-label="Close"></button>
   </div>
@@ -38,7 +35,6 @@
       </div>
     </div>
 
-    <!-- Menú de navegación unificado con lógica automática de 'active' -->
     <div class="d-flex flex-column gap-1 mt-4">
       <a href="principal-usuario.jsp"
          class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("principal-usuario.jsp") ? "active" : "" %>">
