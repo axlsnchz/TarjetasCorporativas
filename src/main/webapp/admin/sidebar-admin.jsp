@@ -13,9 +13,12 @@
         background-color: #0c0e12 !important;
         border-right: 1px solid rgba(58, 73, 75, 0.15) !important;
         z-index: 1050;
+        /* FIJAMOS LA TIPOGRAFÍA AQUÍ PARA EVITAR HERENCIAS Y DESPLAZAMIENTOS */
+        font-family: 'Inter', sans-serif !important;
     }
 
     .sidebar-link {
+        font-family: 'Inter', sans-serif !important;
         color: #B9CACB !important;
         transition: all 0.2s ease;
         border-left: 4px solid transparent;
@@ -33,6 +36,20 @@
         background: rgba(112, 0, 255, 0.20) !important;
         border-left: 4px solid #00DBE7 !important;
         font-weight: 600 !important;
+    }
+
+    /* Fijar también el botón inferior para que no sufra saltos visuales */
+    .btn-logout {
+        font-family: 'Inter', sans-serif !important;
+        color: #BAC9CC !important;
+        border: 1px solid #3B494C !important;
+        transition: all 0.15s ease;
+    }
+
+    .btn-logout:hover {
+        color: #FFFFFF !important;
+        border-color: #64748B !important;
+        background-color: rgba(255, 255, 255, 0.02);
     }
 
     @media (min-width: 768px) {
@@ -56,7 +73,7 @@
         <!-- Brand / Logo Corporativo -->
         <div class="px-4 mb-5">
             <h1 class="fw-bold lh-1 text-info display-6" style="color: #00DBE7 !important; font-family: 'Inter', sans-serif;">FinTech<br>Corp</h1>
-            <div class="text-uppercase fw-bold small tracking-wider" style="font-size: 0.7rem; letter-spacing: 0.6px; color: #B9CACB; opacity: 0.6;">
+            <div class="text-uppercase fw-bold small tracking-wider" style="font-size: 0.7rem; letter-spacing: 0.6px; color: #B9CACB; opacity: 0.6; font-family: 'Inter', sans-serif;">
                 Banca Institucional
             </div>
         </div>
@@ -87,8 +104,7 @@
 
     <!-- Botón de Cerrar Sesión inferior -->
     <div class="px-4 w-100 mt-auto">
-        <button class="btn w-100 py-2 text-center bg-transparent rounded-3"
-                style="color: #BAC9CC !important; border: 1px solid #3B494C !important;">
+        <button class="btn w-100 py-2 text-center bg-transparent rounded-3 btn-logout">
             Cerrar Sesión
         </button>
     </div>

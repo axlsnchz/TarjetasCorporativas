@@ -19,6 +19,8 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       color: #E2E2E8;
       min-height: 100vh;
+      /* SOLUCIÓN AL SALTO: Fuerza a mantener el espacio del scrollbar fijo en todas las pantallas */
+      overflow-y: scroll;
     }
     @media (min-width: 768px) {
       .main-content {
@@ -46,7 +48,7 @@
       transform: translateY(-1px);
     }
     .text-cyan-neon {
-      color: #00DBE7;
+      color: #00DBE7 !important;
     }
     .font-inter {
       font-family: 'Inter', sans-serif;
@@ -69,6 +71,10 @@
       border-radius: 8px !important;
       font-size: 0.85rem;
     }
+    .backdrop-blur {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   </style>
 </head>
 <body>
@@ -79,7 +85,16 @@
 <!-- CONTENEDOR PRINCIPAL -->
 <div class="main-content d-flex flex-column min-vh-100">
 
-  <main class="flex-grow-1 p-4 p-md-5">
+  <!-- HEADER SUPERIOR INCORPORADO -->
+  <header class="sticky-top w-100 d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
+          style="height: 75px; background: rgba(12, 14, 18, 0.75); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
+    <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarAdmin" aria-controls="sidebarAdmin" aria-label="Abrir menú">
+      <i class="bi bi-list"></i>
+    </button>
+    <i class="bi bi-person-circle text-cyan-neon fs-3 role-button" style="cursor: pointer;"></i>
+  </header>
+
+  <main class="flex-grow-1 p-4 p-md-5 pt-4">
     <div class="container-fluid p-0">
 
       <!-- Fila de Encabezado (Título y Acción Principal) -->
@@ -98,7 +113,7 @@
       <!-- Barra de Herramientas y Filtros (Búsqueda, Estado y Tipo) -->
       <div class="p-3 mb-4 rounded-4 shadow-sm" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.03);">
         <div class="row g-3 align-items-center">
-          <!-- Buscador (50% de ancho en pantallas grandes) -->
+          <!-- Buscador -->
           <div class="col-12 col-md-6">
             <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Buscar tarjeta</label>
             <div class="position-relative">
@@ -106,7 +121,7 @@
               <input type="text" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre del empleado o alias de la tarjeta...">
             </div>
           </div>
-          <!-- Filtro Estado (25% de ancho) -->
+          <!-- Filtro Estado -->
           <div class="col-6 col-md-3">
             <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Estado</label>
             <select class="form-select form-figma-select py-2 shadow-none">
@@ -115,7 +130,7 @@
               <option value="blocked">Bloqueadas</option>
             </select>
           </div>
-          <!-- Filtro Tipo (25% de ancho) -->
+          <!-- Filtro Tipo -->
           <div class="col-6 col-md-3">
             <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Tipo</label>
             <select class="form-select form-figma-select py-2 shadow-none">
@@ -142,8 +157,8 @@
                 </div>
                 <span class="position-absolute bottom-0 end-0 translate-middle border border-dark rounded-circle bg-dark d-flex align-items-center justify-content-center"
                       style="width: 24px; height: 24px; margin-bottom: -10px; margin-right: -10px;">
-                                    <i class="bi bi-plus-circle-fill text-muted" style="font-size: 0.85rem;"></i>
-                                </span>
+                    <i class="bi bi-plus-circle-fill text-muted" style="font-size: 0.85rem;"></i>
+                </span>
               </div>
 
               <!-- Mensajes -->
