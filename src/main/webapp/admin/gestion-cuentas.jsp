@@ -32,7 +32,6 @@
       position: relative;
       overflow: hidden;
     }
-    /* Efecto de resplandor de fondo en las tarjetas superiores */
     .card-glow-effect {
       position: absolute;
       width: 256px;
@@ -59,10 +58,12 @@
       color: #002022;
       transform: translateY(-1px);
     }
+    .text-cyan-neon {
+      color: #00DBE7 !important;
+    }
     .font-plus-jakarta {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
-    /* Inputs alineados con Figma */
     .form-figma-search {
       background: #0D0F14 !important;
       border: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -80,16 +81,23 @@
       border-radius: 8px !important;
       font-size: 0.85rem;
     }
-    /* Estilos de tabla simulando Figma */
+
+    /* CORRECCIÓN DE COLOR AQUÍ: Forzamos el fondo oscuro directo a los headers */
     .table-figma-header th {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: #64748B;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #64748B !important;
+      background-color: #14171C !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
       padding: 16px 24px;
+    }
+
+    .backdrop-blur {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
   </style>
 </head>
@@ -101,7 +109,16 @@
 <!-- CONTENEDOR PRINCIPAL -->
 <div class="main-content d-flex flex-column min-vh-100">
 
-  <main class="flex-grow-1 p-4 p-md-5">
+  <!-- HEADER SUPERIOR GLOBAL -->
+  <header class="sticky-top w-100 d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
+          style="height: 75px; background: rgba(17, 19, 24, 0.85); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
+    <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarAdmin" aria-controls="sidebarAdmin" aria-label="Abrir menú">
+      <i class="bi bi-list"></i>
+    </button>
+    <i class="bi bi-person-circle text-cyan-neon fs-3 role-button" style="cursor: pointer;"></i>
+  </header>
+
+  <main class="flex-grow-1 p-4 p-md-5 pt-4">
     <div class="container-fluid p-0">
 
       <!-- Encabezado de la Vista -->
@@ -119,15 +136,16 @@
 
             <div class="row align-items-center g-3">
               <div class="col-12 col-sm-7 col-md-8">
-                <h3 class="font-plus-jakarta fw-normal text-info-light mb-2" style="color: #C3F5FF; font-size: 1.85rem;">Añadir Nuevo Talento</h3>
+                <h3 class="font-plus-jakarta fw-normal mb-2" style="color: #C3F5FF; font-size: 1.85rem;">Añadir Nuevo Talento</h3>
                 <p class="small text-muted mb-0" style="color: #BAC9CC !important; line-height: 1.5;">
                   Inicia el proceso de creación de cuenta fintech para nuevos empleados de la organización.
                 </p>
               </div>
-              <!-- Gráfico decorativo de previsualización -->
+              <!-- Icono de Reemplazo Estilizado -->
               <div class="col-12 col-sm-5 col-md-4 text-end d-none d-sm-block">
-                <div class="rounded-3 overflow-hidden border border-secondary border-opacity-25" style="background: rgba(50, 53, 56, 0.20);">
-                  <img src="https://placehold.co/199x170" class="img-fluid opacity-50 img-luminosity" alt="Preview mock">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-4 border border-info border-opacity-10 shadow-sm mx-auto"
+                     style="width: 110px; height: 110px; background: rgba(0, 229, 255, 0.03); color: #00E5FF;">
+                  <i class="bi bi-person-badge-fill display-4 opacity-50"></i>
                 </div>
               </div>
             </div>
@@ -170,7 +188,6 @@
       <!-- Barra de Filtros y Búsqueda -->
       <div class="p-3 mb-4 rounded-4" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.03);">
         <div class="row g-3 align-items-center">
-          <!-- Buscador -->
           <div class="col-12 col-md-8">
             <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Buscar Titular</label>
             <div class="position-relative">
@@ -178,7 +195,6 @@
               <input type="text" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre del empleado...">
             </div>
           </div>
-          <!-- Filtro Estado -->
           <div class="col-12 col-md-4">
             <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Estado</label>
             <select class="form-select form-figma-select py-2 shadow-none">
@@ -190,7 +206,7 @@
         </div>
       </div>
 
-      <!-- Contenedor de la Tabla con Estado Vacío -->
+      <!-- Contenedor de la Tabla -->
       <div class="bg-figma-card overflow-hidden shadow-lg">
         <div class="table-responsive">
           <table class="table table-borderless m-0 align-middle">
@@ -202,13 +218,17 @@
               <th style="width: 16%;">Estado</th>
               <th style="width: 16%; text-align: right;">Acciones</th>
             </tr>
+            </thead>
+            <tbody>
+            <!-- Las filas dinámicas irán aquí sin alterar el color superior -->
+            </tbody>
           </table>
         </div>
 
         <!-- Bloque de Estado Vacío dentro del contenedor -->
         <div class="d-flex flex-column align-items-center justify-content-center text-center font-plus-jakarta py-5 px-3" style="min-height: 220px; background: #14171C;">
           <div class="mb-3 d-flex align-items-center justify-content-center border rounded-3"
-               style="width: 44px; height: 44px; border-color: #4B4B52 !important; color: #4B4B52;">
+               style="width: 44px; height: 44px; border-color: #3B494C !important; color: #64748B;">
             <i class="bi bi-file-earmark-text fs-4"></i>
           </div>
           <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay cuentas registradas</h5>

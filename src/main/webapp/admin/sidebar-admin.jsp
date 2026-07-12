@@ -1,7 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
-    // Convertimos la URI a minúsculas para evitar problemas de discrepancia de mayúsculas/minúsculas
-    String uri = request.getRequestURI().toLowerCase();
+    // Extraemos de forma limpia el nombre exacto del archivo JSP en ejecución
+    String uri = request.getRequestURI();
+    String currentPage = uri.substring(uri.lastIndexOf("/") + 1).toLowerCase();
 %>
 
 <!-- Estilos específicos del Sidebar de Administración -->
@@ -18,6 +19,7 @@
         color: #B9CACB !important;
         transition: all 0.2s ease;
         border-left: 4px solid transparent;
+        font-weight: 500;
     }
 
     .sidebar-link:hover {
@@ -25,7 +27,7 @@
         background: rgba(0, 219, 231, 0.05);
     }
 
-    /* Prioridad absoluta al estado activo para evitar sobreescritura de Bootstrap */
+    /* Prioridad absoluta al estado activo real */
     .sidebar-link.active {
         color: #00DBE7 !important;
         background: rgba(112, 0, 255, 0.20) !important;
@@ -59,25 +61,25 @@
             </div>
         </div>
 
-        <!-- Menú de navegación con detección flexible (Soporta archivos .jsp y URLs de Servlets) -->
+        <!-- Menú de navegación con detección precisa mediante finalización de cadena -->
         <div class="d-flex flex-column gap-1 mt-4">
             <a href="principal-admin.jsp"
-               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= (uri.contains("resumen") || uri.contains("principal")) ? "active" : "" %>">
+               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= (currentPage.endsWith("principal-admin.jsp") || currentPage.contains("resumen")) ? "active" : "" %>">
                 <i class="bi bi-grid-1x2-fill fs-5"></i> <span>Panel principal</span>
             </a>
 
             <a href="gestion-empleados.jsp"
-               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("empleado") ? "active" : "" %>">
+               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= currentPage.endsWith("gestion-empleados.jsp") ? "active" : "" %>">
                 <i class="bi bi-people-fill fs-5"></i> <span>Empleados</span>
             </a>
 
             <a href="gestion-cuentas.jsp"
-               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("cuenta") ? "active" : "" %>">
+               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= currentPage.endsWith("gestion-cuentas.jsp") ? "active" : "" %>">
                 <i class="bi bi-bank fs-5"></i> <span>Cuentas</span>
             </a>
 
             <a href="gestion-tarjetas.jsp"
-               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("tarjeta") ? "active" : "" %>">
+               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= currentPage.endsWith("gestion-tarjetas.jsp") ? "active" : "" %>">
                 <i class="bi bi-credit-card fs-5"></i> <span>Tarjetas</span>
             </a>
         </div>

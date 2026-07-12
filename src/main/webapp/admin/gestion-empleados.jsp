@@ -1,4 +1,4 @@
-gestion-cuentas.jsp<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -46,7 +46,7 @@ gestion-cuentas.jsp<%@ page contentType="text/html; charset=UTF-8" pageEncoding=
             transform: translateY(-1px);
         }
         .text-cyan-neon {
-            color: #00DBE7;
+            color: #00DBE7 !important;
         }
         .tracking-widest-custom {
             letter-spacing: 0.08rem;
@@ -72,6 +72,10 @@ gestion-cuentas.jsp<%@ page contentType="text/html; charset=UTF-8" pageEncoding=
             border-radius: 8px !important;
             font-size: 0.85rem;
         }
+        .backdrop-blur {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
     </style>
 </head>
 <body>
@@ -82,7 +86,16 @@ gestion-cuentas.jsp<%@ page contentType="text/html; charset=UTF-8" pageEncoding=
 <!-- CONTENEDOR PRINCIPAL -->
 <div class="main-content d-flex flex-column min-vh-100">
 
-    <main class="flex-grow-1 p-4 p-md-5">
+    <!-- HEADER SUPERIOR GLOBAL (Corregido e Incorporado) -->
+    <header class="sticky-top w-100 d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
+            style="height: 75px; background: rgba(12, 14, 18, 0.75); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
+        <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarAdmin" aria-controls="sidebarAdmin" aria-label="Abrir menú">
+            <i class="bi bi-list"></i>
+        </button>
+        <i class="bi bi-person-circle text-cyan-neon fs-3 role-button" style="cursor: pointer;"></i>
+    </header>
+
+    <main class="flex-grow-1 p-4 p-md-5 pt-4">
         <div class="container-fluid p-0">
 
             <!-- Fila de Encabezado de Sección (Título y Acción) -->
@@ -158,9 +171,9 @@ gestion-cuentas.jsp<%@ page contentType="text/html; charset=UTF-8" pageEncoding=
                 <div class="col-12">
                     <div class="bg-figma-card p-4 p-md-5 d-flex flex-column shadow-lg font-jakarta" style="min-height: 400px; background: #14171C;">
 
-                        <!-- Encabezados de la Tabla Responsiva -->
-                        <div class="row text-uppercase fw-bold text-muted pb-3 mb-5 border-bottom align-items-center d-none d-md-flex"
-                             style="font-size: 0.65rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.05) !important; opacity: 0.7;">
+                        <!-- Encabezados de la Tabla CORREGIDOS (Color idéntico a los inputs y sin opacidad opaca) -->
+                        <div class="row text-uppercase fw-bold pb-3 mb-5 border-bottom align-items-center d-none d-md-flex"
+                             style="font-size: 0.68rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.06) !important; color: #F5F5F5 !important;">
                             <div class="col-md-3">Empleado</div>
                             <div class="col-md-3">Correo Electrónico</div>
                             <div class="col-md-2">Departamento</div>
@@ -168,7 +181,7 @@ gestion-cuentas.jsp<%@ page contentType="text/html; charset=UTF-8" pageEncoding=
                             <div class="col-md-2 text-end">Acciones</div>
                         </div>
 
-                        <!-- Bloque Central de Estado Vacío (Visible cuando no hay registros) -->
+                        <!-- Bloque Central de Estado Vacío -->
                         <div class="text-center my-auto py-5">
                             <div class="d-inline-flex align-items-center justify-content-center border rounded-3 mb-4"
                                  style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(255, 255, 255, 0.35);">
