@@ -63,14 +63,8 @@ public class SQLConnector {
             }
 
             // Validar que finalmente tengamos el nombre de la BD
-            if (dbName == null || dbName.trim().isEmpty()) {
+            if (dbName == null) {
                 throw new RuntimeException("El nombre de la base de datos (db.name / DB_NAME) no está configurado.");
-            }
-
-            // Normalizar dbName para coincidir con los alias TNS de Oracle Cloud (ej. tarjetascorporativas_high)
-            dbName = dbName.trim().toLowerCase();
-            if (!dbName.contains("_high") && !dbName.contains("_medium") && !dbName.contains("_low") && !dbName.contains("_tp")) {
-                dbName = dbName + "_high";
             }
 
             // Configuración de Hikari (incluye conf de conexion y pool)

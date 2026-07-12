@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -83,7 +84,7 @@
             </p>
         </div>
 
-        <!-- Fila de Características (Usando Cards de Bootstrap limpias) -->
+        <!-- Fila de Características-->
         <div class="row g-2 position-relative w-100 mx-0 mt-4" style="z-index: 1;">
             <div class="col-4">
                 <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
@@ -114,13 +115,20 @@
                 </p>
             </div>
 
-            <form>
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger border-0 bg-danger bg-opacity-25 text-danger rounded-3 p-3 mb-4 small d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    <span>${error}</span>
+                </div>
+            </c:if>
+
+            <form action="login" method="POST">
                 <!-- Input Correo Electrónico -->
                 <div class="mb-4">
                     <label class="text-figma-muted fw-bold small mb-2 d-block" style="letter-spacing: 0.8px; font-size: 0.75rem;">CORREO ELECTR&Oacute;NICO</label>
                     <div class="input-group rounded-2 overflow-hidden border-0 border-bottom border-2" style="border-color: #3A494B !important;">
                         <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted"><i class="bi bi-envelope"></i></span>
-                        <input type="email" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="nombre@ejemplo.com" required style="font-size: 0.95rem;">
+                        <input type="email" name="correo" value="${param.correo}" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="nombre@ejemplo.com" required style="font-size: 0.95rem;">
                     </div>
                 </div>
 
@@ -130,10 +138,10 @@
                         <label class="text-figma-muted fw-bold small m-0" style="letter-spacing: 0.8px; font-size: 0.75rem;">CONTRASE&Ntilde;A</label>
                         <a href="recucontrasena.jsp" class="text-figma-cyan fw-bold text-decoration-none small" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Olvid&eacute; mi contrase&ntilde;a</a>
                     </div>
-                    <div class="input-group rounded-2 overflow-hiddepn border-0 border-bottom border-2" style="border-color: #3A494B !important;">
+                    <div class="input-group rounded-2 overflow-hidden border-0 border-bottom border-2" style="border-color: #3A494B !important;">
                         <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted"><i class="bi bi-lock"></i></span>
-                        <input type="password" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required style="font-size: 0.95rem;">
-                        <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted" style="cursor: pointer;"><i class="bi bi-eye"></i></span>
+                        <input type="password" id="passwordInput" name="password" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required style="font-size: 0.95rem;">
+                        <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted" style="cursor: pointer;" onclick="togglePassword()"><i class="bi bi-eye" id="togglePasswordIcon"></i></span>
                     </div>
                 </div>
 
@@ -143,6 +151,22 @@
                     Iniciar Sesi&oacute;n <i class="bi bi-arrow-right"></i>
                 </button>
             </form>
+
+            <script>
+                function togglePassword() {
+                    var input = document.getElementById('passwordInput');
+                    var icon = document.getElementById('togglePasswordIcon');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
+                }
+            </script>
 
             <div class="mt-5 pt-3 border-top border-secondary border-opacity-25"></div>
 
