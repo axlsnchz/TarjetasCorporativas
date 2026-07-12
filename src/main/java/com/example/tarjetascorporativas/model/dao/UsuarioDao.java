@@ -13,11 +13,11 @@ import java.util.List;
 
 public class UsuarioDao implements Dao<Usuario, Long> {
 
-    private static final String BASE_SELECT = 
+    private static final String BASE_SELECT =
             "SELECT u.*, d.nombre AS nombre_departamento, c.nombre AS nombre_cargo " +
-            "FROM USUARIOS u " +
-            "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento " +
-            "LEFT JOIN CARGOS c ON u.id_cargo = c.id_cargo ";
+                    "FROM USUARIOS u " +
+                    "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento " +
+                    "LEFT JOIN CARGOS c ON u.id_cargo = c.id_cargo ";
 
     @Override
     public boolean create(Usuario entidad) {
@@ -155,7 +155,7 @@ public class UsuarioDao implements Dao<Usuario, Long> {
     }
 
     public Usuario getByCorreo(String correo) {
-        String sql = BASE_SELECT + "WHERE u.correo = ? AND u.activo = 1";
+        String sql = BASE_SELECT + "WHERE LOWER(u.correo) = LOWER(?) AND u.activo = 1";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -249,6 +249,23 @@ public class UsuarioDao implements Dao<Usuario, Long> {
         }
         return lista;
     }
+
+    public List<Usuario> getTodosLosEmpleados() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = BASE_SELECT + "WHERE u.rol = 'EMPLEADO' ORDER BY u.id_usuario DESC";
+        try (Connection con = SQLConnector.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSetToUsuario(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
 
     public List<Usuario> getByDepartamentoId(Long idDepartamento) {
         List<Usuario> lista = new ArrayList<>();
