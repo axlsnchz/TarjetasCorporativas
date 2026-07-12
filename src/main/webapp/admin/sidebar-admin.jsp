@@ -104,8 +104,8 @@
 
     <!-- Botón de Cerrar Sesión inferior -->
     <div class="px-4 w-100 mt-auto">
-        <button class="btn w-100 py-2 text-center bg-transparent rounded-3 btn-logout">
+        <a href="${pageContext.request.contextPath}/login?accion=logout" class="btn w-100 py-2 text-center bg-transparent rounded-3 btn-logout text-decoration-none d-block">
             Cerrar Sesión
-        </button>
+        </a>
     </div>
 </nav>

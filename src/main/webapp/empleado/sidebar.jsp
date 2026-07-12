@@ -1,8 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
+  // Detecta automáticamente la URL actual para activar el botón correcto
   String uri = request.getRequestURI();
 %>
 
+<!-- Estilos específicos y correcciones del Sidebar centralizados -->
 <style>
   #sidebarUsuario {
     height: 100vh !important;
@@ -22,6 +24,7 @@
 <nav class="offcanvas-md offcanvas-start bg-figma-sidebar border-end d-flex flex-column py-4 backdrop-blur shadow"
      id="sidebarUsuario" tabindex="-1" aria-labelledby="sidebarUsuarioLabel">
 
+  <!-- Botón de cierre para móvil -->
   <div class="offcanvas-header d-md-none justify-content-end px-4 pt-2 pb-0">
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarUsuario" aria-label="Close"></button>
   </div>
@@ -35,6 +38,7 @@
       </div>
     </div>
 
+    <!-- Menú de navegación unificado con lógica automática de 'active' -->
     <div class="d-flex flex-column gap-1 mt-4">
       <a href="principal-usuario.jsp"
          class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= uri.contains("principal-usuario.jsp") ? "active" : "" %>">
@@ -65,9 +69,9 @@
 
   <!-- Botón de Cerrar Sesión empujado al fondo -->
   <div class="px-4 w-100 mt-auto">
-    <button class="btn w-100 py-2 text-center text-secondary border border-secondary bg-transparent rounded-3"
-            style="color: #BAC9CC !important; border-color: #3B494C !important;">
+    <a href="${pageContext.request.contextPath}/login?accion=logout" class="btn w-100 py-2 text-center text-secondary border border-secondary bg-transparent rounded-3 text-decoration-none d-block"
+       style="color: #BAC9CC !important; border-color: #3B494C !important;">
       Cerrar Sesión
-    </button>
+    </a>
   </div>
 </nav>
