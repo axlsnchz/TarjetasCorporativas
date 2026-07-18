@@ -85,8 +85,8 @@
                 <i class="bi bi-grid-1x2-fill fs-5"></i> <span>Panel principal</span>
             </a>
 
-            <a href="gestion-empleados.jsp"
-               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= currentPage.endsWith("gestion-empleados.jsp") ? "active" : "" %>">
+            <a href="${pageContext.request.contextPath}/admin/empleados"
+               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= (currentPage.endsWith("gestion-empleados.jsp") || currentPage.contains("empleado")) ? "active" : "" %>">
                 <i class="bi bi-people-fill fs-5"></i> <span>Empleados</span>
             </a>
 
