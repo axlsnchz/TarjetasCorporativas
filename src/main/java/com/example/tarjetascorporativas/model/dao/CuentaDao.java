@@ -14,15 +14,14 @@ import java.util.List;
 
 public class CuentaDao implements Dao<Cuenta, Long> {
 
-    private static final String BASE_SELECT = 
-            "SELECT c.*, u.nombre AS nombre_empleado, tc.nombre AS nombre_tipo_cuenta " +
-            "FROM CUENTAS c " +
-            "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario " +
-            "JOIN TIPOS_CUENTA tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta ";
+    private static final String BASE_SELECT =
+            "SELECT c.*, u.nombre AS nombre_empleado " +
+                    "FROM CUENTAS c " +
+                    "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario ";
 
     @Override
     public boolean create(Cuenta entidad) {
-        String sql = "INSERT INTO CUENTAS(numero_cuenta, id_empleado, id_tipo_cuenta, nombre_cuenta, descripcion, saldo, limite_asignado, activo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO CUENTAS(numero_cuenta, id_empleado, nombre_cuenta, descripcion, saldo, limite_asignado, activo) VALUES(?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -32,12 +31,11 @@ public class CuentaDao implements Dao<Cuenta, Long> {
             } else {
                 ps.setNull(2, Types.BIGINT);
             }
-            ps.setLong(3, entidad.getIdTipoCuenta());
-            ps.setString(4, entidad.getNombreCuenta());
-            ps.setString(5, entidad.getDescripcion());
-            ps.setBigDecimal(6, entidad.getSaldo() != null ? entidad.getSaldo() : BigDecimal.ZERO);
-            ps.setBigDecimal(7, entidad.getLimiteAsignado() != null ? entidad.getLimiteAsignado() : BigDecimal.ZERO);
-            ps.setInt(8, entidad.isActivo() ? 1 : 0);
+            ps.setString(3, entidad.getNombreCuenta());
+            ps.setString(4, entidad.getDescripcion());
+            ps.setBigDecimal(5, entidad.getSaldo() != null ? entidad.getSaldo() : BigDecimal.ZERO);
+            ps.setBigDecimal(6, entidad.getLimiteAsignado() != null ? entidad.getLimiteAsignado() : BigDecimal.ZERO);
+            ps.setInt(7, entidad.isActivo() ? 1 : 0);
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -50,6 +48,22 @@ public class CuentaDao implements Dao<Cuenta, Long> {
     public List<Cuenta> getAll() {
         List<Cuenta> lista = new ArrayList<>();
         String sql = BASE_SELECT + "WHERE c.activo = 1 ORDER BY c.id_cuenta DESC";
+        try (Connection con = SQLConnector.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSetToCuenta(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Cuenta> getTodasLasCuentas() {
+        List<Cuenta> lista = new ArrayList<>();
+        String sql = BASE_SELECT + "ORDER BY c.id_cuenta DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -83,7 +97,7 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
     @Override
     public boolean update(Cuenta entidad) {
-        String sql = "UPDATE CUENTAS SET numero_cuenta = ?, id_empleado = ?, id_tipo_cuenta = ?, nombre_cuenta = ?, descripcion = ?, saldo = ?, limite_asignado = ?, activo = ? WHERE id_cuenta = ?";
+        String sql = "UPDATE CUENTAS SET numero_cuenta = ?, id_empleado = ?, nombre_cuenta = ?, descripcion = ?, saldo = ?, limite_asignado = ?, activo = ? WHERE id_cuenta = ?";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -93,13 +107,12 @@ public class CuentaDao implements Dao<Cuenta, Long> {
             } else {
                 ps.setNull(2, Types.BIGINT);
             }
-            ps.setLong(3, entidad.getIdTipoCuenta());
-            ps.setString(4, entidad.getNombreCuenta());
-            ps.setString(5, entidad.getDescripcion());
-            ps.setBigDecimal(6, entidad.getSaldo() != null ? entidad.getSaldo() : BigDecimal.ZERO);
-            ps.setBigDecimal(7, entidad.getLimiteAsignado() != null ? entidad.getLimiteAsignado() : BigDecimal.ZERO);
-            ps.setInt(8, entidad.isActivo() ? 1 : 0);
-            ps.setLong(9, entidad.getIdCuenta());
+            ps.setString(3, entidad.getNombreCuenta());
+            ps.setString(4, entidad.getDescripcion());
+            ps.setBigDecimal(5, entidad.getSaldo() != null ? entidad.getSaldo() : BigDecimal.ZERO);
+            ps.setBigDecimal(6, entidad.getLimiteAsignado() != null ? entidad.getLimiteAsignado() : BigDecimal.ZERO);
+            ps.setInt(7, entidad.isActivo() ? 1 : 0);
+            ps.setLong(8, entidad.getIdCuenta());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -150,7 +163,7 @@ public class CuentaDao implements Dao<Cuenta, Long> {
     }
 
     public Cuenta getCuentaConservadora() {
-        String sql = BASE_SELECT + "WHERE tc.es_conservadora = 1 AND c.activo = 1";
+        String sql = BASE_SELECT + "WHERE c.id_empleado IS NULL AND c.activo = 1";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -214,7 +227,7 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
             // 3. Registrar el movimiento contable de Reintegro
             String sqlMov = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                            "VALUES(?, ?, ?, 'REINTEGRO_CONSERVADORA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
+                    "VALUES(?, ?, ?, 'REINTEGRO_CONSERVADORA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
             try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
                 ps.setLong(1, idCuenta);
                 ps.setLong(2, conservadora.getIdCuenta());
@@ -259,13 +272,12 @@ public class CuentaDao implements Dao<Cuenta, Long> {
         Cuenta c = new Cuenta();
         c.setIdCuenta(rs.getLong("id_cuenta"));
         c.setNumeroCuenta(rs.getString("numero_cuenta"));
-        
+
         long idEmp = rs.getLong("id_empleado");
         if (!rs.wasNull()) {
             c.setIdEmpleado(idEmp);
         }
-        
-        c.setIdTipoCuenta(rs.getLong("id_tipo_cuenta"));
+
         c.setNombreCuenta(rs.getString("nombre_cuenta"));
         c.setDescripcion(rs.getString("descripcion"));
         c.setSaldo(rs.getBigDecimal("saldo"));
@@ -278,10 +290,6 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
         try {
             c.setNombreEmpleado(rs.getString("nombre_empleado"));
-        } catch (SQLException ignored) {}
-
-        try {
-            c.setNombreTipoCuenta(rs.getString("nombre_tipo_cuenta"));
         } catch (SQLException ignored) {}
 
         return c;

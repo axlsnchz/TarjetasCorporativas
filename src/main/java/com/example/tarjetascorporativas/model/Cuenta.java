@@ -8,7 +8,6 @@ public class Cuenta implements Serializable {
     private Long idCuenta;
     private String numeroCuenta;
     private Long idEmpleado; // null para la Cuenta Conservadora Principal
-    private Long idTipoCuenta;
     private String nombreCuenta;
     private String descripcion;
     private BigDecimal saldo;
@@ -18,25 +17,22 @@ public class Cuenta implements Serializable {
 
     // Campos auxiliares / relaciones para Vistas y DTOs
     private String nombreEmpleado;
-    private String nombreTipoCuenta;
 
     public Cuenta() {
     }
 
-    public Cuenta(Long idCuenta, String numeroCuenta, Long idEmpleado, Long idTipoCuenta, BigDecimal saldo, boolean activo) {
+    public Cuenta(Long idCuenta, String numeroCuenta, Long idEmpleado, BigDecimal saldo, boolean activo) {
         this.idCuenta = idCuenta;
         this.numeroCuenta = numeroCuenta;
         this.idEmpleado = idEmpleado;
-        this.idTipoCuenta = idTipoCuenta;
         this.saldo = saldo;
         this.activo = activo;
     }
 
-    public Cuenta(Long idCuenta, String numeroCuenta, Long idEmpleado, Long idTipoCuenta, String nombreCuenta, String descripcion, BigDecimal saldo, BigDecimal limiteAsignado, boolean activo, Timestamp fechaCreacion) {
+    public Cuenta(Long idCuenta, String numeroCuenta, Long idEmpleado, String nombreCuenta, String descripcion, BigDecimal saldo, BigDecimal limiteAsignado, boolean activo, Timestamp fechaCreacion) {
         this.idCuenta = idCuenta;
         this.numeroCuenta = numeroCuenta;
         this.idEmpleado = idEmpleado;
-        this.idTipoCuenta = idTipoCuenta;
         this.nombreCuenta = nombreCuenta;
         this.descripcion = descripcion;
         this.saldo = saldo;
@@ -67,14 +63,6 @@ public class Cuenta implements Serializable {
 
     public void setIdEmpleado(Long idEmpleado) {
         this.idEmpleado = idEmpleado;
-    }
-
-    public Long getIdTipoCuenta() {
-        return idTipoCuenta;
-    }
-
-    public void setIdTipoCuenta(Long idTipoCuenta) {
-        this.idTipoCuenta = idTipoCuenta;
     }
 
     public String getNombreCuenta() {
@@ -132,12 +120,5 @@ public class Cuenta implements Serializable {
     public void setNombreEmpleado(String nombreEmpleado) {
         this.nombreEmpleado = nombreEmpleado;
     }
-
-    public String getNombreTipoCuenta() {
-        return nombreTipoCuenta;
-    }
-
-    public void setNombreTipoCuenta(String nombreTipoCuenta) {
-        this.nombreTipoCuenta = nombreTipoCuenta;
-    }
 }
+
