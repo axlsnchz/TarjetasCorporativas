@@ -1,4 +1,38 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<%
+    // Carga de métricas reales para el Resumen General
+    com.example.tarjetascorporativas.model.dao.CuentaDao cDao = new com.example.tarjetascorporativas.model.dao.CuentaDao();
+    com.example.tarjetascorporativas.model.dao.TarjetaDao tDao = new com.example.tarjetascorporativas.model.dao.TarjetaDao();
+    com.example.tarjetascorporativas.model.dao.MovimientoDao mDao = new com.example.tarjetascorporativas.model.dao.MovimientoDao();
+
+    com.example.tarjetascorporativas.model.Cuenta concentradora = cDao.getCuentaConcentradora();
+    java.math.BigDecimal saldoConcentradora = (concentradora != null && concentradora.getSaldo() != null) ? concentradora.getSaldo() : java.math.BigDecimal.ZERO;
+
+    java.util.List<com.example.tarjetascorporativas.model.Cuenta> cuentasEmpleados = cDao.getCuentasEmpleados();
+    long cuentasActivas = cuentasEmpleados.stream().filter(com.example.tarjetascorporativas.model.Cuenta::isActivo).count();
+    long tarjetasEmitidas = tDao.getAll().size();
+
+    java.math.BigDecimal valorEnTransito = cuentasEmpleados.stream()
+            .filter(c -> c.isActivo() && c.getSaldo() != null)
+            .map(com.example.tarjetascorporativas.model.Cuenta::getSaldo)
+            .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+
+    java.math.BigDecimal balanceTotalCorporativo = saldoConcentradora.add(valorEnTransito);
+
+    java.util.List<com.example.tarjetascorporativas.model.Movimiento> ultimosMovimientos = mDao.getAll();
+
+    request.setAttribute("saldoConcentradora", saldoConcentradora);
+    request.setAttribute("saldoMatriz", saldoConcentradora); // Compatibilidad
+    request.setAttribute("cuentasActivasCount", cuentasActivas);
+    request.setAttribute("tarjetasEmitidasCount", tarjetasEmitidas);
+    request.setAttribute("valorEnTransito", valorEnTransito);
+    request.setAttribute("balanceTotalCorporativo", balanceTotalCorporativo);
+    request.setAttribute("ultimosMovimientos", ultimosMovimientos);
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -39,6 +73,56 @@
         .text-cyan-neon {
             color: #00DBE7 !important;
         }
+        .btn-figma-neon {
+            background: #00E5FF;
+            border-radius: 32px;
+            color: #002022;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-figma-neon:hover {
+            background: #00bfe7;
+            color: #002022;
+            transform: translateY(-1px);
+        }
+        .btn-outline-figma-neon {
+            background: transparent;
+            border-radius: 32px;
+            color: #00e5ff;
+            font-weight: 700;
+            border: 1px solid #00e5ff;
+            padding: 8px 20px;
+            transition: all 0.2s ease;
+        }
+        .btn-outline-figma-neon:hover {
+            background: rgba(0, 229, 255, 0.1);
+            color: #00e5ff;
+        }
+        .form-label-figma {
+            color: #bac9cc;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+            display: block;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .form-figma-input {
+            background-color: #1e2024 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            font-size: 15px !important;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-figma-input:focus {
+            border-color: #00e5ff !important;
+            box-shadow: 0 0 0 0.25rem rgba(0, 229, 255, 0.15) !important;
+        }
         .tracking-widest-custom {
             letter-spacing: 0.08rem;
         }
@@ -62,13 +146,29 @@
         <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarUsuario" aria-controls="sidebarUsuario" aria-label="Abrir menú">
             <i class="bi bi-list"></i>
         </button>
-        <!-- Icono de perfil corregido al color azul de la interfaz -->
         <i class="bi bi-person-circle text-cyan-neon fs-3 role-button" style="cursor: pointer;"></i>
     </header>
 
     <!-- CONTENIDO PRINCIPAL DE LA VISTA -->
     <main class="flex-grow-1 p-4 p-md-5">
         <div class="container-fluid p-0">
+
+            <!-- Alertas de Feedback de Sesión -->
+            <c:if test="${not empty sessionScope.mensajeExito}">
+                <div class="alert alert-success alert-dismissible fade show border-0 rounded-3 shadow mb-4" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3) !important; color: #10B981;" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i> ${sessionScope.mensajeExito}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <c:remove var="mensajeExito" scope="session"/>
+            </c:if>
+
+            <c:if test="${not empty sessionScope.mensajeError}">
+                <div class="alert alert-danger alert-dismissible fade show border-0 rounded-3 shadow mb-4" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3) !important; color: #EF4444;" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> ${sessionScope.mensajeError}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <c:remove var="mensajeError" scope="session"/>
+            </c:if>
 
             <!-- Fila de Título -->
             <div class="mb-5">
@@ -84,7 +184,9 @@
                         <div>
                             <span class="d-block fw-bold tracking-widest-custom mb-3" style="font-size: 0.75rem; color: #BAC9CC !important;">BALANCE TOTAL CORPORATIVO</span>
                             <div class="d-flex align-items-baseline gap-2 mb-4">
-                                <h3 class="display-4 fw-bold m-0 text-white">$0.0</h3>
+                                <h3 class="display-4 fw-bold m-0 text-white">
+                                    $<fmt:formatNumber value="${balanceTotalCorporativo}" pattern="#,##0.00"/>
+                                </h3>
                                 <span class="fs-4 fw-semibold text-cyan-neon">MXN</span>
                             </div>
                         </div>
@@ -93,31 +195,65 @@
                         <div class="row g-3 pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.04) !important;">
                             <div class="col-4">
                                 <span class="d-block text-uppercase fw-bold text-muted small tracking-wider mb-1" style="font-size: 0.65rem;">Cuentas Activas</span>
-                                <span class="fs-4 fw-bold text-white">0</span>
+                                <span class="fs-4 fw-bold text-white">${cuentasActivasCount}</span>
                             </div>
                             <div class="col-4">
                                 <span class="d-block text-uppercase fw-bold text-muted small tracking-wider mb-1" style="font-size: 0.65rem;">Tarjetas Emitidas</span>
-                                <span class="fs-4 fw-bold text-white">0</span>
+                                <span class="fs-4 fw-bold text-white">${tarjetasEmitidasCount}</span>
                             </div>
                             <div class="col-4">
                                 <span class="d-block text-uppercase fw-bold text-muted small tracking-wider mb-1" style="font-size: 0.65rem;">Valor en Tránsito</span>
-                                <span class="fs-4 fw-bold text-cyan-neon">$0.0</span>
+                                <span class="fs-4 fw-bold text-cyan-neon">
+                                    $<fmt:formatNumber value="${valorEnTransito}" pattern="#,##0.00"/>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Límite de Crédito Corporativo -->
+                <!-- Datos y Gestión de Cuenta Concentradora Principal -->
                 <div class="col-xl-4 col-12">
-                    <div class="p-4 p-md-5 bg-figma-neon h-100 d-flex flex-column justify-content-between shadow-sm" style="min-height: 260px;">
+                    <div class="p-4 p-md-5 h-100 d-flex flex-column justify-content-between shadow-sm" style="background: linear-gradient(135deg, #00F2FF 0%, #00BBE4 100%); border-radius: 24px; min-height: 260px;">
                         <div>
-                            <h4 class="fw-bold tracking-wider lh-sm m-0" style="font-size: 2.1rem;">LÍMITE DE <br>CRÉDITO</h4>
-                        </div>
-                        <div>
-                            <span class="fs-4 fw-bold d-block mb-3" style="color: #002022;">0% Utilizado</span>
-                            <div class="progress bg-dark bg-opacity-10" style="height: 6px; border-radius: 9999px;">
-                                <div class="progress-bar" role="progressbar" style="width: 0%; background-color: #002022;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <span class="badge px-3 py-1 rounded-pill font-monospace" style="background: rgba(0, 32, 34, 0.15); color: #002022; font-weight: 700; font-size: 11px; letter-spacing: 0.5px;">
+                                    <i class="bi bi-shield-check me-1"></i> CUENTA PRINCIPAL
+                                </span>
+                                <span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: #002022; color: #00F2FF; font-weight: 700; font-size: 10px;">
+                                    ACTIVO
+                                </span>
                             </div>
+
+                            <div class="mb-2">
+                                <h4 class="fw-bold tracking-wider lh-sm m-0" style="font-size: 1.4rem; color: #002022; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                    CUENTA CONCENTRADORA
+                                </h4>
+                                <div class="small font-monospace fw-semibold mt-1" style="color: rgba(0, 32, 34, 0.75); font-size: 12px;">
+                                    Nº Cuenta: <span class="fw-bold text-decoration-underline">ACCT-CONCENTRADORA</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <span class="d-block text-uppercase fw-bold" style="font-size: 10px; color: rgba(0, 32, 34, 0.65); letter-spacing: 1px;">Saldo Principal Disponible</span>
+                                <div class="d-flex align-items-baseline gap-1 mt-1">
+                                    <span class="display-6 fw-bold" style="color: #002022; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                        $<fmt:formatNumber value="${saldoConcentradora}" pattern="#,##0.00"/>
+                                    </span>
+                                    <span class="fw-bold fs-6" style="color: #002022;">MXN</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3">
+                            <p class="small m-0 mb-3 fw-semibold" style="color: rgba(0, 32, 34, 0.85); font-size: 12px; line-height: 1.4;">
+                                Cuenta principal que concentra la liquidez corporativa y distribuye fondos al sistema.
+                            </p>
+                            <button type="button" class="btn w-100 fw-bold py-3 rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                                    style="background: #002022; color: #00F2FF; border: none; font-size: 0.95rem; transition: all 0.2s ease;"
+                                    data-bs-toggle="modal" data-bs-target="#modalIntroducirFondos">
+                                <i class="bi bi-plus-circle-fill fs-5"></i>
+                                <span>Introducir Fondos</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -148,25 +284,66 @@
             <!-- Contenedor Oscuro de la Tabla y Estado Vacío -->
             <div class="row">
                 <div class="col-12">
-                    <div class="bg-figma-card p-4 p-md-5 d-flex flex-column shadow-lg" style="min-height: 400px; background: #14161c;">
+                    <div class="bg-figma-card p-4 p-md-5 d-flex flex-column shadow-lg" style="min-height: 350px; background: #14161c;">
 
-                        <!-- Encabezados integrados exactamente dentro del contenedor -->
-                        <div class="row text-uppercase fw-bold text-muted pb-3 mb-4 border-bottom g-0" style="font-size: 0.65rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.04) !important; opacity: 0.6;">
-                            <div class="col-3 text-start">Concepto</div>
+                        <!-- Encabezados integrados -->
+                        <div class="row text-uppercase fw-bold text-muted pb-3 mb-3 border-bottom g-0" style="font-size: 0.65rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.04) !important; opacity: 0.6;">
+                            <div class="col-4 text-start">Concepto / Descripción</div>
                             <div class="col-3 text-center">Fecha</div>
-                            <div class="col-3 text-center">Estado</div>
+                            <div class="col-2 text-center">Estado</div>
                             <div class="col-3 text-end">Monto</div>
                         </div>
 
-                        <!-- Bloque Central de Estado Vacío -->
-                        <div class="text-center my-auto py-5">
-                            <div class="d-inline-flex align-items-center justify-content-center border rounded-3 mb-4"
-                                 style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(255, 255, 255, 0.25);">
-                                <i class="bi bi-question-lg fs-4"></i>
-                            </div>
-                            <h5 class="fw-normal text-white mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem;">Aún no hay transacciones registradas</h5>
-                            <p class="small text-muted m-0 mx-auto" style="max-width: 420px; font-family: 'Plus Jakarta Sans', sans-serif;">Aún no se han agregado datos para mostrar en esta vista.</p>
-                        </div>
+                        <c:choose>
+                            <c:when test="${not empty ultimosMovimientos}">
+                                <div class="d-flex flex-column gap-2" id="transactionsList">
+                                    <c:forEach var="mov" items="${ultimosMovimientos}">
+                                        <div class="row align-items-center py-3 px-2 rounded-3 g-0 transaction-item" style="border-bottom: 1px solid rgba(255, 255, 255, 0.03); transition: background 0.2s ease;">
+                                            <div class="col-4 text-start d-flex align-items-center gap-3">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                                     style="width: 38px; height: 38px; background: ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? 'rgba(0, 242, 255, 0.1)' : 'rgba(99, 102, 241, 0.1)'}; color: ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? '#00F2FF' : '#818CF8'}; border: 1px solid ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? 'rgba(0, 242, 255, 0.2)' : 'rgba(99, 102, 241, 0.2)'};">
+                                                    <i class="bi ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? 'bi-plus-lg' : 'bi-arrow-left-right'} fs-6"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold text-white" style="font-size: 0.9rem;">
+                                                        <c:choose>
+                                                            <c:when test="${mov.tipoMovimiento == 'DEPOSITO_INICIAL'}">Ingreso a Cuenta Concentradora</c:when>
+                                                            <c:when test="${mov.tipoMovimiento == 'TRANSFERENCIA'}">Transferencia de Fondos</c:when>
+                                                            <c:when test="${mov.tipoMovimiento == 'REINTEGRO_CONSERVADORA'}">Reintegro a Cuenta Concentradora</c:when>
+                                                            <c:otherwise>${mov.tipoMovimiento}</c:otherwise>
+                                                        </c:choose>
+                                                    </div>
+                                                    <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${mov.descripcion}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 text-center small text-muted font-monospace" style="color: #94A3B8 !important; font-size: 0.8rem;">
+                                                <fmt:formatDate value="${mov.fechaMovimiento}" pattern="dd/MM/yyyy HH:mm" />
+                                            </div>
+                                            <div class="col-2 text-center">
+                                                <span class="badge px-3 py-1 rounded-pill font-monospace"
+                                                      style="background: rgba(0, 242, 255, 0.1); color: #00F2FF; border: 1px solid rgba(0, 242, 255, 0.3); font-size: 10px;">
+                                                        ${mov.estado}
+                                                </span>
+                                            </div>
+                                            <div class="col-3 text-end font-monospace fw-bold fs-6 ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? 'text-cyan-neon' : 'text-white'}">
+                                                    ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? '+' : ''}$<fmt:formatNumber value="${mov.monto}" pattern="#,##0.00"/>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- Bloque Central de Estado Vacío -->
+                                <div class="text-center my-auto py-5">
+                                    <div class="d-inline-flex align-items-center justify-content-center border rounded-3 mb-4"
+                                         style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(255, 255, 255, 0.25);">
+                                        <i class="bi bi-question-lg fs-4"></i>
+                                    </div>
+                                    <h5 class="fw-normal text-white mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem;">Aún no hay transacciones registradas</h5>
+                                    <p class="small text-muted m-0 mx-auto" style="max-width: 420px; font-family: 'Plus Jakarta Sans', sans-serif;">Utiliza el botón de Introducir Fondos para inyectar capital a la Cuenta Concentradora.</p>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
 
                     </div>
                 </div>
@@ -175,6 +352,9 @@
         </div>
     </main>
 </div>
+
+<!-- Modal Introducir Fondos -->
+<jsp:include page="modal-introducir-fondos.jsp" />
 
 <!-- Bootstrap 5 JavaScript Bundle LOCAL -->
 <script src="../assets/js/bootstrap.bundle.min.js"></script>
