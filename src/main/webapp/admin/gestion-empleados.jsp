@@ -1,4 +1,36 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<%
+    // Si la lista de empleados no está presente en el request (ej. acceso directo al JSP), la cargamos automáticamente
+    if (request.getAttribute("listaEmpleados") == null) {
+        com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
+        com.example.tarjetascorporativas.model.dao.DepartamentoDao dDao = new com.example.tarjetascorporativas.model.dao.DepartamentoDao();
+
+        java.util.List<com.example.tarjetascorporativas.model.Usuario> lista = uDao.getTodosLosEmpleados();
+        java.util.List<com.example.tarjetascorporativas.model.Departamento> deptos = dDao.getAll();
+
+        long actCount = lista.stream().filter(com.example.tarjetascorporativas.model.Usuario::isActivo).count();
+
+        java.util.Calendar calNow = java.util.Calendar.getInstance();
+        int curMonth = calNow.get(java.util.Calendar.MONTH);
+        int curYear = calNow.get(java.util.Calendar.YEAR);
+
+        long nmCount = lista.stream().filter(u -> {
+            if (u.getFechaCreacion() == null) return false;
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(u.getFechaCreacion());
+            return cal.get(java.util.Calendar.MONTH) == curMonth && cal.get(java.util.Calendar.YEAR) == curYear;
+        }).count();
+
+        request.setAttribute("listaEmpleados", lista);
+        request.setAttribute("totalEmpleados", lista.size());
+        request.setAttribute("activosCount", actCount);
+        request.setAttribute("deptosCount", deptos.size());
+        request.setAttribute("nuevosMesCount", nmCount);
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -45,6 +77,19 @@
             color: #002022;
             transform: translateY(-1px);
         }
+        .btn-outline-figma-neon {
+            background: transparent;
+            border-radius: 32px;
+            color: #00e5ff;
+            font-weight: 700;
+            border: 1px solid #00e5ff;
+            padding: 10px 24px;
+            transition: all 0.2s ease;
+        }
+        .btn-outline-figma-neon:hover {
+            background: rgba(0, 229, 255, 0.1);
+            color: #00e5ff;
+        }
         .text-cyan-neon {
             color: #00DBE7 !important;
         }
@@ -54,7 +99,6 @@
         .font-jakarta {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        /* Custom styles for inputs aligned with Figma */
         .form-figma-search {
             background: #0D0F14 !important;
             border: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -72,9 +116,63 @@
             border-radius: 8px !important;
             font-size: 0.85rem;
         }
+        .form-label-figma {
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-figma-input {
+            background-color: #1e2024 !important;
+            border: 1px solid #30363d !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+        }
+        .form-figma-input:focus {
+            border-color: #00e5ff !important;
+            box-shadow: 0 0 0 0.25rem rgba(0, 229, 255, 0.15) !important;
+        }
+        .form-figma-input::placeholder {
+            color: #4b5563 !important;
+        }
+        .avatar-upload-box {
+            width: 110px;
+            height: 110px;
+            background: rgba(11, 14, 20, 0.5);
+            border: 2px solid #30363d;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-badge-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #00e5ff;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #0d1117;
+        }
         .backdrop-blur {
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+        }
+        .employee-row:hover {
+            background: #1e222a !important;
         }
     </style>
 </head>
@@ -86,7 +184,7 @@
 <!-- CONTENEDOR PRINCIPAL -->
 <div class="main-content d-flex flex-column min-vh-100">
 
-    <!-- HEADER SUPERIOR GLOBAL (Corregido e Incorporado) -->
+    <!-- HEADER SUPERIOR GLOBAL VISIBLE -->
     <header class="sticky-top w-100 d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
             style="height: 75px; background: rgba(12, 14, 18, 0.75); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
         <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarAdmin" aria-controls="sidebarAdmin" aria-label="Abrir menú">
@@ -98,6 +196,23 @@
     <main class="flex-grow-1 p-4 p-md-5 pt-4">
         <div class="container-fluid p-0">
 
+            <!-- Mensajes Alerta Feedback -->
+            <c:if test="${not empty sessionScope.mensajeExito}">
+                <div class="alert alert-success alert-dismissible fade show border-0 text-white mb-4 shadow-sm" style="background: rgba(16, 185, 129, 0.2); border-left: 4px solid #10b981 !important;" role="alert">
+                    <i class="bi bi-check-circle-fill me-2 text-success"></i> ${sessionScope.mensajeExito}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% session.removeAttribute("mensajeExito"); %>
+            </c:if>
+
+            <c:if test="${not empty sessionScope.mensajeError}">
+                <div class="alert alert-danger alert-dismissible fade show border-0 text-white mb-4 shadow-sm" style="background: rgba(239, 68, 68, 0.2); border-left: 4px solid #ef4444 !important;" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i> ${sessionScope.mensajeError}
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% session.removeAttribute("mensajeError"); %>
+            </c:if>
+
             <!-- Fila de Encabezado de Sección (Título y Acción) -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-4 mb-5">
                 <div>
@@ -105,59 +220,61 @@
                     <p class="text-muted m-0 mt-1" style="color: #B9CACB !important;">Administra y monitorea el acceso institucional de tu equipo.</p>
                 </div>
 
-                <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm">
+                <!-- Botón que activa la ventana emergente Modal -->
+                <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm"
+                        data-bs-toggle="modal" data-bs-target="#modalRegistrarEmpleado">
                     <i class="bi bi-person-plus-fill fs-5"></i>
                     <span>Registrar Empleado</span>
                 </button>
             </div>
 
-            <!-- Grid de Tarjetas de Indicadores (Métricas) -->
+            <!-- Grid de Tarjetas de Indicadores (Métricas Dinámicas) -->
             <div class="row g-4 mb-4">
                 <!-- Total Empleados -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="p-4 bg-figma-card shadow-sm">
                         <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Total Empleados</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">0</h3>
+                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${totalEmpleados}</h3>
                     </div>
                 </div>
                 <!-- Activos -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="p-4 bg-figma-card shadow-sm">
                         <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Activos</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">0</h3>
+                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${activosCount}</h3>
                     </div>
                 </div>
                 <!-- Departamentos -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="p-4 bg-figma-card shadow-sm">
                         <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Departamentos</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">0</h3>
+                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${deptosCount}</h3>
                     </div>
                 </div>
                 <!-- Nuevos (Mes) -->
                 <div class="col-sm-6 col-xl-3">
                     <div class="p-4 bg-figma-card shadow-sm">
                         <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Nuevos (Mes)</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">0</h3>
+                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${nuevosMesCount}</h3>
                     </div>
                 </div>
             </div>
 
-            <!-- Barra de Herramientas (Filtros y Búsqueda) -->
+            <!-- Barra de Herramientas (Filtros y Búsqueda Interactiva) -->
             <div class="p-3 mb-4 rounded-4 shadow-sm" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.03);">
                 <div class="row g-3 align-items-center">
                     <!-- Buscador -->
-                    <div class="col-10 col-md-8 col-lg-9 font-jakarta">
+                    <div class="col-12 col-md-8 col-lg-9 font-jakarta">
                         <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Buscar Empleado</label>
                         <div class="position-relative">
                             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #475569;"></i>
-                            <input type="text" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre del empleado...">
+                            <input type="text" id="searchEmpleadoInput" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre o correo del empleado...">
                         </div>
                     </div>
                     <!-- Filtro Estado -->
-                    <div class="col-2 col-md-4 col-lg-3 font-jakarta">
+                    <div class="col-12 col-md-4 col-lg-3 font-jakarta">
                         <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Estado</label>
-                        <select class="form-select form-figma-select py-2 shadow-none">
+                        <select id="selectEstadoFilter" class="form-select form-figma-select py-2 shadow-none">
                             <option selected value="all">Todos los estados</option>
                             <option value="active">Activos</option>
                             <option value="inactive">Inactivos</option>
@@ -166,14 +283,14 @@
                 </div>
             </div>
 
-            <!-- Contenedor de Tabla con Estado Vacío -->
+            <!-- Contenedor de Tabla de Empleados -->
             <div class="row">
                 <div class="col-12">
                     <div class="bg-figma-card p-4 p-md-5 d-flex flex-column shadow-lg font-jakarta" style="min-height: 400px; background: #14171C;">
 
-                        <!-- Encabezados de la Tabla CORREGIDOS (Color idéntico a los inputs y sin opacidad opaca) -->
-                        <div class="row text-uppercase fw-bold pb-3 mb-5 border-bottom align-items-center d-none d-md-flex"
-                             style="font-size: 0.68rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.06) !important; color: #F5F5F5 !important;">
+                        <!-- ENCABEZADOS DE LA TABLA CONFIGURADOS EXACTAMENTE IGUAL A LA IMAGEN MUESTRA -->
+                        <div class="row text-uppercase fw-bold pb-3 mb-4 border-bottom align-items-center d-none d-md-flex"
+                             style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; letter-spacing: 1.5px; border-color: rgba(255, 255, 255, 0.05) !important; color: #64748B !important; background-color: transparent;">
                             <div class="col-md-3">Empleado</div>
                             <div class="col-md-3">Correo Electrónico</div>
                             <div class="col-md-2">Departamento</div>
@@ -181,17 +298,94 @@
                             <div class="col-md-2 text-end">Acciones</div>
                         </div>
 
-                        <!-- Bloque Central de Estado Vacío -->
-                        <div class="text-center my-auto py-5">
-                            <div class="d-inline-flex align-items-center justify-content-center border rounded-3 mb-4"
-                                 style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(255, 255, 255, 0.35);">
-                                <i class="bi bi-person-dash fs-4"></i>
-                            </div>
-                            <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay empleados registrados</h5>
-                            <p class="small text-muted m-0 mx-auto" style="max-width: 440px; color: #737373 !important;">
-                                Aún no se han agregado datos para mostrar en esta vista.
-                            </p>
-                        </div>
+                        <!-- LISTADO DINÁMICO DE EMPLEADOS -->
+                        <c:choose>
+                            <c:when test="${empty listaEmpleados}">
+                                <!-- Estado Vacío -->
+                                <div class="text-center my-auto py-5">
+                                    <div class="d-inline-flex align-items-center justify-content-center border rounded-3 mb-4"
+                                         style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(255, 255, 255, 0.35);">
+                                        <i class="bi bi-person-dash fs-4"></i>
+                                    </div>
+                                    <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay empleados registrados</h5>
+                                    <p class="small text-muted m-0 mx-auto" style="max-width: 440px; color: #737373 !important;">
+                                        Haz clic en "Registrar Empleado" para agregar nuevos miembros al equipo.
+                                    </p>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div id="employeeListContainer" class="d-flex flex-column gap-2">
+                                    <c:forEach var="emp" items="${listaEmpleados}">
+                                        <div class="row align-items-center py-3 px-3 rounded-3 employee-row"
+                                             data-nombre="${emp.nombre.toLowerCase()}"
+                                             data-correo="${emp.correo.toLowerCase()}"
+                                             data-estado="${emp.activo ? 'active' : 'inactive'}"
+                                             style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.04); transition: all 0.2s ease;">
+
+                                            <!-- Empleado (Avatar, Nombre y Cargo) -->
+                                            <div class="col-12 col-md-3 mb-2 mb-md-0 d-flex align-items-center gap-3">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0"
+                                                     style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e293b, #00dbe7); color: #0c0e12 !important; font-size: 14px;">
+                                                        ${emp.nombre.substring(0, 1).toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold text-white" style="font-size: 0.95rem;">${emp.nombre}</div>
+                                                    <div class="small" style="font-size: 0.78rem; color: #64748B;">
+                                                            ${empty emp.nombreCargo ? 'Empleado' : emp.nombreCargo}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Correo Electrónico -->
+                                            <div class="col-12 col-md-3 mb-2 mb-md-0 text-break" style="font-size: 0.85rem; color: #cbd5e1;">
+                                                    ${emp.correo}
+                                            </div>
+
+                                            <!-- Departamento -->
+                                            <div class="col-12 col-md-2 mb-2 mb-md-0" style="font-size: 0.85rem; color: #cbd5e1;">
+                                                    ${empty emp.nombreDepartamento ? 'General' : emp.nombreDepartamento}
+                                            </div>
+
+                                            <!-- Estado Badge -->
+                                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                                <c:choose>
+                                                    <c:when test="${emp.activo}">
+                                                        <span class="badge px-3 py-2 rounded-pill font-monospace"
+                                                              style="background: rgba(0, 242, 255, 0.1); color: #00F2FF; border: 1px solid rgba(0, 242, 255, 0.3); font-size: 0.7rem; letter-spacing: 0.05rem;">
+                                                            ACTIVO
+                                                        </span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge px-3 py-2 rounded-pill font-monospace"
+                                                              style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.7rem; letter-spacing: 0.05rem;">
+                                                            INACTIVO
+                                                        </span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+
+                                            <!-- Acciones -->
+                                            <div class="col-12 col-md-2 text-md-end d-flex align-items-center justify-content-md-end gap-2">
+                                                <form action="${pageContext.request.contextPath}/admin/cambiar-estado-empleado" method="POST" class="d-inline">
+                                                    <input type="hidden" name="idUsuario" value="${emp.idUsuario}">
+                                                    <input type="hidden" name="nuevoEstado" value="${!emp.activo}">
+                                                    <button type="submit" class="btn btn-sm btn-link p-1 text-muted text-hover-white border-0"
+                                                            title="${emp.activo ? 'Desactivar Empleado' : 'Activar Empleado'}">
+                                                        <i class="bi ${emp.activo ? 'bi-trash' : 'bi-check-circle'} fs-5" style="color: #64748B;"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+
+                                <!-- Mensaje por si el filtro no encuentra resultados -->
+                                <div id="emptyFilterStateBlock" class="text-center py-5 d-none">
+                                    <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
+                                    <h6 class="text-muted">No se encontraron empleados coincidentes con la búsqueda</h6>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
 
                     </div>
                 </div>
@@ -201,7 +395,53 @@
     </main>
 </div>
 
+<!-- Ventana Emergente Modal Registrar Empleado -->
+<jsp:include page="modal-registrar-empleado.jsp" />
+
 <!-- Bootstrap 5 JS Bundle LOCAL -->
 <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script de filtrado interactivo -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById("searchEmpleadoInput");
+        const selectEstado = document.getElementById("selectEstadoFilter");
+        const rows = document.querySelectorAll(".employee-row");
+        const emptyFilterBlock = document.getElementById("emptyFilterStateBlock");
+
+        function filterTable() {
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+            const selectedState = selectEstado ? selectEstado.value : "all";
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const name = row.getAttribute("data-nombre") || "";
+                const email = row.getAttribute("data-correo") || "";
+                const estado = row.getAttribute("data-estado") || "";
+
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesState = selectedState === "all" || estado === selectedState;
+
+                if (matchesSearch && matchesState) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            if (emptyFilterBlock) {
+                if (visibleCount === 0 && rows.length > 0) {
+                    emptyFilterBlock.classList.remove("d-none");
+                } else {
+                    emptyFilterBlock.classList.add("d-none");
+                }
+            }
+        }
+
+        if (searchInput) searchInput.addEventListener("input", filterTable);
+        if (selectEstado) selectEstado.addEventListener("change", filterTable);
+    });
+</script>
 </body>
 </html>

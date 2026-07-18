@@ -1,4 +1,24 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<%
+  // Si la lista de cuentas no está presente en el request (acceso directo al JSP), la cargamos automáticamente
+  if (request.getAttribute("listaCuentas") == null) {
+    com.example.tarjetascorporativas.model.dao.CuentaDao cDao = new com.example.tarjetascorporativas.model.dao.CuentaDao();
+    com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
+
+    java.util.List<com.example.tarjetascorporativas.model.Cuenta> cuentas = cDao.getTodasLasCuentas();
+    java.util.List<com.example.tarjetascorporativas.model.Usuario> empleados = uDao.getEmpleados();
+
+    long actCount = cuentas.stream().filter(com.example.tarjetascorporativas.model.Cuenta::isActivo).count();
+
+    request.setAttribute("listaCuentas", cuentas);
+    request.setAttribute("listaEmpleados", empleados);
+    request.setAttribute("cuentasActivasCount", actCount);
+  }
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -58,6 +78,19 @@
       color: #002022;
       transform: translateY(-1px);
     }
+    .btn-outline-figma-neon {
+      background: transparent;
+      border-radius: 32px;
+      color: #00e5ff;
+      font-weight: 700;
+      border: 1px solid #00e5ff;
+      padding: 8px 20px;
+      transition: all 0.2s ease;
+    }
+    .btn-outline-figma-neon:hover {
+      background: rgba(0, 229, 255, 0.1);
+      color: #00e5ff;
+    }
     .text-cyan-neon {
       color: #00DBE7 !important;
     }
@@ -81,8 +114,28 @@
       border-radius: 8px !important;
       font-size: 0.85rem;
     }
+    .form-label-figma {
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .form-figma-input {
+      background-color: #1e2024 !important;
+      border: 1px solid #30363d !important;
+      color: #ffffff !important;
+      border-radius: 8px !important;
+      padding: 10px 14px !important;
+      font-size: 14px !important;
+    }
+    .form-figma-input:focus {
+      border-color: #00e5ff !important;
+      box-shadow: 0 0 0 0.25rem rgba(0, 229, 255, 0.15) !important;
+    }
 
-    /* CORRECCIÓN DE COLOR AQUÍ: Forzamos el fondo oscuro directo a los headers */
     .table-figma-header th {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 11px;
@@ -93,6 +146,10 @@
       background-color: #14171C !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
       padding: 16px 24px;
+    }
+
+    .account-row:hover {
+      background: #1e222a !important;
     }
 
     .backdrop-blur {
@@ -121,6 +178,23 @@
   <main class="flex-grow-1 p-4 p-md-5 pt-4">
     <div class="container-fluid p-0">
 
+      <!-- Mensajes Alerta Feedback -->
+      <c:if test="${not empty sessionScope.mensajeExito}">
+        <div class="alert alert-success alert-dismissible fade show border-0 text-white mb-4 shadow-sm" style="background: rgba(16, 185, 129, 0.2); border-left: 4px solid #10b981 !important;" role="alert">
+          <i class="bi bi-check-circle-fill me-2 text-success"></i> ${sessionScope.mensajeExito}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% session.removeAttribute("mensajeExito"); %>
+      </c:if>
+
+      <c:if test="${not empty sessionScope.mensajeError}">
+        <div class="alert alert-danger alert-dismissible fade show border-0 text-white mb-4 shadow-sm" style="background: rgba(239, 68, 68, 0.2); border-left: 4px solid #ef4444 !important;" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i> ${sessionScope.mensajeError}
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% session.removeAttribute("mensajeError"); %>
+      </c:if>
+
       <!-- Encabezado de la Vista -->
       <div class="mb-4">
         <h2 class="fw-bold text-white m-0 lh-sm" style="font-size: 2.6rem; color: #E1FDFF !important;">Gestión de Cuentas</h2>
@@ -129,23 +203,23 @@
 
       <!-- Fila superior: Tarjetas de Acciones Principales -->
       <div class="row g-4 mb-4">
-        <!-- Tarjeta: Añadir Nuevo Talento -->
+        <!-- Tarjeta: Crear Cuenta -->
         <div class="col-12 col-lg-7">
           <div class="bg-figma-card p-4 h-100 d-flex flex-column justify-content-between">
             <div class="card-glow-effect"></div>
 
             <div class="row align-items-center g-3">
               <div class="col-12 col-sm-7 col-md-8">
-                <h3 class="font-plus-jakarta fw-normal mb-2" style="color: #C3F5FF; font-size: 1.85rem;">Añadir Nuevo Talento</h3>
+                <h3 class="font-plus-jakarta fw-normal mb-2" style="color: #C3F5FF; font-size: 1.85rem;">Crear Nueva Cuenta</h3>
                 <p class="small text-muted mb-0" style="color: #BAC9CC !important; line-height: 1.5;">
-                  Inicia el proceso de creación de cuenta fintech para nuevos empleados de la organización.
+                  Inicia la asignación de cuentas corporativas (viáticos, bonos, combustible) a los empleados.
                 </p>
               </div>
-              <!-- Icono de Reemplazo Estilizado -->
+              <!-- Icono Estilizado -->
               <div class="col-12 col-sm-5 col-md-4 text-end d-none d-sm-block">
                 <div class="d-inline-flex align-items-center justify-content-center rounded-4 border border-info border-opacity-10 shadow-sm mx-auto"
                      style="width: 110px; height: 110px; background: rgba(0, 229, 255, 0.03); color: #00E5FF;">
-                  <i class="bi bi-person-badge-fill display-4 opacity-50"></i>
+                  <i class="bi bi-wallet2 display-4 opacity-50"></i>
                 </div>
               </div>
             </div>
@@ -154,31 +228,37 @@
             <div class="d-flex justify-content-between align-items-end mt-4">
               <div>
                 <div class="text-muted small fw-medium" style="color: #BAC9CC !important; font-size: 0.9rem;">Cuentas Activas</div>
-                <div class="fw-bold text-white fs-3 font-plus-jakarta mt-1">0</div>
+                <div class="fw-bold text-white fs-3 font-plus-jakarta mt-1">${cuentasActivasCount}</div>
               </div>
-              <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2">
-                <i class="bi bi-person-plus-fill fs-5"></i>
+              <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2"
+                      data-bs-toggle="modal" data-bs-target="#modalRegistrarCuenta">
+                <i class="bi bi-plus-circle-fill fs-5"></i>
                 <span>Crear Cuenta</span>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Tarjeta: Depositar a cuentas -->
+        <!-- Tarjeta: Resumen Estadístico -->
         <div class="col-12 col-lg-5">
           <div class="bg-figma-card p-4 h-100 d-flex flex-column justify-content-between">
             <div class="card-glow-effect"></div>
 
             <div>
               <h3 class="font-plus-jakarta fw-normal mb-2 mt-2" style="color: #C3F5FF; font-size: 1.85rem; line-height: 1.2;">
-                Deposita a las cuentas<br>de los empleados
+                Gestión Integral<br>de Cuentas Corporativas
               </h3>
+              <p class="small text-muted mb-0" style="color: #BAC9CC !important; line-height: 1.4;">
+                Supervisa el estado, saldo asignado y disponibilidad de capital de cada departamento.
+              </p>
             </div>
 
-            <div class="text-end mt-4">
-              <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2">
-                <i class="bi bi-cash-stack fs-5"></i>
-                <span>Depositar</span>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <span class="text-muted small">Total Cuentas: <strong class="text-white">${listaCuentas.size()}</strong></span>
+              <button class="btn btn-outline-figma-neon px-3 py-1 d-inline-flex align-items-center gap-2"
+                      data-bs-toggle="modal" data-bs-target="#modalRegistrarCuenta">
+                <i class="bi bi-credit-card-2-front fs-6"></i>
+                <span>Nueva Asignación</span>
               </button>
             </div>
           </div>
@@ -189,60 +269,165 @@
       <div class="p-3 mb-4 rounded-4" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.03);">
         <div class="row g-3 align-items-center">
           <div class="col-12 col-md-8">
-            <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Buscar Titular</label>
+            <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Buscar Titular o Cuenta</label>
             <div class="position-relative">
               <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #475569;"></i>
-              <input type="text" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre del empleado...">
+              <input type="text" id="searchCuentaInput" class="form-control form-figma-search ps-5 py-2" placeholder="Buscar por empleado o nombre de cuenta...">
             </div>
           </div>
           <div class="col-12 col-md-4">
             <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Estado</label>
-            <select class="form-select form-figma-select py-2 shadow-none">
+            <select id="selectEstadoCuentaFilter" class="form-select form-figma-select py-2 shadow-none">
               <option selected value="all">Todos los estados</option>
-              <option value="active">Activo</option>
-              <option value="inactive">Inactivo</option>
+              <option value="active">Activas</option>
+              <option value="inactive">Inactivas</option>
             </select>
           </div>
         </div>
       </div>
 
       <!-- Contenedor de la Tabla -->
-      <div class="bg-figma-card overflow-hidden shadow-lg">
-        <div class="table-responsive">
-          <table class="table table-borderless m-0 align-middle">
-            <thead class="table-figma-header">
-            <tr>
-              <th style="width: 28%;">Empleado</th>
-              <th style="width: 22%; text-align: center;">Cuenta</th>
-              <th style="width: 18%; text-align: center;">Saldo Actual</th>
-              <th style="width: 16%;">Estado</th>
-              <th style="width: 16%; text-align: right;">Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Las filas dinámicas irán aquí sin alterar el color superior -->
-            </tbody>
-          </table>
-        </div>
+      <div class="bg-figma-card overflow-hidden shadow-lg" style="min-height: 350px;">
+        <c:choose>
+          <c:when test="${empty listaCuentas}">
+            <!-- Bloque de Estado Vacío dentro del contenedor -->
+            <div class="d-flex flex-column align-items-center justify-content-center text-center font-plus-jakarta py-5 px-3" style="min-height: 250px; background: #14171C;">
+              <div class="mb-3 d-flex align-items-center justify-content-center border rounded-3"
+                   style="width: 44px; height: 44px; border-color: #3B494C !important; color: #64748B;">
+                <i class="bi bi-file-earmark-text fs-4"></i>
+              </div>
+              <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay cuentas registradas</h5>
+              <p class="small text-muted mb-0" style="color: #737373 !important;">
+                Haz clic en "Crear Cuenta" para asignar una nueva cuenta corporativa a un empleado.
+              </p>
+            </div>
+          </c:when>
+          <c:otherwise>
+            <div class="table-responsive">
+              <table class="table table-borderless m-0 align-middle">
+                <thead class="table-figma-header">
+                <tr>
+                  <th style="width: 30%;">Titular (Empleado)</th>
+                  <th style="width: 25%;">Cuenta</th>
+                  <th style="width: 15%; text-align: right;">Saldo</th>
+                  <th style="width: 15%; text-align: right;">Límite</th>
+                  <th style="width: 10%;">Estado</th>
+                  <th style="width: 5%; text-align: right;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="accountTableBody">
+                <c:forEach var="cta" items="${listaCuentas}">
+                  <tr class="account-row"
+                      data-titular="${empty cta.nombreEmpleado ? '' : cta.nombreEmpleado.toLowerCase()}"
+                      data-cuenta="${cta.nombreCuenta.toLowerCase()}"
+                      data-estado="${cta.activo ? 'active' : 'inactive'}"
+                      style="border-bottom: 1px solid rgba(255, 255, 255, 0.03); color: #E2E2E8;">
+                    <td>
+                      <div class="fw-semibold text-white">${empty cta.nombreEmpleado ? 'Cuenta Corporativa' : cta.nombreEmpleado}</div>
+                      <div class="small text-muted" style="font-size: 11px;">${cta.numeroCuenta}</div>
+                    </td>
+                    <td>
+                      <div class="fw-medium text-white">${cta.nombreCuenta}</div>
+                      <div class="small text-muted" style="font-size: 11px;">${cta.descripcion}</div>
+                    </td>
+                    <td style="text-align: right;" class="font-monospace text-cyan-neon fw-bold">
+                      $<fmt:formatNumber value="${cta.saldo}" pattern="#,##0.00" />
+                    </td>
+                    <td style="text-align: right;" class="font-monospace text-light">
+                      $<fmt:formatNumber value="${cta.limiteAsignado}" pattern="#,##0.00" />
+                    </td>
+                    <td>
+                      <c:choose>
+                        <c:when test="${cta.activo}">
+                          <span class="badge px-3 py-1 rounded-pill font-monospace"
+                                style="background: rgba(0, 242, 255, 0.1); color: #00F2FF; border: 1px solid rgba(0, 242, 255, 0.3); font-size: 10px;">
+                            ACTIVA
+                          </span>
+                        </c:when>
+                        <c:otherwise>
+                          <span class="badge px-3 py-1 rounded-pill font-monospace"
+                                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 10px;">
+                            INACTIVA
+                          </span>
+                        </c:otherwise>
+                      </c:choose>
+                    </td>
+                    <td style="text-align: right;">
+                      <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="d-inline">
+                        <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
+                        <input type="hidden" name="nuevoEstado" value="${!cta.activo}">
+                        <button type="submit" class="btn btn-sm btn-link p-1 text-muted border-0"
+                                title="${cta.activo ? 'Desactivar y Reintegrar Saldo' : 'Activar Cuenta'}">
+                          <i class="bi ${cta.activo ? 'bi-trash' : 'bi-check-circle'} fs-5" style="color: #64748B;"></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                </c:forEach>
+                </tbody>
+              </table>
+            </div>
 
-        <!-- Bloque de Estado Vacío dentro del contenedor -->
-        <div class="d-flex flex-column align-items-center justify-content-center text-center font-plus-jakarta py-5 px-3" style="min-height: 220px; background: #14171C;">
-          <div class="mb-3 d-flex align-items-center justify-content-center border rounded-3"
-               style="width: 44px; height: 44px; border-color: #3B494C !important; color: #64748B;">
-            <i class="bi bi-file-earmark-text fs-4"></i>
-          </div>
-          <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay cuentas registradas</h5>
-          <p class="small text-muted mb-0" style="color: #737373 !important;">
-            Aún no se han agregado datos para mostrar en esta vista.
-          </p>
-        </div>
+            <!-- Estado filtrado vacío -->
+            <div id="emptyAccountFilterStateBlock" class="text-center py-5 d-none">
+              <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
+              <h6 class="text-muted">No se encontraron cuentas coincidentes con la búsqueda</h6>
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
 
     </div>
   </main>
 </div>
 
+<!-- Modal Registrar Cuenta -->
+<jsp:include page="modal-registrar-cuenta.jsp" />
+
 <!-- Bootstrap 5 JS Bundle LOCAL -->
 <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script de filtrado interactivo para Cuentas -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("searchCuentaInput");
+    const selectEstado = document.getElementById("selectEstadoCuentaFilter");
+    const rows = document.querySelectorAll(".account-row");
+    const emptyFilterBlock = document.getElementById("emptyAccountFilterStateBlock");
+
+    function filterTable() {
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+      const selectedState = selectEstado ? selectEstado.value : "all";
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const titular = row.getAttribute("data-titular") || "";
+        const cuenta = row.getAttribute("data-cuenta") || "";
+        const estado = row.getAttribute("data-estado") || "";
+
+        const matchesSearch = titular.includes(searchTerm) || cuenta.includes(searchTerm);
+        const matchesState = selectedState === "all" || estado === selectedState;
+
+        if (matchesSearch && matchesState) {
+          row.style.display = "";
+          visibleCount++;
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      if (emptyFilterBlock) {
+        if (visibleCount === 0 && rows.length > 0) {
+          emptyFilterBlock.classList.remove("d-none");
+        } else {
+          emptyFilterBlock.classList.add("d-none");
+        }
+      }
+    }
+
+    if (searchInput) searchInput.addEventListener("input", filterTable);
+    if (selectEstado) selectEstado.addEventListener("change", filterTable);
+  });
+</script>
 </body>
 </html>
