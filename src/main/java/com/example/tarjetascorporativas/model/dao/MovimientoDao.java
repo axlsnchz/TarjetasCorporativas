@@ -5,7 +5,11 @@ import com.example.tarjetascorporativas.model.Movimiento;
 import com.example.tarjetascorporativas.utils.SQLConnector;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +18,7 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     @Override
     public boolean create(Movimiento entidad) {
         String sql = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                     "VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)";
+                "VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -40,10 +44,10 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getAll() {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                     "FROM MOVIMIENTOS m " +
-                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                     "ORDER BY m.fecha_movimiento DESC";
+                "FROM MOVIMIENTOS m " +
+                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -60,10 +64,10 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     @Override
     public Movimiento getById(Long id) {
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                     "FROM MOVIMIENTOS m " +
-                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                     "WHERE m.id_movimiento = ?";
+                "FROM MOVIMIENTOS m " +
+                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                "WHERE m.id_movimiento = ?";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -94,11 +98,11 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getByCuentaId(Long idCuenta) {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                     "FROM MOVIMIENTOS m " +
-                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                     "WHERE m.id_cuenta_origen = ? OR m.id_cuenta_destino = ? " +
-                     "ORDER BY m.fecha_movimiento DESC";
+                "FROM MOVIMIENTOS m " +
+                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                "WHERE m.id_cuenta_origen = ? OR m.id_cuenta_destino = ? " +
+                "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -118,11 +122,11 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getByEmpleadoId(Long idEmpleado) {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                     "FROM MOVIMIENTOS m " +
-                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                     "WHERE co.id_empleado = ? OR cd.id_empleado = ? " +
-                     "ORDER BY m.fecha_movimiento DESC";
+                "FROM MOVIMIENTOS m " +
+                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                "WHERE co.id_empleado = ? OR cd.id_empleado = ? " +
+                "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -142,11 +146,11 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getByEstado(String estado) {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                     "FROM MOVIMIENTOS m " +
-                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                     "WHERE m.estado = ? " +
-                     "ORDER BY m.fecha_movimiento DESC";
+                "FROM MOVIMIENTOS m " +
+                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                "WHERE m.estado = ? " +
+                "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -176,13 +180,7 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
             return false;
         }
 
-        // REGLA CRÍTICA 1: Solo se permiten transferencias entre cuentas del MISMO TIPO
-        if (!origen.getIdTipoCuenta().equals(destino.getIdTipoCuenta())) {
-            System.err.println("Error en transferencia: Las cuentas no son del mismo tipo.");
-            return false;
-        }
-
-        // REGLA CRÍTICA 2: Verificación de Saldo Suficiente
+        // REGLA CRÍTICA: Verificación de Saldo Suficiente
         if (origen.getSaldo().compareTo(monto) < 0) {
             System.err.println("Error en transferencia: Saldo insuficiente en la cuenta de origen.");
             return false;
@@ -211,12 +209,63 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
 
             // 3. Insertar movimiento
             String sqlMov = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                            "VALUES(?, ?, ?, 'TRANSFERENCIA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
+                    "VALUES(?, ?, ?, 'TRANSFERENCIA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
             try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
                 ps.setLong(1, idCuentaOrigen);
                 ps.setLong(2, idCuentaDestino);
                 ps.setBigDecimal(3, monto);
                 ps.setString(4, descripcion != null ? descripcion : "Transferencia entre cuentas del mismo tipo");
+                ps.executeUpdate();
+            }
+
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            if (con != null) {
+                try { con.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (con != null) {
+                try { con.setAutoCommit(true); con.close(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+        }
+    }
+
+    public boolean registrarDepositoConservadora(BigDecimal monto, String descripcion) {
+        if (monto == null || monto.compareTo(BigDecimal.ZERO) <= 0) {
+            return false;
+        }
+
+        CuentaDao cuentaDao = new CuentaDao();
+        Cuenta conservadora = cuentaDao.getCuentaConservadora();
+
+        if (conservadora == null) {
+            System.err.println("Error en depósito: No se encontró la Cuenta Conservadora.");
+            return false;
+        }
+
+        Connection con = null;
+        try {
+            con = SQLConnector.getConnection();
+            con.setAutoCommit(false);
+
+            // 1. Sumar saldo a la Cuenta Conservadora
+            String sqlSumar = "UPDATE CUENTAS SET saldo = saldo + ? WHERE id_cuenta = ?";
+            try (PreparedStatement ps = con.prepareStatement(sqlSumar)) {
+                ps.setBigDecimal(1, monto);
+                ps.setLong(2, conservadora.getIdCuenta());
+                ps.executeUpdate();
+            }
+
+            // 2. Registrar movimiento de Depósito Inicial
+            String sqlMov = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
+                    "VALUES(NULL, ?, ?, 'DEPOSITO_INICIAL', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
+            try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
+                ps.setLong(1, conservadora.getIdCuenta());
+                ps.setBigDecimal(2, monto);
+                ps.setString(3, (descripcion != null && !descripcion.trim().isEmpty()) ? descripcion : "Ingreso de fondos a Cuenta Concentradora Corporativa");
                 ps.executeUpdate();
             }
 

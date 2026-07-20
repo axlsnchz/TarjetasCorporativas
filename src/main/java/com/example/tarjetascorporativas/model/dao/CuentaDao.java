@@ -77,9 +77,30 @@ public class CuentaDao implements Dao<Cuenta, Long> {
         return lista;
     }
 
+    public List<Cuenta> getCuentasEmpleados() {
+        List<Cuenta> lista = new ArrayList<>();
+        String sql = BASE_SELECT +
+                "WHERE c.id_empleado IS NOT NULL " +
+                "AND c.numero_cuenta NOT IN ('ACCT-MATRIZ', 'ACCT-CONCENTRADORA') " +
+                "AND UPPER(c.nombre_cuenta) NOT LIKE '%MATRIZ%' " +
+                "AND UPPER(c.nombre_cuenta) NOT LIKE '%CONCENTRADORA%' " +
+                "ORDER BY c.id_cuenta DESC";
+        try (Connection con = SQLConnector.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSetToCuenta(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     @Override
     public Cuenta getById(Long id) {
-        String sql = BASE_SELECT + "WHERE c.id_cuenta = ? AND c.activo = 1";
+        String sql = BASE_SELECT + "WHERE c.id_cuenta = ?";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -97,6 +118,14 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
     @Override
     public boolean update(Cuenta entidad) {
+        // La Cuenta Concentradora siempre se mantiene activa (nunca inactiva)
+        if (entidad.getIdEmpleado() == null ||
+                "ACCT-CONCENTRADORA".equalsIgnoreCase(entidad.getNumeroCuenta()) ||
+                "ACCT-MATRIZ".equalsIgnoreCase(entidad.getNumeroCuenta()) ||
+                (entidad.getNombreCuenta() != null && entidad.getNombreCuenta().toUpperCase().contains("CONCENTRADORA"))) {
+            entidad.setActivo(true);
+        }
+
         String sql = "UPDATE CUENTAS SET numero_cuenta = ?, id_empleado = ?, nombre_cuenta = ?, descripcion = ?, saldo = ?, limite_asignado = ?, activo = ? WHERE id_cuenta = ?";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -123,7 +152,7 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
     @Override
     public boolean delete(Long id) {
-        // Regla Financiera Crítica: Retorno automático de saldo a la Cuenta Conservadora antes de borrado lógico
+        // Regla Financiera Crítica: Retorno automático de saldo a la Cuenta Concentradora antes de borrado lógico
         return deshabilitarCuenta(id);
     }
 
@@ -162,19 +191,68 @@ public class CuentaDao implements Dao<Cuenta, Long> {
         return null;
     }
 
-    public Cuenta getCuentaConservadora() {
-        String sql = BASE_SELECT + "WHERE c.id_empleado IS NULL AND c.activo = 1";
+    public Cuenta getCuentaConcentradora() {
+        String sql = BASE_SELECT +
+                "WHERE (c.id_empleado IS NULL " +
+                "OR UPPER(c.nombre_cuenta) LIKE '%MATRIZ%' " +
+                "OR UPPER(c.nombre_cuenta) LIKE '%CONCENTRADORA%' " +
+                "OR c.numero_cuenta IN ('ACCT-MATRIZ', 'ACCT-CONCENTRADORA')) " +
+                "ORDER BY c.id_cuenta ASC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
-                return mapResultSetToCuenta(rs);
+                Cuenta c = mapResultSetToCuenta(rs);
+                boolean necesitaActualizar = false;
+                if (!"CUENTA CONCENTRADORA CORPORATIVA".equalsIgnoreCase(c.getNombreCuenta())) {
+                    c.setNombreCuenta("CUENTA CONCENTRADORA CORPORATIVA");
+                    necesitaActualizar = true;
+                }
+                if (!"Cuenta Principal Concentradora de la Empresa".equalsIgnoreCase(c.getDescripcion())) {
+                    c.setDescripcion("Cuenta Principal Concentradora de la Empresa");
+                    necesitaActualizar = true;
+                }
+                if (!"ACCT-CONCENTRADORA".equalsIgnoreCase(c.getNumeroCuenta())) {
+                    c.setNumeroCuenta("ACCT-CONCENTRADORA");
+                    necesitaActualizar = true;
+                }
+                if (c.getIdEmpleado() != null) {
+                    c.setIdEmpleado(null);
+                    necesitaActualizar = true;
+                }
+                if (!c.isActivo()) {
+                    c.setActivo(true);
+                    necesitaActualizar = true;
+                }
+
+                if (necesitaActualizar) {
+                    update(c);
+                }
+                return c;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        // Si no existe ninguna Cuenta Concentradora, la creamos automáticamente
+        Cuenta concentradora = new Cuenta();
+        concentradora.setNumeroCuenta("ACCT-CONCENTRADORA");
+        concentradora.setIdEmpleado(null);
+        concentradora.setNombreCuenta("CUENTA CONCENTRADORA CORPORATIVA");
+        concentradora.setDescripcion("Cuenta Principal Concentradora de la Empresa");
+        concentradora.setSaldo(BigDecimal.ZERO);
+        concentradora.setLimiteAsignado(BigDecimal.ZERO);
+        concentradora.setActivo(true);
+
+        if (create(concentradora)) {
+            return getByNumeroCuenta("ACCT-CONCENTRADORA");
+        }
         return null;
+    }
+
+    public Cuenta getCuentaConservadora() {
+        return getCuentaConcentradora();
     }
 
     public boolean actualizarSaldo(Long idCuenta, BigDecimal nuevoSaldo) {
@@ -192,15 +270,15 @@ public class CuentaDao implements Dao<Cuenta, Long> {
         }
     }
 
-    public boolean retornarSaldoAConservadora(Long idCuenta) {
+    public boolean retornarSaldoAConcentradora(Long idCuenta) {
         Cuenta cuenta = getById(idCuenta);
         if (cuenta == null || cuenta.getSaldo() == null || cuenta.getSaldo().compareTo(BigDecimal.ZERO) <= 0) {
             return true; // No hay saldo que devolver
         }
 
-        Cuenta conservadora = getCuentaConservadora();
-        if (conservadora == null || conservadora.getIdCuenta().equals(idCuenta)) {
-            return false; // La propia cuenta conservadora no se devuelve a sí misma
+        Cuenta concentradora = getCuentaConcentradora();
+        if (concentradora == null || concentradora.getIdCuenta().equals(idCuenta)) {
+            return false; // La propia cuenta concentradora no se devuelve a sí misma
         }
 
         BigDecimal montoARetornar = cuenta.getSaldo();
@@ -217,11 +295,11 @@ public class CuentaDao implements Dao<Cuenta, Long> {
                 ps.executeUpdate();
             }
 
-            // 2. Sumar saldo a la Cuenta Conservadora
+            // 2. Sumar saldo a la Cuenta Concentradora
             String sqlSum = "UPDATE CUENTAS SET saldo = saldo + ? WHERE id_cuenta = ?";
             try (PreparedStatement ps = con.prepareStatement(sqlSum)) {
                 ps.setBigDecimal(1, montoARetornar);
-                ps.setLong(2, conservadora.getIdCuenta());
+                ps.setLong(2, concentradora.getIdCuenta());
                 ps.executeUpdate();
             }
 
@@ -230,9 +308,9 @@ public class CuentaDao implements Dao<Cuenta, Long> {
                     "VALUES(?, ?, ?, 'REINTEGRO_CONSERVADORA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
             try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
                 ps.setLong(1, idCuenta);
-                ps.setLong(2, conservadora.getIdCuenta());
+                ps.setLong(2, concentradora.getIdCuenta());
                 ps.setBigDecimal(3, montoARetornar);
-                ps.setString(4, "Reintegro automático por desactivación/borrado de cuenta");
+                ps.setString(4, "Reintegro automático a Cuenta Concentradora por desactivación/borrado de cuenta");
                 ps.executeUpdate();
             }
 
@@ -251,9 +329,22 @@ public class CuentaDao implements Dao<Cuenta, Long> {
         }
     }
 
+    public boolean retornarSaldoAConservadora(Long idCuenta) {
+        return retornarSaldoAConcentradora(idCuenta);
+    }
+
     public boolean deshabilitarCuenta(Long idCuenta) {
-        // 1. Devolver saldo automáticamente a la Conservadora
-        retornarSaldoAConservadora(idCuenta);
+        Cuenta c = getById(idCuenta);
+        if (c != null && (c.getIdEmpleado() == null ||
+                "ACCT-CONCENTRADORA".equalsIgnoreCase(c.getNumeroCuenta()) ||
+                "ACCT-MATRIZ".equalsIgnoreCase(c.getNumeroCuenta()) ||
+                (c.getNombreCuenta() != null && (c.getNombreCuenta().toUpperCase().contains("CONCENTRADORA") || c.getNombreCuenta().toUpperCase().contains("MATRIZ"))))) {
+            // La Cuenta Concentradora NUNCA se puede desactivar ni dar de baja
+            return false;
+        }
+
+        // 1. Devolver saldo automáticamente a la Concentradora
+        retornarSaldoAConcentradora(idCuenta);
 
         // 2. Desactivar la cuenta (Borrado lógico)
         String sql = "UPDATE CUENTAS SET activo = 0 WHERE id_cuenta = ?";
