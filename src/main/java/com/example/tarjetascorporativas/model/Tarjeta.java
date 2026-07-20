@@ -14,8 +14,13 @@ public class Tarjeta implements Serializable {
     private boolean activo;
     private Timestamp fechaCreacion;
 
-    // Campo auxiliar para Vistas
+    // Campos auxiliares / relaciones para Vistas y DTOs
     private String numeroCuenta;
+    private String nombreEmpleado;
+    private String nombreCargo;
+    private String nombreDepartamento;
+    private String nombreCuenta;
+    private Long idEmpleado;
 
     public Tarjeta() {
     }
@@ -120,5 +125,45 @@ public class Tarjeta implements Serializable {
 
     public void setNumeroCuenta(String numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
+    }
+
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
+    public String getNombreCargo() {
+        return nombreCargo;
+    }
+
+    public void setNombreCargo(String nombreCargo) {
+        this.nombreCargo = nombreCargo;
+    }
+
+    public String getNombreDepartamento() {
+        return nombreDepartamento;
+    }
+
+    public void setNombreDepartamento(String nombreDepartamento) {
+        this.nombreDepartamento = nombreDepartamento;
+    }
+
+    public String getNombreCuenta() {
+        return nombreCuenta;
+    }
+
+    public void setNombreCuenta(String nombreCuenta) {
+        this.nombreCuenta = nombreCuenta;
+    }
+
+    public Long getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(Long idEmpleado) {
+        this.idEmpleado = idEmpleado;
     }
 }
