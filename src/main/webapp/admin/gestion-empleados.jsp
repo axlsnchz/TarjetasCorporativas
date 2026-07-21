@@ -174,6 +174,27 @@
         .employee-row:hover {
             background: #1e222a !important;
         }
+        /* Estilos menú contextual Dropdown en tabla */
+        .dropdown-menu-dark-custom {
+            background-color: #14171C !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+        }
+        .dropdown-menu-dark-custom .dropdown-item {
+            color: #E2E2E8 !important;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            transition: background 0.15s ease;
+        }
+        .dropdown-menu-dark-custom .dropdown-item:hover {
+            background-color: rgba(0, 242, 255, 0.08) !important;
+            color: #00F2FF !important;
+        }
+        .dropdown-menu-dark-custom .dropdown-item.text-danger:hover {
+            background-color: rgba(239, 68, 68, 0.15) !important;
+            color: #ef4444 !important;
+        }
     </style>
 </head>
 <body>
@@ -222,7 +243,7 @@
 
                 <!-- Botón que activa la ventana emergente Modal -->
                 <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm"
-                        data-bs-toggle="modal" data-bs-target="#modalRegistrarEmpleado">
+                        data-bs-toggle="modal" data-bs-target="#modalRegistrarEmpleado" onclick="prepararModalRegistrarEmpleado()">
                     <i class="bi bi-person-plus-fill fs-5"></i>
                     <span>Registrar Empleado</span>
                 </button>
@@ -366,14 +387,46 @@
 
                                             <!-- Acciones -->
                                             <div class="col-12 col-md-2 text-md-end d-flex align-items-center justify-content-md-end gap-2">
-                                                <form action="${pageContext.request.contextPath}/admin/cambiar-estado-empleado" method="POST" class="d-inline">
-                                                    <input type="hidden" name="idUsuario" value="${emp.idUsuario}">
-                                                    <input type="hidden" name="nuevoEstado" value="${!emp.activo}">
-                                                    <button type="submit" class="btn btn-sm btn-link p-1 text-muted text-hover-white border-0"
-                                                            title="${emp.activo ? 'Desactivar Empleado' : 'Activar Empleado'}">
-                                                        <i class="bi ${emp.activo ? 'bi-trash' : 'bi-check-circle'} fs-5" style="color: #64748B;"></i>
+                                                <!-- Icono Editar -->
+                                                <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar empleado"
+                                                        data-bs-toggle="modal" data-bs-target="#modalRegistrarEmpleado"
+                                                        onclick="prepararModalEditarEmpleado('${emp.idUsuario}', '${emp.nombre}', '${emp.correo}', '${emp.nombreDepartamento}', '${emp.nombreCargo}')">
+                                                    <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
+                                                </button>
+                                                <!-- Dropdown de Acciones (3 puntos) -->
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm text-muted p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical fs-5" style="color: #64748B;"></i>
                                                     </button>
-                                                </form>
+                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-custom py-2">
+                                                        <c:choose>
+                                                            <c:when test="${emp.activo}">
+                                                                <li>
+                                                                    <form action="${pageContext.request.contextPath}/admin/cambiar-estado-empleado" method="POST" class="m-0">
+                                                                        <input type="hidden" name="idUsuario" value="${emp.idUsuario}">
+                                                                        <input type="hidden" name="nuevoEstado" value="false">
+                                                                        <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                                                                            <i class="bi bi-power text-warning"></i>
+                                                                            <span>Desactivar</span>
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <li>
+                                                                    <form action="${pageContext.request.contextPath}/admin/cambiar-estado-empleado" method="POST" class="m-0">
+                                                                        <input type="hidden" name="idUsuario" value="${emp.idUsuario}">
+                                                                        <input type="hidden" name="nuevoEstado" value="true">
+                                                                        <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                                                                            <i class="bi bi-check-circle text-success"></i>
+                                                                            <span>Activar</span>
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </c:forEach>
