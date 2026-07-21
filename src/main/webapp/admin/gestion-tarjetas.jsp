@@ -183,7 +183,7 @@
         </div>
 
         <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm"
-                data-bs-toggle="modal" data-bs-target="#modalEmitirTarjeta">
+                data-bs-toggle="modal" data-bs-target="#modalEmitirTarjeta" onclick="prepararModalEmitirTarjeta()">
           <i class="bi bi-plus-lg fw-bold"></i>
           <span>Emitir Nueva Tarjeta</span>
         </button>
@@ -336,7 +336,8 @@
                       <!-- ACCIONES MENU -->
                       <div class="col-12 col-md-1 text-end d-flex align-items-center justify-content-end gap-2">
                         <!-- Icono Editar -->
-                        <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar tarjeta" data-bs-toggle="modal" data-bs-target="#modalEmitirTarjeta">
+                        <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar tarjeta" data-bs-toggle="modal" data-bs-target="#modalEmitirTarjeta"
+                                onclick="prepararModalEditarTarjeta('${tj.idTarjeta}', '${tj.idEmpleado}', '${tj.idCuenta}', '${tj.tipoTarjeta}', '${tj.alias}', '${tj.numeroTarjeta}', '${tj.cvv}', '${tj.fechaExpiracion}')">
                           <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
                         </button>
                         <!-- Dropdown de Acciones -->
