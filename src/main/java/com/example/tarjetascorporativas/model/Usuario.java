@@ -19,6 +19,7 @@ public class Usuario implements Serializable {
     // Campos auxiliares / relaciones para Vistas y DTOs
     private String nombreDepartamento;
     private String nombreCargo;
+    private String urlFoto;
 
     public Usuario() {
     }
@@ -150,5 +151,13 @@ public class Usuario implements Serializable {
 
     public void setNombreCargo(String nombreCargo) {
         this.nombreCargo = nombreCargo;
+    }
+
+    public String getUrlFoto() {
+        return urlFoto;
+    }
+
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
     }
 }

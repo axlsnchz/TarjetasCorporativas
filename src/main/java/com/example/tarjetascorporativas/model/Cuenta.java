@@ -17,6 +17,7 @@ public class Cuenta implements Serializable {
 
     // Campos auxiliares / relaciones para Vistas y DTOs
     private String nombreEmpleado;
+    private String urlFoto;
 
     public Cuenta() {
     }
@@ -119,6 +120,14 @@ public class Cuenta implements Serializable {
 
     public void setNombreEmpleado(String nombreEmpleado) {
         this.nombreEmpleado = nombreEmpleado;
+    }
+
+    public String getUrlFoto() {
+        return urlFoto;
+    }
+
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
     }
 }
 

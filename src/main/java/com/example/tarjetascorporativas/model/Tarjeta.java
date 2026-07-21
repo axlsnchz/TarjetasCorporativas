@@ -21,6 +21,7 @@ public class Tarjeta implements Serializable {
     private String nombreDepartamento;
     private String nombreCuenta;
     private Long idEmpleado;
+    private String urlFoto;
 
     public Tarjeta() {
     }
@@ -165,5 +166,13 @@ public class Tarjeta implements Serializable {
 
     public void setIdEmpleado(Long idEmpleado) {
         this.idEmpleado = idEmpleado;
+    }
+
+    public String getUrlFoto() {
+        return urlFoto;
+    }
+
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
     }
 }
