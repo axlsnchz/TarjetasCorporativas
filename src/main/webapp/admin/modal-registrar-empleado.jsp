@@ -14,7 +14,8 @@
             </div>
 
             <div class="modal-body p-4">
-                <form action="${pageContext.request.contextPath}/admin/registrar-empleado" method="POST" enctype="multipart/form-data">
+                <form action="${pageContext.request.contextPath}/admin/registrar-empleado" method="POST" id="formEmpleadoModal" enctype="multipart/form-data">
+                    <input type="hidden" name="idUsuario" id="inputIdUsuario" value="">
                     <div class="row g-4 align-items-stretch">
 
                         <!-- Columna Izquierda: Subida de Fotografía -->
@@ -51,32 +52,32 @@
                                         <!-- Nombre Completo -->
                                         <div class="col-12 col-md-6 mb-2">
                                             <label class="form-label-figma">NOMBRE COMPLETO</label>
-                                            <input type="text" name="nombreCompleto" class="form-control form-figma-input" placeholder="Ej. Alejandro Valdivia" required>
+                                            <input type="text" id="inputNombreCompleto" name="nombreCompleto" class="form-control form-figma-input" placeholder="Ej. Alejandro Valdivia" required>
                                         </div>
 
                                         <!-- Correo Electrónico -->
                                         <div class="col-12 col-md-6 mb-2">
                                             <label class="form-label-figma">CORREO ELECTRÓNICO</label>
-                                            <input type="email" name="correo" class="form-control form-figma-input" placeholder="alejandro@fintechcorp.com" required>
+                                            <input type="email" id="inputCorreo" name="correo" class="form-control form-figma-input" placeholder="alejandro@fintechcorp.com" required>
                                         </div>
 
                                         <!-- Departamento -->
                                         <div class="col-12 col-md-6 mb-2">
                                             <label class="form-label-figma">DEPARTAMENTO</label>
-                                            <input type="text" name="departamento" class="form-control form-figma-input" placeholder="Ej. Ciberseguridad" required>
+                                            <input type="text" id="inputDepartamento" name="departamento" class="form-control form-figma-input" placeholder="Ej. Ciberseguridad" required>
                                         </div>
 
                                         <!-- Cargo / Rol -->
                                         <div class="col-12 col-md-6 mb-2">
                                             <label class="form-label-figma">CARGO / ROL</label>
-                                            <input type="text" name="cargo" class="form-control form-figma-input" placeholder="Ej. Ejecutivo en seguridad" required>
+                                            <input type="text" id="inputCargo" name="cargo" class="form-control form-figma-input" placeholder="Ej. Ejecutivo en seguridad" required>
                                         </div>
                                     </div>
 
                                     <!-- Banner Informativo -->
                                     <div class="info-box-figma p-3 my-3 d-flex align-items-start gap-3" style="background: #0c1a26; border: 1px solid #1e3a5f; border-radius: 8px;">
                                         <i class="bi bi-info-circle text-cyan-neon fs-5 flex-shrink-0"></i>
-                                        <span style="color: #bfdbfe; font-size: 11px; line-height: 1.5;">
+                                        <span id="bannerEmpleadoText" style="color: #bfdbfe; font-size: 11px; line-height: 1.5;">
                                             Al registrar un nuevo empleado, el sistema generará automáticamente sus credenciales de acceso temporal y le enviará un correo electrónico institucional.
                                         </span>
                                     </div>
@@ -88,8 +89,8 @@
                                         Cancelar
                                     </button>
                                     <button type="submit" class="btn btn-figma-neon w-100 w-sm-auto d-inline-flex align-items-center justify-content-center gap-2">
-                                        <i class="bi bi-box-arrow-in-right"></i>
-                                        <span>Guardar Empleado</span>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <span id="btnSubmitEmpleadoText">Guardar Empleado</span>
                                     </button>
                                 </div>
 
@@ -120,4 +121,44 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    window.prepararModalRegistrarEmpleado = function() {
+        const modalLabel = document.getElementById("modalRegistrarEmpleadoLabel");
+        const btnText = document.getElementById("btnSubmitEmpleadoText");
+        const inputId = document.getElementById("inputIdUsuario");
+        const banner = document.getElementById("bannerEmpleadoText");
+
+        if (modalLabel) modalLabel.textContent = "Registrar Nuevo Empleado";
+        if (btnText) btnText.textContent = "Guardar Empleado";
+        if (inputId) inputId.value = "";
+        if (banner) banner.textContent = "Al registrar un nuevo empleado, el sistema generará automáticamente sus credenciales de acceso temporal y le enviará un correo electrónico institucional.";
+
+        const form = document.getElementById("formEmpleadoModal");
+        if (form) form.action = "${pageContext.request.contextPath}/admin/registrar-empleado";
+
+        document.getElementById("inputNombreCompleto").value = "";
+        document.getElementById("inputCorreo").value = "";
+        document.getElementById("inputDepartamento").value = "";
+        document.getElementById("inputCargo").value = "";
+    };
+
+    window.prepararModalEditarEmpleado = function(idUsuario, nombre, correo, departamento, cargo) {
+        const modalLabel = document.getElementById("modalRegistrarEmpleadoLabel");
+        const btnText = document.getElementById("btnSubmitEmpleadoText");
+        const inputId = document.getElementById("inputIdUsuario");
+        const banner = document.getElementById("bannerEmpleadoText");
+
+        if (modalLabel) modalLabel.textContent = "Editar Empleado";
+        if (btnText) btnText.textContent = "Guardar Cambios";
+        if (inputId) inputId.value = idUsuario || "";
+        if (banner) banner.textContent = "Actualiza la información del empleado en la plataforma corporativa.";
+
+        const form = document.getElementById("formEmpleadoModal");
+        if (form) form.action = "${pageContext.request.contextPath}/admin/editar-empleado";
+
+        document.getElementById("inputNombreCompleto").value = nombre || "";
+        document.getElementById("inputCorreo").value = correo || "";
+        document.getElementById("inputDepartamento").value = departamento || "";
+        document.getElementById("inputCargo").value = cargo || "";
+    };
 </script>
