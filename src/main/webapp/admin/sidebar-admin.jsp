@@ -95,8 +95,8 @@
                 <i class="bi bi-bank fs-5"></i> <span>Cuentas</span>
             </a>
 
-            <a href="gestion-tarjetas.jsp"
-               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= currentPage.endsWith("gestion-tarjetas.jsp") ? "active" : "" %>">
+            <a href="${pageContext.request.contextPath}/admin/tarjetas"
+               class="sidebar-link d-flex align-items-center gap-3 px-4 py-3 text-decoration-none <%= (currentPage.endsWith("gestion-tarjetas.jsp") || currentPage.contains("tarjeta")) ? "active" : "" %>">
                 <i class="bi bi-credit-card fs-5"></i> <span>Tarjetas</span>
             </a>
         </div>
