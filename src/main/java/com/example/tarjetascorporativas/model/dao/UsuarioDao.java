@@ -21,7 +21,7 @@ public class UsuarioDao implements Dao<Usuario, Long> {
 
     @Override
     public boolean create(Usuario entidad) {
-        String sql = "INSERT INTO USUARIOS(nombre, correo, password, rol, id_departamento, id_cargo, primer_inicio, activo, codigo_recuperacion) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIOS(nombre, correo, password, rol, id_departamento, id_cargo, primer_inicio, activo, codigo_recuperacion, url_foto) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -45,6 +45,7 @@ public class UsuarioDao implements Dao<Usuario, Long> {
             ps.setInt(7, entidad.isPrimerInicio() ? 1 : 0);
             ps.setInt(8, entidad.isActivo() ? 1 : 0);
             ps.setString(9, entidad.getCodigoRecuperacion());
+            ps.setString(10, entidad.getUrlFoto());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -90,7 +91,7 @@ public class UsuarioDao implements Dao<Usuario, Long> {
 
     @Override
     public boolean update(Usuario entidad) {
-        String sql = "UPDATE USUARIOS SET nombre = ?, correo = ?, rol = ?, id_departamento = ?, id_cargo = ?, primer_inicio = ?, activo = ? WHERE id_usuario = ?";
+        String sql = "UPDATE USUARIOS SET nombre = ?, correo = ?, rol = ?, id_departamento = ?, id_cargo = ?, primer_inicio = ?, activo = ?, url_foto = ? WHERE id_usuario = ?";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -112,7 +113,8 @@ public class UsuarioDao implements Dao<Usuario, Long> {
 
             ps.setInt(6, entidad.isPrimerInicio() ? 1 : 0);
             ps.setInt(7, entidad.isActivo() ? 1 : 0);
-            ps.setLong(8, entidad.getIdUsuario());
+            ps.setString(8, entidad.getUrlFoto());
+            ps.setLong(9, entidad.getIdUsuario());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -335,6 +337,10 @@ public class UsuarioDao implements Dao<Usuario, Long> {
 
         try {
             u.setNombreCargo(rs.getString("nombre_cargo"));
+        } catch (SQLException ignored) {}
+
+        try {
+            u.setUrlFoto(rs.getString("url_foto"));
         } catch (SQLException ignored) {}
 
         return u;

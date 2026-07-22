@@ -12,6 +12,15 @@ import java.util.List;
 
 public class TarjetaDao implements Dao<Tarjeta, Long> {
 
+    private static final String BASE_SELECT =
+            "SELECT t.*, c.numero_cuenta, c.nombre_cuenta, c.id_empleado, " +
+                    "u.nombre AS nombre_empleado, u.url_foto AS url_foto, ca.nombre AS nombre_cargo, d.nombre AS nombre_departamento " +
+                    "FROM TARJETAS t " +
+                    "JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta " +
+                    "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario " +
+                    "LEFT JOIN CARGOS ca ON u.id_cargo = ca.id_cargo " +
+                    "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento ";
+
     @Override
     public boolean create(Tarjeta entidad) {
         String sql = "INSERT INTO TARJETAS(numero_tarjeta, alias, fecha_expiracion, cvv, tipo_tarjeta, id_cuenta, activo) VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -36,7 +45,23 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
     @Override
     public List<Tarjeta> getAll() {
         List<Tarjeta> lista = new ArrayList<>();
-        String sql = "SELECT t.*, c.numero_cuenta FROM TARJETAS t JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta WHERE t.activo = 1 ORDER BY t.id_tarjeta DESC";
+        String sql = BASE_SELECT + "WHERE t.activo = 1 ORDER BY t.id_tarjeta DESC";
+        try (Connection con = SQLConnector.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapResultSetToTarjeta(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Tarjeta> getTodasLasTarjetas() {
+        List<Tarjeta> lista = new ArrayList<>();
+        String sql = BASE_SELECT + "ORDER BY t.id_tarjeta DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -52,7 +77,7 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
 
     @Override
     public Tarjeta getById(Long id) {
-        String sql = "SELECT t.*, c.numero_cuenta FROM TARJETAS t JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta WHERE t.id_tarjeta = ? AND t.activo = 1";
+        String sql = BASE_SELECT + "WHERE t.id_tarjeta = ? AND t.activo = 1";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -107,7 +132,7 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
 
     public List<Tarjeta> getByCuentaId(Long idCuenta) {
         List<Tarjeta> lista = new ArrayList<>();
-        String sql = "SELECT t.*, c.numero_cuenta FROM TARJETAS t JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta WHERE t.id_cuenta = ? AND t.activo = 1 ORDER BY t.id_tarjeta DESC";
+        String sql = BASE_SELECT + "WHERE t.id_cuenta = ? AND t.activo = 1 ORDER BY t.id_tarjeta DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -124,7 +149,7 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
     }
 
     public Tarjeta getByNumeroTarjeta(String numeroTarjeta) {
-        String sql = "SELECT t.*, c.numero_cuenta FROM TARJETAS t JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta WHERE t.numero_tarjeta = ? AND t.activo = 1";
+        String sql = BASE_SELECT + "WHERE t.numero_tarjeta = ? AND t.activo = 1";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -161,6 +186,33 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
 
         try {
             t.setNumeroCuenta(rs.getString("numero_cuenta"));
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setNombreCuenta(rs.getString("nombre_cuenta"));
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setNombreEmpleado(rs.getString("nombre_empleado"));
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setNombreCargo(rs.getString("nombre_cargo"));
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setNombreDepartamento(rs.getString("nombre_departamento"));
+        } catch (SQLException ignored) {}
+
+        try {
+            long idEmp = rs.getLong("id_empleado");
+            if (!rs.wasNull()) {
+                t.setIdEmpleado(idEmp);
+            }
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setUrlFoto(rs.getString("url_foto"));
         } catch (SQLException ignored) {}
 
         return t;

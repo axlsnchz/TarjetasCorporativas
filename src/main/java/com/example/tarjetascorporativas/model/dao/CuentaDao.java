@@ -15,7 +15,7 @@ import java.util.List;
 public class CuentaDao implements Dao<Cuenta, Long> {
 
     private static final String BASE_SELECT =
-            "SELECT c.*, u.nombre AS nombre_empleado " +
+            "SELECT c.*, u.nombre AS nombre_empleado, u.url_foto AS url_foto " +
                     "FROM CUENTAS c " +
                     "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario ";
 
@@ -381,6 +381,10 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
         try {
             c.setNombreEmpleado(rs.getString("nombre_empleado"));
+        } catch (SQLException ignored) {}
+
+        try {
+            c.setUrlFoto(rs.getString("url_foto"));
         } catch (SQLException ignored) {}
 
         return c;
