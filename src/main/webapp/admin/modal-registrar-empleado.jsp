@@ -140,9 +140,16 @@
         document.getElementById("inputCorreo").value = "";
         document.getElementById("inputDepartamento").value = "";
         document.getElementById("inputCargo").value = "";
+
+        const avatarImg = document.getElementById('avatarImageModal');
+        const placeholder = document.getElementById('uploadPlaceholderModal');
+        if (avatarImg) { avatarImg.src = ""; avatarImg.classList.add('d-none'); }
+        if (placeholder) placeholder.classList.remove('d-none');
+        const fotoInput = document.getElementById('fotoInputModal');
+        if (fotoInput) fotoInput.value = "";
     };
 
-    window.prepararModalEditarEmpleado = function(idUsuario, nombre, correo, departamento, cargo) {
+    window.prepararModalEditarEmpleado = function(idUsuario, nombre, correo, departamento, cargo, urlFoto) {
         const modalLabel = document.getElementById("modalRegistrarEmpleadoLabel");
         const btnText = document.getElementById("btnSubmitEmpleadoText");
         const inputId = document.getElementById("inputIdUsuario");
@@ -160,5 +167,34 @@
         document.getElementById("inputCorreo").value = correo || "";
         document.getElementById("inputDepartamento").value = departamento || "";
         document.getElementById("inputCargo").value = cargo || "";
+
+        const avatarImg = document.getElementById('avatarImageModal');
+        const placeholder = document.getElementById('uploadPlaceholderModal');
+        if (urlFoto && urlFoto.trim().length > 0) {
+            if (avatarImg) {
+                avatarImg.src = urlFoto;
+                avatarImg.classList.remove('d-none');
+            }
+            if (placeholder) placeholder.classList.add('d-none');
+        } else {
+            if (avatarImg) {
+                avatarImg.src = "";
+                avatarImg.classList.add('d-none');
+            }
+            if (placeholder) placeholder.classList.remove('d-none');
+        }
+        const fotoInput = document.getElementById('fotoInputModal');
+        if (fotoInput) fotoInput.value = "";
+    };
+
+    window.prepararModalEditarEmpleadoDesdeElemento = function(btn) {
+        if (!btn) return;
+        const idUsuario = btn.getAttribute('data-id');
+        const nombre = btn.getAttribute('data-nombre');
+        const correo = btn.getAttribute('data-correo');
+        const departamento = btn.getAttribute('data-depto');
+        const cargo = btn.getAttribute('data-cargo');
+        const urlFoto = btn.getAttribute('data-foto');
+        window.prepararModalEditarEmpleado(idUsuario, nombre, correo, departamento, cargo, urlFoto);
     };
 </script>

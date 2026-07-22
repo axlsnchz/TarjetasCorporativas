@@ -105,25 +105,7 @@ public class EmpleadoServlet extends HttpServlet {
             fotoPart = request.getPart("foto");
         } catch (Exception ignored) {}
 
-        String base64Foto = null;
-        if (fotoPart != null && fotoPart.getSize() > 0) {
-            try (java.io.InputStream is = fotoPart.getInputStream();
-                 java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream()) {
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = is.read(buffer)) != -1) {
-                    baos.write(buffer, 0, bytesRead);
-                }
-                byte[] imageBytes = baos.toByteArray();
-                String mimeType = fotoPart.getContentType();
-                if (mimeType == null || !mimeType.startsWith("image/")) {
-                    mimeType = "image/png";
-                }
-                base64Foto = "data:" + mimeType + ";base64," + java.util.Base64.getEncoder().encodeToString(imageBytes);
-            } catch (Exception e) {
-                System.err.println("Error procesando foto de perfil: " + e.getMessage());
-            }
-        }
+        String base64Foto = procesarFotoBase64(fotoPart);
 
         if (esEdicion) {
             try {
@@ -275,5 +257,47 @@ public class EmpleadoServlet extends HttpServlet {
         request.setAttribute("activosCount", activosCount);
         request.setAttribute("deptosCount", deptosCount);
         request.setAttribute("nuevosMesCount", nuevosMesCount);
+    }
+
+    private String procesarFotoBase64(jakarta.servlet.http.Part fotoPart) {
+        if (fotoPart == null || fotoPart.getSize() <= 0) {
+            return null;
+        }
+
+        try (java.io.InputStream is = fotoPart.getInputStream()) {
+            java.awt.image.BufferedImage originalImage = javax.imageio.ImageIO.read(is);
+            if (originalImage == null) {
+                return null;
+            }
+
+            int targetSize = 140;
+            int originalWidth = originalImage.getWidth();
+            int originalHeight = originalImage.getHeight();
+
+            double ratio = Math.min((double) targetSize / originalWidth, (double) targetSize / originalHeight);
+            int newWidth = Math.max(1, (int) Math.round(originalWidth * ratio));
+            int newHeight = Math.max(1, (int) Math.round(originalHeight * ratio));
+
+            java.awt.image.BufferedImage resizedImage = new java.awt.image.BufferedImage(newWidth, newHeight, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            java.awt.Graphics2D g2d = resizedImage.createGraphics();
+            g2d.setRenderingHint(java.awt.rendering.RenderingHints.KEY_INTERPOLATION, java.awt.rendering.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.setRenderingHint(java.awt.rendering.RenderingHints.KEY_RENDERING, java.awt.rendering.RenderingHints.VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(java.awt.rendering.RenderingHints.KEY_ANTIALIASING, java.awt.rendering.RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2d.setColor(java.awt.Color.WHITE);
+            g2d.fillRect(0, 0, newWidth, newHeight);
+            g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+            g2d.dispose();
+
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+            javax.imageio.ImageIO.write(resizedImage, "jpg", baos);
+            byte[] imageBytes = baos.toByteArray();
+
+            return "data:image/jpeg;base64," + java.util.Base64.getEncoder().encodeToString(imageBytes);
+        } catch (Exception e) {
+            System.err.println("Error procesando foto de perfil: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 }
