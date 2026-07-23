@@ -8,8 +8,9 @@
 
   <!-- Bootstrap 5 CSS LOCAL -->
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons LOCAL -->
-  <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap Icons (CDN + Fallback Local) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
@@ -250,8 +251,8 @@
             <span>Crear y Asignar Cuenta</span>
             <i class="bi bi-chevron-right"></i>
           </button>
-          <a href="${pageContext.request.contextPath}/cuentas" class="btn btn-outline-figma-cancel w-100 w-sm-auto text-center">
-            Cancelar
+          <a href="${pageContext.request.contextPath}/cuentas" class="btn btn-outline-figma-cancel w-100 w-sm-auto text-center d-inline-flex align-items-center justify-content-center gap-1">
+            <i class="bi bi-x-circle"></i> Cancelar
           </a>
         </div>
       </form>

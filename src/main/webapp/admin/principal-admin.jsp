@@ -42,8 +42,9 @@
 
     <!-- Bootstrap 5 CSS LOCAL -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons LOCAL -->
-    <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons (CDN + Fallback Local) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -143,7 +144,7 @@
     <!-- HEADER SUPERIOR CONTROLADO -->
     <header class="sticky-top w-100 d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
             style="height: 75px; background: rgba(12, 14, 18, 0.75); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
-        <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarUsuario" aria-controls="sidebarUsuario" aria-label="Abrir menú">
+        <button class="btn d-md-none text-cyan-neon fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarAdmin" aria-controls="sidebarAdmin" aria-label="Abrir menú">
             <i class="bi bi-list"></i>
         </button>
         <i class="bi bi-person-circle text-cyan-neon fs-3 role-button" style="cursor: pointer;"></i>
@@ -262,15 +263,17 @@
             <!-- Cabecera de Transacciones -->
             <div class="row mb-4 align-items-center">
                 <div class="col-12 col-sm-6">
-                    <h4 class="fs-4 fw-semibold text-white m-0">Últimas transacciones</h4>
+                    <h4 class="fs-4 fw-semibold text-white m-0 d-flex align-items-center gap-2">
+                        <i class="bi bi-clock-history text-cyan-neon"></i> Últimas transacciones
+                    </h4>
                 </div>
 
                 <!-- Selector de Filtrado -->
                 <div class="col-12 col-sm-6 d-flex justify-content-sm-end align-items-center gap-2 mt-2 mt-sm-0">
                     <span class="text-muted d-none d-md-inline" style="font-size: 0.75rem;">Filtrar todas las transacciones</span>
                     <div class="dropdown">
-                        <button class="btn btn-sm btn-dark dropdown-toggle px-3 border-0 text-white-50" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: #14161c; font-size: 0.85rem;">
-                            Todas
+                        <button class="btn btn-sm btn-dark dropdown-toggle px-3 border-0 text-white-50 d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: #14161c; font-size: 0.85rem;">
+                            <i class="bi bi-funnel"></i> Todas
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
                             <li><a class="dropdown-item active" href="#">Todas</a></li>
@@ -288,10 +291,10 @@
 
                         <!-- Encabezados integrados -->
                         <div class="row text-uppercase fw-bold text-muted pb-3 mb-3 border-bottom g-0" style="font-size: 0.65rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.04) !important; opacity: 0.6;">
-                            <div class="col-4 text-start">Concepto / Descripción</div>
-                            <div class="col-3 text-center">Fecha</div>
-                            <div class="col-2 text-center">Estado</div>
-                            <div class="col-3 text-end">Monto</div>
+                            <div class="col-4 text-start"><i class="bi bi-file-text me-1"></i>Concepto / Descripción</div>
+                            <div class="col-3 text-center"><i class="bi bi-calendar-event me-1"></i>Fecha</div>
+                            <div class="col-2 text-center"><i class="bi bi-info-circle me-1"></i>Estado</div>
+                            <div class="col-3 text-end"><i class="bi bi-currency-dollar me-1"></i>Monto</div>
                         </div>
 
                         <c:choose>
@@ -322,11 +325,11 @@
                                             <div class="col-2 text-center">
                                                 <span class="badge px-3 py-1 rounded-pill font-monospace"
                                                       style="background: rgba(0, 242, 255, 0.1); color: #00F2FF; border: 1px solid rgba(0, 242, 255, 0.3); font-size: 10px;">
-                                                        ${mov.estado}
+                                                    ${mov.estado}
                                                 </span>
                                             </div>
                                             <div class="col-3 text-end font-monospace fw-bold fs-6 ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? 'text-cyan-neon' : 'text-white'}">
-                                                    ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? '+' : ''}$<fmt:formatNumber value="${mov.monto}" pattern="#,##0.00"/>
+                                                ${mov.tipoMovimiento == 'DEPOSITO_INICIAL' ? '+' : ''}$<fmt:formatNumber value="${mov.monto}" pattern="#,##0.00"/>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -336,8 +339,8 @@
                                 <!-- Bloque Central de Estado Vacío -->
                                 <div class="text-center my-auto py-5">
                                     <div class="d-inline-flex align-items-center justify-content-center border rounded-3 mb-4"
-                                         style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(255, 255, 255, 0.25);">
-                                        <i class="bi bi-question-lg fs-4"></i>
+                                         style="width: 48px; height: 48px; border-color: rgba(255, 255, 255, 0.15) !important; color: rgba(0, 242, 255, 0.5);">
+                                        <i class="bi bi-receipt fs-4"></i>
                                     </div>
                                     <h5 class="fw-normal text-white mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem;">Aún no hay transacciones registradas</h5>
                                     <p class="small text-muted m-0 mx-auto" style="max-width: 420px; font-family: 'Plus Jakarta Sans', sans-serif;">Utiliza el botón de Introducir Fondos para inyectar capital a la Cuenta Concentradora.</p>

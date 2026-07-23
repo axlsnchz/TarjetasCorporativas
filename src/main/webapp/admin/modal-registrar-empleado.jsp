@@ -4,7 +4,7 @@
 <div class="modal fade" id="modalRegistrarEmpleado" tabindex="-1" aria-labelledby="modalRegistrarEmpleadoLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" style="background: #0d1117; border: 1px solid #30363d; border-radius: 16px; color: #E2E2E8;">
-
+            
             <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
                 <div>
                     <h4 class="modal-title fw-semibold text-white m-0 lh-sm" id="modalRegistrarEmpleadoLabel" style="font-size: 1.8rem; color: #E1FDFF !important;">Registrar Nuevo Empleado</h4>
@@ -20,7 +20,7 @@
 
                         <!-- Columna Izquierda: Subida de Fotografía -->
                         <div class="col-12 col-lg-4">
-                            <div class="bg-figma-card p-4 h-100 d-flex flex-column align-items-center justify-content-center text-center shadow-lg"
+                            <div class="bg-figma-card p-4 h-100 d-flex flex-column align-items-center justify-content-center text-center shadow-lg" 
                                  style="min-height: 320px; background: #14171C; border: 1px solid #30363d; border-radius: 12px;">
                                 <div class="position-relative mb-4">
                                     <div class="avatar-upload-box" onclick="document.getElementById('fotoInputModal').click();">
@@ -85,8 +85,8 @@
 
                                 <!-- Botones de Acción -->
                                 <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-3">
-                                    <button type="button" class="btn btn-outline-figma-neon w-100 w-sm-auto text-center" data-bs-dismiss="modal">
-                                        Cancelar
+                                    <button type="button" class="btn btn-outline-figma-neon w-100 w-sm-auto text-center d-inline-flex align-items-center justify-content-center gap-1" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle"></i> Cancelar
                                     </button>
                                     <button type="submit" class="btn btn-figma-neon w-100 w-sm-auto d-inline-flex align-items-center justify-content-center gap-2">
                                         <i class="bi bi-check-circle-fill"></i>

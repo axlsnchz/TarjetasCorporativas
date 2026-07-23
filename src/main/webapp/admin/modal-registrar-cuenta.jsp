@@ -6,14 +6,14 @@
 <div class="modal fade" id="modalRegistrarCuenta" tabindex="-1" aria-labelledby="modalRegistrarCuentaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" style="background: #0d1117; border: 1px solid #30363d; border-radius: 16px; color: #E2E2E8;">
-
+            
             <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
                 <div>
                     <div class="d-flex align-items-center gap-2 mb-1">
                         <h4 class="modal-title fw-semibold text-white m-0 lh-sm" id="modalRegistrarCuentaLabel" style="font-size: 1.8rem; color: #E1FDFF !important;">Crear Nueva Cuenta Corporativa</h4>
                     </div>
                     <p class="text-muted m-0 mt-1 small" style="color: #B9CACB !important;">
-                        Asigna fondos y límites financieros a un empleado.
+                        Asigna fondos y límites financieros a un empleado. 
                         <span class="badge font-monospace ms-1" style="background: rgba(0, 229, 255, 0.1); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3);">
                             Disponible Concentradora: $<fmt:formatNumber value="${saldoConcentradora}" pattern="#,##0.00"/> MXN
                         </span>
@@ -72,8 +72,8 @@
 
                         <!-- Botones de Acción -->
                         <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-2">
-                            <button type="button" class="btn btn-outline-figma-neon w-100 w-sm-auto text-center" data-bs-dismiss="modal">
-                                Cancelar
+                            <button type="button" class="btn btn-outline-figma-neon w-100 w-sm-auto text-center d-inline-flex align-items-center justify-content-center gap-1" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Cancelar
                             </button>
                             <button type="submit" class="btn btn-figma-neon w-100 w-sm-auto d-inline-flex align-items-center justify-content-center gap-2">
                                 <i class="bi bi-check-circle-fill"></i>

@@ -2,20 +2,20 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <%
-  // Si las listas no están presentes en el request (ej. acceso directo al JSP), las cargamos automáticamente
-  if (request.getAttribute("listaTarjetas") == null) {
-    com.example.tarjetascorporativas.model.dao.TarjetaDao tDao = new com.example.tarjetascorporativas.model.dao.TarjetaDao();
-    com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
-    com.example.tarjetascorporativas.model.dao.CuentaDao cDao = new com.example.tarjetascorporativas.model.dao.CuentaDao();
+    // Si las listas no están presentes en el request (ej. acceso directo al JSP), las cargamos automáticamente
+    if (request.getAttribute("listaTarjetas") == null) {
+        com.example.tarjetascorporativas.model.dao.TarjetaDao tDao = new com.example.tarjetascorporativas.model.dao.TarjetaDao();
+        com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
+        com.example.tarjetascorporativas.model.dao.CuentaDao cDao = new com.example.tarjetascorporativas.model.dao.CuentaDao();
 
-    java.util.List<com.example.tarjetascorporativas.model.Tarjeta> tarjetas = tDao.getTodasLasTarjetas();
-    java.util.List<com.example.tarjetascorporativas.model.Usuario> empleados = uDao.getEmpleados();
-    java.util.List<com.example.tarjetascorporativas.model.Cuenta> cuentas = cDao.getCuentasEmpleados();
+        java.util.List<com.example.tarjetascorporativas.model.Tarjeta> tarjetas = tDao.getTodasLasTarjetas();
+        java.util.List<com.example.tarjetascorporativas.model.Usuario> empleados = uDao.getEmpleados();
+        java.util.List<com.example.tarjetascorporativas.model.Cuenta> cuentas = cDao.getCuentasEmpleados();
 
-    request.setAttribute("listaTarjetas", tarjetas);
-    request.setAttribute("listaEmpleados", empleados);
-    request.setAttribute("listaCuentas", cuentas);
-  }
+        request.setAttribute("listaTarjetas", tarjetas);
+        request.setAttribute("listaEmpleados", empleados);
+        request.setAttribute("listaCuentas", cuentas);
+    }
 %>
 
 <!DOCTYPE html>
@@ -27,8 +27,9 @@
 
   <!-- Bootstrap 5 CSS LOCAL -->
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons LOCAL -->
-  <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap Icons (CDN + Fallback Local) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -257,12 +258,12 @@
                 <!-- ENCABEZADOS DE LA TABLA EXACTOS DE FIGMA -->
                 <div class="row text-uppercase fw-bold pb-3 mb-3 border-bottom align-items-center d-none d-md-flex"
                      style="font-size: 11px; letter-spacing: 1px; border-color: rgba(255, 255, 255, 0.05) !important; color: #64748B !important;">
-                  <div class="col-md-3">TITULAR & DETALLES</div>
-                  <div class="col-md-2">ALIAS</div>
-                  <div class="col-md-2">CUENTA</div>
-                  <div class="col-md-2">TIPO</div>
-                  <div class="col-md-2">ESTADO</div>
-                  <div class="col-md-1 text-end">ACCIONES</div>
+                  <div class="col-md-3"><i class="bi bi-person me-1"></i>TITULAR & DETALLES</div>
+                  <div class="col-md-2"><i class="bi bi-tag me-1"></i>ALIAS</div>
+                  <div class="col-md-2"><i class="bi bi-bank me-1"></i>CUENTA</div>
+                  <div class="col-md-2"><i class="bi bi-credit-card-2-front me-1"></i>TIPO</div>
+                  <div class="col-md-2"><i class="bi bi-info-circle me-1"></i>ESTADO</div>
+                  <div class="col-md-1 text-end"><i class="bi bi-gear me-1"></i>ACCIONES</div>
                 </div>
 
                 <!-- LISTADO DINÁMICO DE TARJETAS -->
@@ -279,11 +280,18 @@
                       <div class="col-12 col-md-3 mb-2 mb-md-0 d-flex align-items-center gap-3">
                         <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0"
                              style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e293b, #00dbe7); color: #0c0e12 !important; font-size: 14px;">
-                            ${empty tj.nombreEmpleado ? 'T' : tj.nombreEmpleado.substring(0, 1).toUpperCase()}
+                          <c:choose>
+                            <c:when test="${not empty tj.urlFoto}">
+                              <img src="${tj.urlFoto}" alt="${tj.nombreEmpleado}" class="w-100 h-100 object-fit-cover">
+                            </c:when>
+                            <c:otherwise>
+                              ${empty tj.nombreEmpleado ? 'T' : tj.nombreEmpleado.substring(0, 1).toUpperCase()}
+                            </c:otherwise>
+                          </c:choose>
                         </div>
                         <div>
                           <div class="fw-semibold text-white" style="font-size: 0.95rem;">
-                              ${empty tj.nombreEmpleado ? 'Sin Asignar' : tj.nombreEmpleado}
+                            ${empty tj.nombreEmpleado ? 'Sin Asignar' : tj.nombreEmpleado}
                           </div>
                           <div class="small" style="font-size: 0.78rem; color: #64748B;">
                             <c:out value="${tj.nombreCargo}" default="Cargo" /> • <c:out value="${tj.nombreDepartamento}" default="Corporativo" />

@@ -54,8 +54,8 @@
 
                         <!-- Botones de Acción -->
                         <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-2">
-                            <button type="button" class="btn btn-outline-figma-neon w-100 w-sm-auto text-center" data-bs-dismiss="modal" style="border-radius: 32px; border: 1px solid #00e5ff; color: #00e5ff; font-weight: 700; padding: 8px 20px;">
-                                Cancelar
+                            <button type="button" class="btn btn-outline-figma-neon w-100 w-sm-auto text-center d-inline-flex align-items-center justify-content-center gap-1" data-bs-dismiss="modal" style="border-radius: 32px; border: 1px solid #00e5ff; color: #00e5ff; font-weight: 700; padding: 8px 20px;">
+                                <i class="bi bi-x-circle"></i> Cancelar
                             </button>
                             <button type="submit" class="btn btn-figma-neon w-100 w-sm-auto d-inline-flex align-items-center justify-content-center gap-2" style="background: #00E5FF; color: #002022; font-weight: 700; border-radius: 32px; padding: 8px 24px; border: none;">
                                 <i class="bi bi-plus-circle-fill"></i>

@@ -40,8 +40,9 @@
 
     <!-- Bootstrap 5 CSS LOCAL -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons LOCAL -->
-    <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons (CDN + Fallback Local) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -253,30 +254,42 @@
             <div class="row g-4 mb-4">
                 <!-- Total Empleados -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="p-4 bg-figma-card shadow-sm">
-                        <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Total Empleados</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${totalEmpleados}</h3>
+                    <div class="p-4 bg-figma-card shadow-sm d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Total Empleados</span>
+                            <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${totalEmpleados}</h3>
+                        </div>
+                        <i class="bi bi-people-fill text-cyan-neon fs-2 opacity-75"></i>
                     </div>
                 </div>
                 <!-- Activos -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="p-4 bg-figma-card shadow-sm">
-                        <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Activos</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${activosCount}</h3>
+                    <div class="p-4 bg-figma-card shadow-sm d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Activos</span>
+                            <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${activosCount}</h3>
+                        </div>
+                        <i class="bi bi-person-check-fill text-cyan-neon fs-2 opacity-75"></i>
                     </div>
                 </div>
                 <!-- Departamentos -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="p-4 bg-figma-card shadow-sm">
-                        <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Departamentos</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${deptosCount}</h3>
+                    <div class="p-4 bg-figma-card shadow-sm d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Departamentos</span>
+                            <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${deptosCount}</h3>
+                        </div>
+                        <i class="bi bi-building text-cyan-neon fs-2 opacity-75"></i>
                     </div>
                 </div>
                 <!-- Nuevos (Mes) -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="p-4 bg-figma-card shadow-sm">
-                        <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Nuevos (Mes)</span>
-                        <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${nuevosMesCount}</h3>
+                    <div class="p-4 bg-figma-card shadow-sm d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="d-block fw-bold text-muted text-uppercase tracking-widest-custom mb-2" style="font-size: 0.75rem; color: #B9CACB !important;">Nuevos (Mes)</span>
+                            <h3 class="fw-semibold text-cyan-neon m-0 fs-2">${nuevosMesCount}</h3>
+                        </div>
+                        <i class="bi bi-person-plus-fill text-cyan-neon fs-2 opacity-75"></i>
                     </div>
                 </div>
             </div>
@@ -312,11 +325,11 @@
                         <!-- ENCABEZADOS DE LA TABLA CONFIGURADOS EXACTAMENTE IGUAL A LA IMAGEN MUESTRA -->
                         <div class="row text-uppercase fw-bold pb-3 mb-4 border-bottom align-items-center d-none d-md-flex"
                              style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; letter-spacing: 1.5px; border-color: rgba(255, 255, 255, 0.05) !important; color: #64748B !important; background-color: transparent;">
-                            <div class="col-md-3">Empleado</div>
-                            <div class="col-md-3">Correo Electrónico</div>
-                            <div class="col-md-2">Departamento</div>
-                            <div class="col-md-2">Estado</div>
-                            <div class="col-md-2 text-end">Acciones</div>
+                            <div class="col-md-3"><i class="bi bi-person me-1"></i>Empleado</div>
+                            <div class="col-md-3"><i class="bi bi-envelope me-1"></i>Correo Electrónico</div>
+                            <div class="col-md-2"><i class="bi bi-building me-1"></i>Departamento</div>
+                            <div class="col-md-2"><i class="bi bi-info-circle me-1"></i>Estado</div>
+                            <div class="col-md-2 text-end"><i class="bi bi-gear me-1"></i>Acciones</div>
                         </div>
 
                         <!-- LISTADO DINÁMICO DE EMPLEADOS -->
@@ -342,29 +355,36 @@
                                              data-correo="${emp.correo.toLowerCase()}"
                                              data-estado="${emp.activo ? 'active' : 'inactive'}"
                                              style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.04); transition: all 0.2s ease;">
-
+                                            
                                             <!-- Empleado (Avatar, Nombre y Cargo) -->
                                             <div class="col-12 col-md-3 mb-2 mb-md-0 d-flex align-items-center gap-3">
                                                 <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold overflow-hidden flex-shrink-0"
                                                      style="width: 40px; height: 40px; background: linear-gradient(135deg, #1e293b, #00dbe7); color: #0c0e12 !important; font-size: 14px;">
-                                                        ${emp.nombre.substring(0, 1).toUpperCase()}
+                                                    <c:choose>
+                                                        <c:when test="${not empty emp.urlFoto}">
+                                                            <img src="${emp.urlFoto}" alt="${emp.nombre}" class="w-100 h-100 object-fit-cover">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${emp.nombre.substring(0, 1).toUpperCase()}
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                                 <div>
                                                     <div class="fw-semibold text-white" style="font-size: 0.95rem;">${emp.nombre}</div>
                                                     <div class="small" style="font-size: 0.78rem; color: #64748B;">
-                                                            ${empty emp.nombreCargo ? 'Empleado' : emp.nombreCargo}
+                                                        ${empty emp.nombreCargo ? 'Empleado' : emp.nombreCargo}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <!-- Correo Electrónico -->
                                             <div class="col-12 col-md-3 mb-2 mb-md-0 text-break" style="font-size: 0.85rem; color: #cbd5e1;">
-                                                    ${emp.correo}
+                                                ${emp.correo}
                                             </div>
 
                                             <!-- Departamento -->
                                             <div class="col-12 col-md-2 mb-2 mb-md-0" style="font-size: 0.85rem; color: #cbd5e1;">
-                                                    ${empty emp.nombreDepartamento ? 'General' : emp.nombreDepartamento}
+                                                ${empty emp.nombreDepartamento ? 'General' : emp.nombreDepartamento}
                                             </div>
 
                                             <!-- Estado Badge -->
@@ -390,7 +410,13 @@
                                                 <!-- Icono Editar -->
                                                 <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar empleado"
                                                         data-bs-toggle="modal" data-bs-target="#modalRegistrarEmpleado"
-                                                        onclick="prepararModalEditarEmpleado('${emp.idUsuario}', '${emp.nombre}', '${emp.correo}', '${emp.nombreDepartamento}', '${emp.nombreCargo}')">
+                                                        data-id="${emp.idUsuario}"
+                                                        data-nombre="<c:out value='${emp.nombre}'/>"
+                                                        data-correo="<c:out value='${emp.correo}'/>"
+                                                        data-depto="<c:out value='${emp.nombreDepartamento}'/>"
+                                                        data-cargo="<c:out value='${emp.nombreCargo}'/>"
+                                                        data-foto="<c:out value='${emp.urlFoto}'/>"
+                                                        onclick="prepararModalEditarEmpleadoDesdeElemento(this)">
                                                     <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
                                                 </button>
                                                 <!-- Dropdown de Acciones (3 puntos) -->

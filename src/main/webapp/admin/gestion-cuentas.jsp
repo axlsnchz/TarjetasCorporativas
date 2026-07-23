@@ -3,23 +3,23 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
 <%
-  // Si la lista de cuentas no está presente en el request (acceso directo al JSP), la cargamos automáticamente
-  if (request.getAttribute("listaCuentas") == null) {
-    com.example.tarjetascorporativas.model.dao.CuentaDao cDao = new com.example.tarjetascorporativas.model.dao.CuentaDao();
-    com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
+    // Si la lista de cuentas no está presente en el request (acceso directo al JSP), la cargamos automáticamente
+    if (request.getAttribute("listaCuentas") == null) {
+        com.example.tarjetascorporativas.model.dao.CuentaDao cDao = new com.example.tarjetascorporativas.model.dao.CuentaDao();
+        com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
 
-    java.util.List<com.example.tarjetascorporativas.model.Cuenta> cuentas = cDao.getCuentasEmpleados();
-    java.util.List<com.example.tarjetascorporativas.model.Usuario> empleados = uDao.getEmpleados();
-    com.example.tarjetascorporativas.model.Cuenta concentradora = cDao.getCuentaConcentradora();
-    java.math.BigDecimal saldoConcentradora = (concentradora != null && concentradora.getSaldo() != null) ? concentradora.getSaldo() : java.math.BigDecimal.ZERO;
+        java.util.List<com.example.tarjetascorporativas.model.Cuenta> cuentas = cDao.getCuentasEmpleados();
+        java.util.List<com.example.tarjetascorporativas.model.Usuario> empleados = uDao.getEmpleados();
+        com.example.tarjetascorporativas.model.Cuenta concentradora = cDao.getCuentaConcentradora();
+        java.math.BigDecimal saldoConcentradora = (concentradora != null && concentradora.getSaldo() != null) ? concentradora.getSaldo() : java.math.BigDecimal.ZERO;
 
-    long actCount = cuentas.stream().filter(com.example.tarjetascorporativas.model.Cuenta::isActivo).count();
+        long actCount = cuentas.stream().filter(com.example.tarjetascorporativas.model.Cuenta::isActivo).count();
 
-    request.setAttribute("listaCuentas", cuentas);
-    request.setAttribute("listaEmpleados", empleados);
-    request.setAttribute("cuentasActivasCount", actCount);
-    request.setAttribute("saldoConcentradora", saldoConcentradora);
-  }
+        request.setAttribute("listaCuentas", cuentas);
+        request.setAttribute("listaEmpleados", empleados);
+        request.setAttribute("cuentasActivasCount", actCount);
+        request.setAttribute("saldoConcentradora", saldoConcentradora);
+    }
 %>
 
 <!DOCTYPE html>
@@ -31,8 +31,9 @@
 
   <!-- Bootstrap 5 CSS LOCAL -->
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons LOCAL -->
-  <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap Icons (CDN + Fallback Local) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -346,121 +347,128 @@
               <table class="table table-borderless table-figma-dark m-0 align-middle">
                 <thead class="table-figma-header">
                 <tr>
-                  <th style="width: 32%;">EMPLEADO</th>
-                  <th style="width: 25%;">CUENTA</th>
-                  <th style="width: 20%; text-align: right;">SALDO ACTUAL</th>
-                  <th style="width: 13%; text-align: center;">ESTADO</th>
-                  <th style="width: 10%; text-align: right;">ACCIONES</th>
+                  <th style="width: 32%;"><i class="bi bi-person me-1"></i>EMPLEADO</th>
+                  <th style="width: 25%;"><i class="bi bi-wallet2 me-1"></i>CUENTA</th>
+                  <th style="width: 20%; text-align: right;"><i class="bi bi-currency-dollar me-1"></i>SALDO ACTUAL</th>
+                  <th style="width: 13%; text-align: center;"><i class="bi bi-info-circle me-1"></i>ESTADO</th>
+                  <th style="width: 10%; text-align: right;"><i class="bi bi-gear me-1"></i>ACCIONES</th>
                 </tr>
                 </thead>
                 <tbody id="accountTableBody">
                 <c:forEach var="cta" items="${listaCuentas}">
                   <c:if test="${cta.idEmpleado != null && cta.numeroCuenta != 'ACCT-CONCENTRADORA' && cta.numeroCuenta != 'ACCT-MATRIZ' && !cta.nombreCuenta.toLowerCase().contains('concentradora') && !cta.nombreCuenta.toLowerCase().contains('matriz')}">
-                    <tr class="account-row"
-                        data-titular="${empty cta.nombreEmpleado ? '' : cta.nombreEmpleado.toLowerCase()}"
-                        data-cuenta="${cta.nombreCuenta.toLowerCase()}"
-                        data-estado="${cta.activo ? 'active' : 'inactive'}">
-                      <td>
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                               style="width: 36px; height: 36px; background: rgba(0, 229, 255, 0.1); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.2);">
-                            <i class="bi bi-person-fill fs-6"></i>
-                          </div>
-                          <div>
-                            <div class="fw-semibold text-white">${empty cta.nombreEmpleado ? 'Empleado' : cta.nombreEmpleado}</div>
-                            <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${cta.numeroCuenta}</div>
-                          </div>
+                  <tr class="account-row"
+                      data-titular="${empty cta.nombreEmpleado ? '' : cta.nombreEmpleado.toLowerCase()}"
+                      data-cuenta="${cta.nombreCuenta.toLowerCase()}"
+                      data-estado="${cta.activo ? 'active' : 'inactive'}">
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0"
+                             style="width: 36px; height: 36px; background: rgba(0, 229, 255, 0.1); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.2);">
+                          <c:choose>
+                            <c:when test="${not empty cta.urlFoto}">
+                              <img src="${cta.urlFoto}" alt="${cta.nombreEmpleado}" class="w-100 h-100 object-fit-cover">
+                            </c:when>
+                            <c:otherwise>
+                              <i class="bi bi-person-fill fs-6"></i>
+                            </c:otherwise>
+                          </c:choose>
                         </div>
-                      </td>
-                      <td>
-                        <div class="fw-bold text-white text-uppercase" style="letter-spacing: 0.5px;">${cta.nombreCuenta}</div>
-                        <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${cta.descripcion}</div>
-                      </td>
-                      <td style="text-align: right;" class="font-monospace text-cyan-neon fw-bold fs-6">
-                        $<fmt:formatNumber value="${cta.saldo}" pattern="#,##0.00" />
-                      </td>
-                      <td style="text-align: center;">
-                        <c:choose>
-                          <c:when test="${cta.activo}">
+                        <div>
+                          <div class="fw-semibold text-white">${empty cta.nombreEmpleado ? 'Empleado' : cta.nombreEmpleado}</div>
+                          <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${cta.numeroCuenta}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="fw-bold text-white text-uppercase" style="letter-spacing: 0.5px;">${cta.nombreCuenta}</div>
+                      <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${cta.descripcion}</div>
+                    </td>
+                    <td style="text-align: right;" class="font-monospace text-cyan-neon fw-bold fs-6">
+                      $<fmt:formatNumber value="${cta.saldo}" pattern="#,##0.00" />
+                    </td>
+                    <td style="text-align: center;">
+                      <c:choose>
+                        <c:when test="${cta.activo}">
                           <span class="badge px-3 py-1 rounded-pill font-monospace"
                                 style="background: rgba(0, 229, 255, 0.1); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); font-size: 10px; letter-spacing: 0.5px;">
                             ACTIVO
                           </span>
-                          </c:when>
-                          <c:otherwise>
+                        </c:when>
+                        <c:otherwise>
                           <span class="badge px-3 py-1 rounded-pill font-monospace"
                                 style="background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 10px; letter-spacing: 0.5px;">
                             INACTIVO
                           </span>
-                          </c:otherwise>
-                        </c:choose>
-                      </td>
-                      <td style="text-align: right;">
-                        <div class="d-flex align-items-center justify-content-end gap-2">
-                          <!-- Icono Editar -->
-                          <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar cuenta"
-                                  data-bs-toggle="modal" data-bs-target="#modalRegistrarCuenta"
-                                  onclick="prepararModalEditarCuenta('${cta.idCuenta}', '${cta.idEmpleado}', '${cta.nombreCuenta}', '${cta.descripcion}', '${cta.limiteAsignado}')">
-                            <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
+                        </c:otherwise>
+                      </c:choose>
+                    </td>
+                    <td style="text-align: right;">
+                      <div class="d-flex align-items-center justify-content-end gap-2">
+                        <!-- Icono Editar -->
+                        <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar cuenta"
+                                data-bs-toggle="modal" data-bs-target="#modalRegistrarCuenta"
+                                onclick="prepararModalEditarCuenta('${cta.idCuenta}', '${cta.idEmpleado}', '${cta.nombreCuenta}', '${cta.descripcion}', '${cta.limiteAsignado}')">
+                          <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
+                        </button>
+                        <!-- Dropdown de Acciones -->
+                        <div class="dropstart d-inline-block">
+                          <button class="btn btn-sm text-muted border-0 p-1 shadow-none" type="button" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed", "modifiers": [{"name": "offset", "options": {"offset": [0, 8]}}, {"name": "flip", "enabled": false}]}' aria-expanded="false" title="Opciones">
+                            <i class="bi bi-three-dots-vertical fs-5" style="color: #94A3B8;"></i>
                           </button>
-                          <!-- Dropdown de Acciones -->
-                          <div class="dropstart d-inline-block">
-                            <button class="btn btn-sm text-muted border-0 p-1 shadow-none" type="button" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed", "modifiers": [{"name": "offset", "options": {"offset": [0, 8]}}, {"name": "flip", "enabled": false}]}' aria-expanded="false" title="Opciones">
-                              <i class="bi bi-three-dots-vertical fs-5" style="color: #94A3B8;"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-dark-figma">
-                              <c:if test="${cta.activo}">
-                                <li>
-                                  <button type="button" class="dropdown-item d-flex align-items-center gap-2"
-                                          data-bs-toggle="modal" data-bs-target="#modalDepositarEmpleado"
-                                          onclick="prepararModalDeposito('${cta.idCuenta}', '${empty cta.nombreEmpleado ? 'Empleado' : cta.nombreEmpleado}', '${cta.nombreCuenta}')">
-                                    <i class="bi bi-arrow-down-circle fs-6 text-cyan-neon"></i>
-                                    <span>Depositar Fondos</span>
-                                  </button>
-                                </li>
-                              </c:if>
-                              <c:choose>
-                                <c:when test="${cta.activo}">
-                                  <li>
-                                    <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="m-0">
-                                      <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
-                                      <input type="hidden" name="accion" value="desactivar">
-                                      <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
-                                        <i class="bi bi-power fs-6"></i>
-                                        <span>Desactivar</span>
-                                      </button>
-                                    </form>
-                                  </li>
-                                </c:when>
-                                <c:otherwise>
-                                  <li>
-                                    <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="m-0">
-                                      <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
-                                      <input type="hidden" name="accion" value="activar">
-                                      <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
-                                        <i class="bi bi-power fs-6 text-cyan-neon"></i>
-                                        <span>Activar</span>
-                                      </button>
-                                    </form>
-                                  </li>
-                                </c:otherwise>
-                              </c:choose>
+                          <ul class="dropdown-menu dropdown-menu-dark-figma">
+                            <c:if test="${cta.activo}">
                               <li>
-                                <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="m-0"
-                                      onsubmit="return confirm('¿Estás seguro de dar de baja la cuenta \'${cta.nombreCuenta}\'? El saldo disponible ($<fmt:formatNumber value="${cta.saldo}" pattern="#,##0.00"/>) se devolverá a la Cuenta Concentradora.');">
-                                  <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
-                                  <input type="hidden" name="accion" value="dar_de_baja">
-                                  <button type="submit" class="dropdown-item d-flex align-items-center gap-2 text-danger">
-                                    <i class="bi bi-x-lg fs-6"></i>
-                                    <span>Dar de baja</span>
-                                  </button>
-                                </form>
+                                <button type="button" class="dropdown-item d-flex align-items-center gap-2"
+                                        data-bs-toggle="modal" data-bs-target="#modalDepositarEmpleado"
+                                        onclick="prepararModalDeposito('${cta.idCuenta}', '${empty cta.nombreEmpleado ? 'Empleado' : cta.nombreEmpleado}', '${cta.nombreCuenta}')">
+                                  <i class="bi bi-arrow-down-circle fs-6 text-cyan-neon"></i>
+                                  <span>Depositar Fondos</span>
+                                </button>
                               </li>
-                            </ul>
-                          </div>
+                            </c:if>
+                            <c:choose>
+                              <c:when test="${cta.activo}">
+                                <li>
+                                  <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="m-0">
+                                    <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
+                                    <input type="hidden" name="accion" value="desactivar">
+                                    <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="bi bi-slash-circle fs-6 text-warning"></i>
+                                      <span>Desactivar</span>
+                                    </button>
+                                  </form>
+                                </li>
+                              </c:when>
+                              <c:otherwise>
+                                <li>
+                                  <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="m-0">
+                                    <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
+                                    <input type="hidden" name="accion" value="activar">
+                                    <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="bi bi-check-circle fs-6 text-cyan-neon"></i>
+                                      <span>Activar</span>
+                                    </button>
+                                  </form>
+                                </li>
+                              </c:otherwise>
+                            </c:choose>
+                            <li>
+                              <form action="${pageContext.request.contextPath}/admin/cambiar-estado-cuenta" method="POST" class="m-0"
+                                    onsubmit="return confirm('¿Estás seguro de dar de baja la cuenta \'${cta.nombreCuenta}\'? El saldo disponible ($<fmt:formatNumber value="${cta.saldo}" pattern="#,##0.00"/>) se devolverá a la Cuenta Concentradora.');">
+                                <input type="hidden" name="idCuenta" value="${cta.idCuenta}">
+                                <input type="hidden" name="accion" value="dar_de_baja">
+                                <button type="submit" class="dropdown-item d-flex align-items-center gap-2 text-danger">
+                                  <i class="bi bi-trash fs-6"></i>
+                                  <span>Dar de baja</span>
+                                </button>
+                              </form>
+                            </li>
+                          </ul>
                         </div>
-                      </td>
-                    </tr>
+                      </div>
+                    </td>
+                  </tr>
                   </c:if>
                 </c:forEach>
                 </tbody>

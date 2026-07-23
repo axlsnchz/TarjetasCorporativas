@@ -5,7 +5,7 @@
 <div class="modal fade" id="modalEmitirTarjeta" tabindex="-1" aria-labelledby="modalEmitirTarjetaLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 860px;">
     <div class="modal-content text-white border-0 shadow-lg" style="background: #0D0F14; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.08);">
-
+      
       <!-- Modal Header -->
       <div class="modal-header border-0 px-4 pt-4 pb-2 d-flex justify-content-between align-items-center">
         <h3 class="modal-title fw-bold text-white mb-0" id="modalEmitirTarjetaLabel" style="font-size: 1.75rem; letter-spacing: -0.02em;">
@@ -19,16 +19,16 @@
         <!-- Modal Body -->
         <div class="modal-body px-4 py-3">
           <div class="row g-4">
-
+            
             <!-- Columna Izquierda: Identificación y Modalidad -->
             <div class="col-12 col-md-5 d-flex flex-column gap-3">
-
+              
               <!-- Card 1: Identificación -->
               <div class="p-3 p-md-4 rounded-4" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.04);">
                 <span class="d-block fw-bold text-uppercase tracking-wider mb-3" style="font-size: 0.7rem; color: #00DBE7; letter-spacing: 0.1em;">
                   IDENTIFICACIÓN
                 </span>
-
+                
                 <!-- Nombre del Empleado -->
                 <div class="mb-3">
                   <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important; letter-spacing: 0.05em;">
@@ -39,7 +39,7 @@
                     <c:forEach var="emp" items="${listaEmpleados}">
                       <c:if test="${emp.activo}">
                         <option value="${emp.idUsuario}" data-nombre="${emp.nombre}">
-                            ${emp.nombre}
+                          ${emp.nombre}
                         </option>
                       </c:if>
                     </c:forEach>
@@ -89,17 +89,17 @@
 
             <!-- Columna Derecha: Vista Previa y Datos de Tarjeta -->
             <div class="col-12 col-md-7 d-flex flex-column gap-3">
-
+              
               <!-- Card 3: Contenedor Completo Derecha -->
               <div class="p-3 p-md-4 rounded-4" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.04);">
-
+                
                 <!-- Live Card Preview Element -->
                 <div class="card-preview-box p-4 rounded-4 mb-4 position-relative overflow-hidden shadow-lg"
                      style="background: linear-gradient(135deg, #09121d 0%, #0c1825 50%, #050a11 100%); border: 1px solid rgba(0, 242, 255, 0.15); min-height: 180px;">
-
+                  
                   <!-- Watermark / Subtle Glow -->
                   <div class="position-absolute" style="top: -40px; right: -40px; width: 140px; height: 140px; background: rgba(0, 242, 255, 0.06); filter: blur(40px); border-radius: 50%;"></div>
-
+                  
                   <!-- Top Row: Brand & Contactless Icon -->
                   <div class="d-flex justify-content-between align-items-center mb-4">
                     <span class="fw-bold tracking-wider" style="color: #00DBE7; font-size: 0.95rem; font-family: 'Inter', sans-serif;">
@@ -193,13 +193,13 @@
   // Transferimos la lista de cuentas desde JSP a un array JS
   window.cuentasData = [
     <c:forEach var="cta" items="${listaCuentas}" varStatus="loop">
-    {
-      idCuenta: "${cta.idCuenta}",
-      idEmpleado: "${cta.idEmpleado}",
-      nombreCuenta: "${cta.nombreCuenta}",
-      numeroCuenta: "${cta.numeroCuenta}",
-      activo: ${cta.activo}
-    }${!loop.last ? ',' : ''}
+      {
+        idCuenta: "${cta.idCuenta}",
+        idEmpleado: "${cta.idEmpleado}",
+        nombreCuenta: "${cta.nombreCuenta}",
+        numeroCuenta: "${cta.numeroCuenta}",
+        activo: ${cta.activo}
+      }${!loop.last ? ',' : ''}
     </c:forEach>
   ];
 
@@ -210,7 +210,7 @@
     const btnVirtual = document.getElementById("btnModeVirtual");
     const btnFisica = document.getElementById("btnModeFisica");
     const inputTipoTarjeta = document.getElementById("inputTipoTarjeta");
-
+    
     const inputAlias = document.getElementById("inputAlias");
     const inputNumero = document.getElementById("inputNumeroTarjeta");
     const inputCvv = document.getElementById("inputCvv");
@@ -341,22 +341,22 @@
       const modalLabel = document.getElementById("modalEmitirTarjetaLabel");
       const btnText = document.getElementById("btnSubmitTarjetaText");
       const inputId = document.getElementById("inputIdTarjeta");
-
+      
       if (modalLabel) modalLabel.textContent = "Configura la nueva credencial";
       if (btnText) btnText.textContent = "EMITIR NUEVA TARJETA";
       if (inputId) inputId.value = "";
-
+      
       if (inputAlias) inputAlias.value = "";
       if (inputNumero) { inputNumero.value = ""; inputNumero.dispatchEvent(new Event("input")); }
       if (inputCvv) inputCvv.value = "";
       if (inputVencimiento) { inputVencimiento.value = ""; inputVencimiento.dispatchEvent(new Event("input")); }
-
+      
       if (empleadoSelect) {
         empleadoSelect.disabled = false;
         empleadoSelect.selectedIndex = 0;
         empleadoSelect.dispatchEvent(new Event("change"));
       }
-
+      
       if (btnVirtual) btnVirtual.click();
     };
 
