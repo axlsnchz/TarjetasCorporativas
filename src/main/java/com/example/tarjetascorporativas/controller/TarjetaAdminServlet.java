@@ -52,6 +52,7 @@ public class TarjetaAdminServlet extends HttpServlet {
     private void emitirTarjeta(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
+        String idTarjetaStr = request.getParameter("idTarjeta");
         String idCuentaStr = request.getParameter("idCuenta");
         String tipoTarjeta = request.getParameter("tipoTarjeta"); // "VIRTUAL" o "FISICA"
         String alias = request.getParameter("alias");
@@ -114,21 +115,44 @@ public class TarjetaAdminServlet extends HttpServlet {
                 }
             }
 
-            Tarjeta tarjeta = new Tarjeta();
-            tarjeta.setIdCuenta(idCuenta);
-            tarjeta.setTipoTarjeta(tipoTarjeta);
-            tarjeta.setAlias(alias);
-            tarjeta.setNumeroTarjeta(numeroTarjeta);
-            tarjeta.setCvv(cvv);
-            tarjeta.setFechaExpiracion(fechaExpiracion);
-            tarjeta.setActivo(true);
+            boolean esEdicion = idTarjetaStr != null && !idTarjetaStr.trim().isEmpty();
+            boolean exito = false;
 
-            boolean creada = tarjetaDao.create(tarjeta);
-
-            if (creada) {
-                session.setAttribute("mensajeExito", "¡Tarjeta '" + alias + "' emitida exitosamente!");
+            if (esEdicion) {
+                Long idTarjeta = Long.parseLong(idTarjetaStr.trim());
+                Tarjeta t = tarjetaDao.getById(idTarjeta);
+                if (t == null) {
+                    t = new Tarjeta();
+                    t.setIdTarjeta(idTarjeta);
+                }
+                t.setIdCuenta(idCuenta);
+                t.setTipoTarjeta(tipoTarjeta);
+                t.setAlias(alias);
+                t.setNumeroTarjeta(numeroTarjeta);
+                t.setCvv(cvv);
+                t.setFechaExpiracion(fechaExpiracion);
+                t.setActivo(true);
+                exito = tarjetaDao.update(t);
+                if (exito) {
+                    session.setAttribute("mensajeExito", "¡Tarjeta '" + alias + "' actualizada exitosamente!");
+                } else {
+                    session.setAttribute("mensajeError", "No se pudo actualizar la tarjeta en la base de datos.");
+                }
             } else {
-                session.setAttribute("mensajeError", "No se pudo registrar la tarjeta en la base de datos.");
+                Tarjeta tarjeta = new Tarjeta();
+                tarjeta.setIdCuenta(idCuenta);
+                tarjeta.setTipoTarjeta(tipoTarjeta);
+                tarjeta.setAlias(alias);
+                tarjeta.setNumeroTarjeta(numeroTarjeta);
+                tarjeta.setCvv(cvv);
+                tarjeta.setFechaExpiracion(fechaExpiracion);
+                tarjeta.setActivo(true);
+                exito = tarjetaDao.create(tarjeta);
+                if (exito) {
+                    session.setAttribute("mensajeExito", "¡Tarjeta '" + alias + "' emitida exitosamente!");
+                } else {
+                    session.setAttribute("mensajeError", "No se pudo registrar la tarjeta en la base de datos.");
+                }
             }
 
         } catch (Exception e) {
@@ -188,7 +212,7 @@ public class TarjetaAdminServlet extends HttpServlet {
     }
 
     private void cargarDatos(HttpServletRequest request) {
-        List<Tarjeta> listaTarjetas = tarjetaDao.getTarjetas();
+        List<Tarjeta> listaTarjetas = tarjetaDao.getTodasLasTarjetas();
         List<Usuario> listaEmpleados = usuarioDao.getEmpleados();
         List<Cuenta> listaCuentas = cuentaDao.getCuentasEmpleados();
 

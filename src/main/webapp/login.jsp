@@ -8,10 +8,11 @@
     <title>FinTech Corp - Inicio de Sesi&oacute;n</title>
 
     <!-- Bootstrap 5 CSS LOCAL -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons LOCAL -->
-    <link href="assets/icons/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons (CDN + Fallback Local) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -84,7 +85,7 @@
             </p>
         </div>
 
-        <!-- Fila de Características-->
+        <!-- Fila de Características (Usando Cards de Bootstrap limpias) -->
         <div class="row g-2 position-relative w-100 mx-0 mt-4" style="z-index: 1;">
             <div class="col-4">
                 <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">

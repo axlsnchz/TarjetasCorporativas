@@ -70,9 +70,9 @@ public class EmpleadoServlet extends HttpServlet {
 
         // Validar campos obligatorios
         if (nombreCompleto == null || nombreCompleto.isEmpty() ||
-                correo == null || correo.isEmpty() ||
-                departamentoNombre == null || departamentoNombre.isEmpty() ||
-                cargoNombre == null || cargoNombre.isEmpty()) {
+            correo == null || correo.isEmpty() ||
+            departamentoNombre == null || departamentoNombre.isEmpty() ||
+            cargoNombre == null || cargoNombre.isEmpty()) {
 
             session.setAttribute("mensajeError", "Todos los campos marcados son obligatorios.");
             response.sendRedirect(request.getContextPath() + "/admin/empleados");
@@ -205,26 +205,26 @@ public class EmpleadoServlet extends HttpServlet {
                 String asunto = "FinTech Corp - Credenciales de Acceso Institucional";
                 String mensajeHtml =
                         "<!DOCTYPE html>" +
-                                "<html>" +
-                                "<head><meta charset='UTF-8'></head>" +
-                                "<body style='font-family: Arial, sans-serif; background-color: #0c0e12; color: #E2E2E8; padding: 20px;'>" +
-                                "<div style='max-width: 600px; margin: 0 auto; background-color: #14161c; border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 12px; padding: 30px;'>" +
-                                "  <h1 style='color: #00DBE7; margin-bottom: 5px; font-size: 24px;'>FinTech Corp</h1>" +
-                                "  <div style='color: #B9CACB; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px;'>Banca Institucional</div>" +
-                                "  <h2 style='color: #FFFFFF; font-size: 18px;'>¡Bienvenido al equipo, " + nombre + "!</h2>" +
-                                "  <p style='color: #B9CACB; font-size: 14px; line-height: 1.6;'>Se ha generado tu cuenta institucional en nuestra plataforma corporativa. A continuación se presentan tus credenciales de acceso temporal:</p>" +
-                                "  <div style='background-color: #0d0f14; border-left: 4px solid #00DBE7; padding: 15px; border-radius: 6px; margin: 20px 0;'>" +
-                                "    <p style='margin: 5px 0; color: #E2E2E8;'><strong>Correo electrónico:</strong> <span style='color: #00DBE7;'>" + correoDestino + "</span></p>" +
-                                "    <p style='margin: 5px 0; color: #E2E2E8;'><strong>Contraseña temporal:</strong> <code style='background: #1e2024; color: #00DBE7; padding: 4px 8px; border-radius: 4px; font-size: 15px; font-weight: bold;'>" + password + "</code></p>" +
-                                "  </div>" +
-                                "  <p style='color: #bfdbfe; font-size: 13px; background-color: #0c1a26; padding: 12px; border-radius: 6px; border: 1px solid #1e3a5f;'>" +
-                                "    <strong>Importante:</strong> Al ingresar por primera vez, el sistema te solicitará cambiar tu contraseña por una contraseña personalizada." +
-                                "  </p>" +
-                                "  <hr style='border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 25px 0;'>" +
-                                "  <p style='color: #64748B; font-size: 11px; text-align: center; margin: 0;'>Este es un mensaje automático generado por FinTech Corp. Por favor no respondas a este correo.</p>" +
-                                "</div>" +
-                                "</body>" +
-                                "</html>";
+                        "<html>" +
+                        "<head><meta charset='UTF-8'></head>" +
+                        "<body style='font-family: Arial, sans-serif; background-color: #0c0e12; color: #E2E2E8; padding: 20px;'>" +
+                        "<div style='max-width: 600px; margin: 0 auto; background-color: #14161c; border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 12px; padding: 30px;'>" +
+                        "  <h1 style='color: #00DBE7; margin-bottom: 5px; font-size: 24px;'>FinTech Corp</h1>" +
+                        "  <div style='color: #B9CACB; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px;'>Banca Institucional</div>" +
+                        "  <h2 style='color: #FFFFFF; font-size: 18px;'>¡Bienvenido al equipo, " + nombre + "!</h2>" +
+                        "  <p style='color: #B9CACB; font-size: 14px; line-height: 1.6;'>Se ha generado tu cuenta institucional en nuestra plataforma corporativa. A continuación se presentan tus credenciales de acceso temporal:</p>" +
+                        "  <div style='background-color: #0d0f14; border-left: 4px solid #00DBE7; padding: 15px; border-radius: 6px; margin: 20px 0;'>" +
+                        "    <p style='margin: 5px 0; color: #E2E2E8;'><strong>Correo electrónico:</strong> <span style='color: #00DBE7;'>" + correoDestino + "</span></p>" +
+                        "    <p style='margin: 5px 0; color: #E2E2E8;'><strong>Contraseña temporal:</strong> <code style='background: #1e2024; color: #00DBE7; padding: 4px 8px; border-radius: 4px; font-size: 15px; font-weight: bold;'>" + password + "</code></p>" +
+                        "  </div>" +
+                        "  <p style='color: #bfdbfe; font-size: 13px; background-color: #0c1a26; padding: 12px; border-radius: 6px; border: 1px solid #1e3a5f;'>" +
+                        "    <strong>Importante:</strong> Al ingresar por primera vez, el sistema te solicitará cambiar tu contraseña por una contraseña personalizada." +
+                        "  </p>" +
+                        "  <hr style='border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 25px 0;'>" +
+                        "  <p style='color: #64748B; font-size: 11px; text-align: center; margin: 0;'>Este es un mensaje automático generado por FinTech Corp. Por favor no respondas a este correo.</p>" +
+                        "</div>" +
+                        "</body>" +
+                        "</html>";
 
                 EmailSender.sendMail(correoDestino, asunto, mensajeHtml);
             } catch (Exception e) {
@@ -280,9 +280,9 @@ public class EmpleadoServlet extends HttpServlet {
 
             java.awt.image.BufferedImage resizedImage = new java.awt.image.BufferedImage(newWidth, newHeight, java.awt.image.BufferedImage.TYPE_INT_RGB);
             java.awt.Graphics2D g2d = resizedImage.createGraphics();
-            g2d.setRenderingHint(java.awt.rendering.RenderingHints.KEY_INTERPOLATION, java.awt.rendering.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2d.setRenderingHint(java.awt.rendering.RenderingHints.KEY_RENDERING, java.awt.rendering.RenderingHints.VALUE_RENDER_QUALITY);
-            g2d.setRenderingHint(java.awt.rendering.RenderingHints.KEY_ANTIALIASING, java.awt.rendering.RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
 
             g2d.setColor(java.awt.Color.WHITE);
             g2d.fillRect(0, 0, newWidth, newHeight);

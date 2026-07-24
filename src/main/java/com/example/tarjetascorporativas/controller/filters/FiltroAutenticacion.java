@@ -1,7 +1,13 @@
 package com.example.tarjetascorporativas.controller.filters;
 
 import com.example.tarjetascorporativas.model.Usuario;
-import jakarta.servlet.*;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,12 +47,12 @@ public class FiltroAutenticacion implements Filter {
                 
                 // Si un Empleado intenta acceder a rutas de administración /admin/*
                 if ("EMPLEADO".equalsIgnoreCase(usuario.getRol()) && path.startsWith("/admin/")) {
-                    httpResponse.sendRedirect(contextPath + "/usuario/principal-usuario.jsp");
+                    httpResponse.sendRedirect(contextPath + "/empleado/principal-usuario.jsp");
                     return;
                 }
 
-                // Si un Administrador intenta acceder a rutas de usuario /usuario/*
-                if ("ADMINISTRADOR".equalsIgnoreCase(usuario.getRol()) && path.startsWith("/usuario/")) {
+                // Si un Administrador intenta acceder a rutas de empleado /empleado/*
+                if ("ADMINISTRADOR".equalsIgnoreCase(usuario.getRol()) && path.startsWith("/empleado/")) {
                     httpResponse.sendRedirect(contextPath + "/admin/principal-admin.jsp");
                     return;
                 }

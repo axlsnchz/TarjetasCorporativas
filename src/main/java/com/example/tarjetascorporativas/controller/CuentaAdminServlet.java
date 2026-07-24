@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.List;
 
-@WebServlet(name = "CuentaAdminServlet", value = {"/admin/cuentas", "/admin/registrar-cuenta", "/admin/cambiar-estado-cuenta", "/admin/introducir-fondos", "/admin/depositar-cuenta"})
+@WebServlet(name = "CuentaAdminServlet", value = {"/admin/cuentas", "/admin/registrar-cuenta", "/admin/editar-cuenta", "/admin/cambiar-estado-cuenta", "/admin/introducir-fondos", "/admin/depositar-cuenta"})
 public class CuentaAdminServlet extends HttpServlet {
 
     private final CuentaDao cuentaDao = new CuentaDao();
@@ -40,7 +40,7 @@ public class CuentaAdminServlet extends HttpServlet {
 
         String path = request.getServletPath();
 
-        if ("/admin/registrar-cuenta".equals(path)) {
+        if ("/admin/registrar-cuenta".equals(path) || "/admin/editar-cuenta".equals(path)) {
             registrarCuenta(request, response);
         } else if ("/admin/cambiar-estado-cuenta".equals(path)) {
             cambiarEstadoCuenta(request, response);
@@ -58,19 +58,19 @@ public class CuentaAdminServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
+        String idCuentaStr = request.getParameter("idCuenta");
         String idEmpleadoStr = request.getParameter("idEmpleado");
         String nombreCuenta = request.getParameter("nombreCuenta");
         String descripcion = request.getParameter("descripcion");
         String limiteAsignadoStr = request.getParameter("limiteAsignado");
-        String saldoInicialStr = request.getParameter("saldoInicial");
 
         if (nombreCuenta != null) nombreCuenta = nombreCuenta.trim();
         if (descripcion != null) descripcion = descripcion.trim();
 
         if (idEmpleadoStr == null || idEmpleadoStr.isEmpty() ||
-                nombreCuenta == null || nombreCuenta.isEmpty() ||
-                descripcion == null || descripcion.isEmpty() ||
-                limiteAsignadoStr == null || limiteAsignadoStr.isEmpty()) {
+            nombreCuenta == null || nombreCuenta.isEmpty() ||
+            descripcion == null || descripcion.isEmpty() ||
+            limiteAsignadoStr == null || limiteAsignadoStr.isEmpty()) {
 
             session.setAttribute("mensajeError", "Todos los campos marcados son obligatorios.");
             response.sendRedirect(request.getContextPath() + "/admin/cuentas");
@@ -80,28 +80,49 @@ public class CuentaAdminServlet extends HttpServlet {
         try {
             Long idEmpleado = Long.parseLong(idEmpleadoStr);
             BigDecimal limiteAsignado = new BigDecimal(limiteAsignadoStr);
+            boolean esEdicion = idCuentaStr != null && !idCuentaStr.trim().isEmpty();
 
-            // Generar número de cuenta único seguro (ej. ACCT-4920)
-            String numeroCuenta = "ACCT-" + (1000 + random.nextInt(9000));
-            while (cuentaDao.getByNumeroCuenta(numeroCuenta) != null) {
-                numeroCuenta = "ACCT-" + (1000 + random.nextInt(9000));
-            }
+            if (esEdicion) {
+                Long idCuenta = Long.parseLong(idCuentaStr.trim());
+                Cuenta c = cuentaDao.getById(idCuenta);
+                if (c != null) {
+                    c.setIdEmpleado(idEmpleado);
+                    c.setNombreCuenta(nombreCuenta);
+                    c.setDescripcion(descripcion);
+                    c.setLimiteAsignado(limiteAsignado);
 
-            Cuenta cuenta = new Cuenta();
-            cuenta.setNumeroCuenta(numeroCuenta);
-            cuenta.setIdEmpleado(idEmpleado);
-            cuenta.setNombreCuenta(nombreCuenta);
-            cuenta.setDescripcion(descripcion);
-            cuenta.setLimiteAsignado(limiteAsignado);
-            cuenta.setSaldo(BigDecimal.ZERO);
-            cuenta.setActivo(true);
-
-            boolean creada = cuentaDao.create(cuenta);
-
-            if (creada) {
-                session.setAttribute("mensajeExito", "¡Cuenta '" + nombreCuenta + "' creada con éxito!");
+                    boolean actualizado = cuentaDao.update(c);
+                    if (actualizado) {
+                        session.setAttribute("mensajeExito", "¡Cuenta '" + nombreCuenta + "' actualizada con éxito!");
+                    } else {
+                        session.setAttribute("mensajeError", "No se pudo actualizar la cuenta en la base de datos.");
+                    }
+                } else {
+                    session.setAttribute("mensajeError", "No se encontró la cuenta a editar.");
+                }
             } else {
-                session.setAttribute("mensajeError", "No se pudo registrar la cuenta en la base de datos.");
+                // Generar número de cuenta único seguro (ej. ACCT-4920)
+                String numeroCuenta = "ACCT-" + (1000 + random.nextInt(9000));
+                while (cuentaDao.getByNumeroCuenta(numeroCuenta) != null) {
+                    numeroCuenta = "ACCT-" + (1000 + random.nextInt(9000));
+                }
+
+                Cuenta cuenta = new Cuenta();
+                cuenta.setNumeroCuenta(numeroCuenta);
+                cuenta.setIdEmpleado(idEmpleado);
+                cuenta.setNombreCuenta(nombreCuenta);
+                cuenta.setDescripcion(descripcion);
+                cuenta.setLimiteAsignado(limiteAsignado);
+                cuenta.setSaldo(BigDecimal.ZERO);
+                cuenta.setActivo(true);
+
+                boolean creada = cuentaDao.create(cuenta);
+
+                if (creada) {
+                    session.setAttribute("mensajeExito", "¡Cuenta '" + nombreCuenta + "' creada con éxito!");
+                } else {
+                    session.setAttribute("mensajeError", "No se pudo registrar la cuenta en la base de datos.");
+                }
             }
 
         } catch (Exception e) {

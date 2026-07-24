@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "CuentaUsuarioServlet", value = "/usuario/cuentas")
+@WebServlet(name = "CuentaUsuarioServlet", value = "/empleado/cuentas")
 public class CuentaUsuarioServlet extends HttpServlet {
 
     private final CuentaDao cuentaDao = new CuentaDao();
@@ -41,6 +41,6 @@ public class CuentaUsuarioServlet extends HttpServlet {
         }
 
         request.setAttribute("listaCuentas", listaCuentas);
-        request.getRequestDispatcher("/usuario/gestion-cuentas-usuario.jsp").forward(request, response);
+        request.getRequestDispatcher("/empleado/gestion-cuentas-usuario.jsp").forward(request, response);
     }
 }

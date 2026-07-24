@@ -83,7 +83,7 @@ public class LoginServlet extends HttpServlet {
         if ("ADMINISTRADOR".equalsIgnoreCase(usuario.getRol())) {
             response.sendRedirect(request.getContextPath() + "/admin/principal-admin.jsp");
         } else {
-            response.sendRedirect(request.getContextPath() + "/usuario/principal-usuario.jsp");
+            response.sendRedirect(request.getContextPath() + "/empleado/principal-usuario.jsp");
         }
     }
 }

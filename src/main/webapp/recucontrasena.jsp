@@ -10,8 +10,9 @@
     <!-- Bootstrap 5 CSS LOCAL -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons LOCAL -->
-    <link href="assets/icons/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons (CDN + Fallback Local) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -197,7 +198,7 @@
                style="border-color: #00F2FF !important; background: transparent; font-size: 1rem;"
                onmouseover="this.style.backgroundColor='rgba(0, 242, 255, 0.08)'"
                onmouseout="this.style.backgroundColor='transparent'">
-                Volver al Inicio
+                <i class="bi bi-arrow-left"></i> Volver al Inicio
             </a>
 
             <div class="mt-5 pt-3 border-top border-secondary border-opacity-25"></div>
