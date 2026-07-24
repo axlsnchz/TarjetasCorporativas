@@ -58,13 +58,27 @@
       font-family: 'Inter', sans-serif;
       font-weight: 700;
       letter-spacing: 0.02rem;
-      border: none;
+      border: 1px solid transparent;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .btn-figma-neon:hover {
       background: #00bfe7;
       color: #002022;
       transform: translateY(-1px);
+    }
+    .btn-outline-figma-neon {
+      background: transparent;
+      border-radius: 32px;
+      color: #00e5ff;
+      font-weight: 700;
+      border: 1px solid #00e5ff;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-outline-figma-neon:hover {
+      background: rgba(0, 229, 255, 0.1);
+      color: #00e5ff;
     }
     .text-cyan-neon {
       color: #00DBE7 !important;
