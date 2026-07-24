@@ -108,8 +108,11 @@
       border-radius: 8px !important;
       font-size: 0.85rem;
     }
+    .text-muted {
+      color: #BAC9CC !important;
+    }
     .form-figma-search::placeholder {
-      color: #475569;
+      color: #8BACB4;
     }
     .form-figma-select {
       background: #1E2024 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center/10px 10px !important;
@@ -309,14 +312,14 @@
       <div class="p-3 mb-4 rounded-4" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.03);">
         <div class="row g-3 align-items-center">
           <div class="col-12 col-md-8">
-            <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Buscar Titular o Cuenta</label>
+            <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #BAC9CC !important; letter-spacing: 1px;">Buscar Titular o Cuenta</label>
             <div class="position-relative">
-              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #475569;"></i>
+              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #BAC9CC;"></i>
               <input type="text" id="searchCuentaInput" class="form-control form-figma-search ps-5 py-2" placeholder="Buscar por empleado o nombre de cuenta...">
             </div>
           </div>
           <div class="col-12 col-md-4">
-            <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #64748B; letter-spacing: 1px;">Estado</label>
+            <label class="d-block text-uppercase fw-bold mb-1 font-plus-jakarta" style="font-size: 0.625rem; color: #BAC9CC !important; letter-spacing: 1px;">Estado</label>
             <select id="selectEstadoCuentaFilter" class="form-select form-figma-select py-2 shadow-none">
               <option selected value="all">Todos los estados</option>
               <option value="active">Activas</option>
@@ -333,11 +336,11 @@
             <!-- Bloque de Estado Vacío dentro del contenedor -->
             <div class="d-flex flex-column align-items-center justify-content-center text-center font-plus-jakarta py-5 px-3" style="min-height: 250px; background: #14171C;">
               <div class="mb-3 d-flex align-items-center justify-content-center border rounded-3"
-                   style="width: 44px; height: 44px; border-color: #3B494C !important; color: #64748B;">
+                   style="width: 44px; height: 44px; border-color: #3B494C !important; color: #BAC9CC;">
                 <i class="bi bi-file-earmark-text fs-4"></i>
               </div>
               <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay cuentas registradas</h5>
-              <p class="small text-muted mb-0" style="color: #737373 !important;">
+              <p class="small text-muted mb-0" style="color: #BAC9CC !important;">
                 Haz clic en "Crear Cuenta" para asignar una nueva cuenta corporativa a un empleado.
               </p>
             </div>
@@ -376,13 +379,13 @@
                         </div>
                         <div>
                           <div class="fw-semibold text-white">${empty cta.nombreEmpleado ? 'Empleado' : cta.nombreEmpleado}</div>
-                          <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${cta.numeroCuenta}</div>
+                          <div class="small" style="font-size: 11px; color: #BAC9CC !important;">${cta.numeroCuenta}</div>
                         </div>
                       </div>
                     </td>
                     <td>
                       <div class="fw-bold text-white text-uppercase" style="letter-spacing: 0.5px;">${cta.nombreCuenta}</div>
-                      <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${cta.descripcion}</div>
+                      <div class="small" style="font-size: 11px; color: #BAC9CC !important;">${cta.descripcion}</div>
                     </td>
                     <td style="text-align: right;" class="font-monospace text-cyan-neon fw-bold fs-6">
                       $<fmt:formatNumber value="${cta.saldo}" pattern="#,##0.00" />
@@ -409,12 +412,12 @@
                         <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar cuenta"
                                 data-bs-toggle="modal" data-bs-target="#modalRegistrarCuenta"
                                 onclick="prepararModalEditarCuenta('${cta.idCuenta}', '${cta.idEmpleado}', '${cta.nombreCuenta}', '${cta.descripcion}', '${cta.limiteAsignado}')">
-                          <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
+                          <i class="bi bi-pencil fs-6" style="color: #BAC9CC;"></i>
                         </button>
                         <!-- Dropdown de Acciones -->
                         <div class="dropstart d-inline-block">
                           <button class="btn btn-sm text-muted border-0 p-1 shadow-none" type="button" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed", "modifiers": [{"name": "offset", "options": {"offset": [0, 8]}}, {"name": "flip", "enabled": false}]}' aria-expanded="false" title="Opciones">
-                            <i class="bi bi-three-dots-vertical fs-5" style="color: #94A3B8;"></i>
+                            <i class="bi bi-three-dots-vertical fs-5" style="color: #BAC9CC;"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-dark-figma">
                             <c:if test="${cta.activo}">

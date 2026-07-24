@@ -33,9 +33,9 @@
         .bg-figma-input { background-color: #0D0F14 !important; }
         .bg-figma-select { background-color: #1E2024 !important; }
 
-        text-figma-cyan { color: #00DBE7 !important; }
+        .text-figma-cyan { color: #00DBE7 !important; }
         .text-figma-muted { color: #B9CACB !important; }
-        .text-figma-gray { color: #64748B !important; }
+        .text-figma-gray { color: #BAC9CC !important; }
 
         /* Efecto de desenfoque Figma */
         .backdrop-blur {

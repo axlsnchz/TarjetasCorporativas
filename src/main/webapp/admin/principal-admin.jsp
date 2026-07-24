@@ -71,6 +71,9 @@
             color: #002022;
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
+        .text-muted {
+            color: #BAC9CC !important;
+        }
         .text-cyan-neon {
             color: #00DBE7 !important;
         }
@@ -174,7 +177,7 @@
             <!-- Fila de Título -->
             <div class="mb-5">
                 <h2 class="fw-bold text-white m-0 lh-sm" style="font-size: 2.6rem; color: #E1FDFF !important;">Resumen General</h2>
-                <p class="m-0 mt-2" style="color: #64748B !important; font-weight: 500;">Monitoreo en tiempo real del estado financiero corporativo.</p>
+                <p class="m-0 mt-2" style="color: #BAC9CC !important; font-weight: 500;">Monitoreo en tiempo real del estado financiero corporativo.</p>
             </div>
 
             <!-- Bloque de Tarjetas Informativas -->
@@ -195,15 +198,15 @@
                         <!-- Sub-métricas horizontales limpias -->
                         <div class="row g-3 pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.04) !important;">
                             <div class="col-4">
-                                <span class="d-block text-uppercase fw-bold text-muted small tracking-wider mb-1" style="font-size: 0.65rem;">Cuentas Activas</span>
+                                <span class="d-block text-uppercase fw-bold small tracking-wider mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">Cuentas Activas</span>
                                 <span class="fs-4 fw-bold text-white">${cuentasActivasCount}</span>
                             </div>
                             <div class="col-4">
-                                <span class="d-block text-uppercase fw-bold text-muted small tracking-wider mb-1" style="font-size: 0.65rem;">Tarjetas Emitidas</span>
+                                <span class="d-block text-uppercase fw-bold small tracking-wider mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">Tarjetas Emitidas</span>
                                 <span class="fs-4 fw-bold text-white">${tarjetasEmitidasCount}</span>
                             </div>
                             <div class="col-4">
-                                <span class="d-block text-uppercase fw-bold text-muted small tracking-wider mb-1" style="font-size: 0.65rem;">Valor en Tránsito</span>
+                                <span class="d-block text-uppercase fw-bold small tracking-wider mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">Valor en Tránsito</span>
                                 <span class="fs-4 fw-bold text-cyan-neon">
                                     $<fmt:formatNumber value="${valorEnTransito}" pattern="#,##0.00"/>
                                 </span>
@@ -216,26 +219,14 @@
                 <div class="col-xl-4 col-12">
                     <div class="p-4 p-md-5 h-100 d-flex flex-column justify-content-between shadow-sm" style="background: linear-gradient(135deg, #00F2FF 0%, #00BBE4 100%); border-radius: 24px; min-height: 260px;">
                         <div>
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <span class="badge px-3 py-1 rounded-pill font-monospace" style="background: rgba(0, 32, 34, 0.15); color: #002022; font-weight: 700; font-size: 11px; letter-spacing: 0.5px;">
-                                    <i class="bi bi-shield-check me-1"></i> CUENTA PRINCIPAL
-                                </span>
-                                <span class="badge px-2.5 py-1 rounded-pill font-monospace" style="background: #002022; color: #00F2FF; font-weight: 700; font-size: 10px;">
-                                    ACTIVO
-                                </span>
-                            </div>
-
                             <div class="mb-2">
                                 <h4 class="fw-bold tracking-wider lh-sm m-0" style="font-size: 1.4rem; color: #002022; font-family: 'Plus Jakarta Sans', sans-serif;">
                                     CUENTA CONCENTRADORA
                                 </h4>
-                                <div class="small font-monospace fw-semibold mt-1" style="color: rgba(0, 32, 34, 0.75); font-size: 12px;">
-                                    Nº Cuenta: <span class="fw-bold text-decoration-underline">ACCT-CONCENTRADORA</span>
-                                </div>
                             </div>
 
                             <div class="mt-3">
-                                <span class="d-block text-uppercase fw-bold" style="font-size: 10px; color: rgba(0, 32, 34, 0.65); letter-spacing: 1px;">Saldo Principal Disponible</span>
+                                <span class="d-block text-uppercase fw-bold" style="font-size: 10px; color: rgba(0, 32, 34, 0.65); letter-spacing: 1px;">Saldo Principal</span>
                                 <div class="d-flex align-items-baseline gap-1 mt-1">
                                     <span class="display-6 fw-bold" style="color: #002022; font-family: 'Plus Jakarta Sans', sans-serif;">
                                         $<fmt:formatNumber value="${saldoConcentradora}" pattern="#,##0.00"/>
@@ -270,7 +261,7 @@
 
                 <!-- Selector de Filtrado -->
                 <div class="col-12 col-sm-6 d-flex justify-content-sm-end align-items-center gap-2 mt-2 mt-sm-0">
-                    <span class="text-muted d-none d-md-inline" style="font-size: 0.75rem;">Filtrar todas las transacciones</span>
+                    <span class="d-none d-md-inline" style="font-size: 0.75rem; color: #BAC9CC !important;">Filtrar todas las transacciones</span>
                     <div class="dropdown">
                         <button class="btn btn-sm btn-dark dropdown-toggle px-3 border-0 text-white-50 d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: #14161c; font-size: 0.85rem;">
                             <i class="bi bi-funnel"></i> Todas
@@ -290,7 +281,7 @@
                     <div class="bg-figma-card p-4 p-md-5 d-flex flex-column shadow-lg" style="min-height: 350px; background: #14161c;">
 
                         <!-- Encabezados integrados -->
-                        <div class="row text-uppercase fw-bold text-muted pb-3 mb-3 border-bottom g-0" style="font-size: 0.65rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.04) !important; opacity: 0.6;">
+                        <div class="row text-uppercase fw-bold pb-3 mb-3 border-bottom g-0" style="font-size: 0.65rem; letter-spacing: 1.5px; border-color: rgba(255,255,255,0.04) !important; color: #BAC9CC !important; opacity: 1;">
                             <div class="col-4 text-start"><i class="bi bi-file-text me-1"></i>Concepto / Descripción</div>
                             <div class="col-3 text-center"><i class="bi bi-calendar-event me-1"></i>Fecha</div>
                             <div class="col-2 text-center"><i class="bi bi-info-circle me-1"></i>Estado</div>
@@ -316,10 +307,10 @@
                                                             <c:otherwise>${mov.tipoMovimiento}</c:otherwise>
                                                         </c:choose>
                                                     </div>
-                                                    <div class="small text-muted" style="font-size: 11px; color: #64748B !important;">${mov.descripcion}</div>
+                                                    <div class="small" style="font-size: 11px; color: #BAC9CC !important;">${mov.descripcion}</div>
                                                 </div>
                                             </div>
-                                            <div class="col-3 text-center small text-muted font-monospace" style="color: #94A3B8 !important; font-size: 0.8rem;">
+                                            <div class="col-3 text-center small font-monospace" style="color: #BAC9CC !important; font-size: 0.8rem;">
                                                 <fmt:formatDate value="${mov.fechaMovimiento}" pattern="dd/MM/yyyy HH:mm" />
                                             </div>
                                             <div class="col-2 text-center">
@@ -343,7 +334,7 @@
                                         <i class="bi bi-receipt fs-4"></i>
                                     </div>
                                     <h5 class="fw-normal text-white mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem;">Aún no hay transacciones registradas</h5>
-                                    <p class="small text-muted m-0 mx-auto" style="max-width: 420px; font-family: 'Plus Jakarta Sans', sans-serif;">Utiliza el botón de Introducir Fondos para inyectar capital a la Cuenta Concentradora.</p>
+                                    <p class="small m-0 mx-auto" style="max-width: 420px; font-family: 'Plus Jakarta Sans', sans-serif; color: #BAC9CC !important;">Utiliza el botón de Introducir Fondos para inyectar capital a la Cuenta Concentradora.</p>
                                 </div>
                             </c:otherwise>
                         </c:choose>

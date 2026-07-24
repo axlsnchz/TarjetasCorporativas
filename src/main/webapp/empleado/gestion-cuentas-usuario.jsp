@@ -56,7 +56,7 @@
 
         .text-figma-cyan { color: #00DBE7 !important; }
         .text-figma-muted { color: #B9CACB !important; }
-        .text-figma-gray { color: #64748B !important; }
+        .text-figma-gray { color: #BAC9CC !important; }
 
         .backdrop-blur {
             backdrop-filter: blur(12px);

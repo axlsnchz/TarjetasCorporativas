@@ -80,7 +80,7 @@
       font-size: 0.85rem;
     }
     .form-figma-search::placeholder {
-      color: #475569;
+      color: #8BACB4;
     }
     .form-figma-select {
       background: #1E2024 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center/10px 10px !important;
@@ -103,8 +103,14 @@
       border-color: #00DBE7 !important;
       box-shadow: 0 0 0 0.2rem rgba(0, 219, 231, 0.15) !important;
     }
+    .text-muted {
+      color: #BAC9CC !important;
+    }
+    .form-figma-search::placeholder {
+      color: #8BACB4;
+    }
     .form-figma-input::placeholder {
-      color: #64748B !important;
+      color: #8BACB4 !important;
     }
     .backdrop-blur {
       backdrop-filter: blur(8px);
@@ -180,7 +186,7 @@
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-4 mb-4">
         <div>
           <h2 class="fw-bold text-white m-0 lh-sm" style="font-size: 2.6rem; color: #E1FDFF !important;">Gestión de Tarjetas</h2>
-          <p class="m-0 mt-2" style="color: #64748B !important; font-weight: 500;">Control centralizado de tarjetas corporativas, límites y estados.</p>
+          <p class="m-0 mt-2" style="color: #BAC9CC !important; font-weight: 500;">Control centralizado de tarjetas corporativas, límites y estados.</p>
         </div>
 
         <button class="btn btn-figma-neon px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm"
@@ -195,15 +201,15 @@
         <div class="row g-3 align-items-center">
           <!-- Buscador -->
           <div class="col-12 col-md-6">
-            <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Buscar tarjeta</label>
+            <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #BAC9CC !important;">Buscar tarjeta</label>
             <div class="position-relative">
-              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #475569;"></i>
+              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #BAC9CC;"></i>
               <input type="text" id="searchTarjetaInput" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre del empleado o alias de la tarjeta...">
             </div>
           </div>
           <!-- Filtro Estado -->
           <div class="col-6 col-md-3">
-            <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Estado</label>
+            <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #BAC9CC !important;">Estado</label>
             <select id="selectEstadoFilter" class="form-select form-figma-select py-2 shadow-none">
               <option selected value="all">Todos los estados</option>
               <option value="active">Activas</option>
@@ -212,7 +218,7 @@
           </div>
           <!-- Filtro Tipo -->
           <div class="col-6 col-md-3">
-            <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Tipo</label>
+            <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #BAC9CC !important;">Tipo</label>
             <select id="selectTipoFilter" class="form-select form-figma-select py-2 shadow-none">
               <option selected value="all">Todos los tipos</option>
               <option value="FISICA">Física</option>
@@ -243,7 +249,7 @@
                   </div>
 
                   <h4 class="fw-bold text-white mb-3" style="font-size: 1.5rem;">No hay tarjetas corporativas emitidas aún</h4>
-                  <p class="small mx-auto mb-4" style="max-width: 480px; color: #94A3B8; line-height: 1.6;">
+                  <p class="small mx-auto mb-4" style="max-width: 480px; color: #BAC9CC !important; line-height: 1.6;">
                     Para comenzar a controlar los límites y gastos de tu equipo, necesitas emitir tu primera tarjeta física o virtual.
                   </p>
 
@@ -257,7 +263,7 @@
               <c:otherwise>
                 <!-- ENCABEZADOS DE LA TABLA EXACTOS DE FIGMA -->
                 <div class="row text-uppercase fw-bold pb-3 mb-3 border-bottom align-items-center d-none d-md-flex"
-                     style="font-size: 11px; letter-spacing: 1px; border-color: rgba(255, 255, 255, 0.05) !important; color: #64748B !important;">
+                     style="font-size: 11px; letter-spacing: 1px; border-color: rgba(255, 255, 255, 0.05) !important; color: #BAC9CC !important;">
                   <div class="col-md-3"><i class="bi bi-person me-1"></i>TITULAR & DETALLES</div>
                   <div class="col-md-2"><i class="bi bi-tag me-1"></i>ALIAS</div>
                   <div class="col-md-2"><i class="bi bi-bank me-1"></i>CUENTA</div>
@@ -293,7 +299,7 @@
                           <div class="fw-semibold text-white" style="font-size: 0.95rem;">
                             ${empty tj.nombreEmpleado ? 'Sin Asignar' : tj.nombreEmpleado}
                           </div>
-                          <div class="small" style="font-size: 0.78rem; color: #64748B;">
+                          <div class="small" style="font-size: 0.78rem; color: #BAC9CC !important;">
                             <c:out value="${tj.nombreCargo}" default="Cargo" /> • <c:out value="${tj.nombreDepartamento}" default="Corporativo" />
                           </div>
                         </div>
@@ -346,12 +352,12 @@
                         <!-- Icono Editar -->
                         <button class="btn btn-sm text-muted p-1 border-0" type="button" title="Editar tarjeta" data-bs-toggle="modal" data-bs-target="#modalEmitirTarjeta"
                                 onclick="prepararModalEditarTarjeta('${tj.idTarjeta}', '${tj.idEmpleado}', '${tj.idCuenta}', '${tj.tipoTarjeta}', '${tj.alias}', '${tj.numeroTarjeta}', '${tj.cvv}', '${tj.fechaExpiracion}')">
-                          <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
+                          <i class="bi bi-pencil fs-6" style="color: #BAC9CC;"></i>
                         </button>
                         <!-- Dropdown de Acciones -->
                         <div class="dropdown">
                           <button class="btn btn-sm text-muted p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical fs-5" style="color: #64748B;"></i>
+                            <i class="bi bi-three-dots-vertical fs-5" style="color: #BAC9CC;"></i>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-custom py-2">
                             <c:choose>

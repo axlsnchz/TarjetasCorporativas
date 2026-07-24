@@ -79,7 +79,7 @@
                 </div>
                 <div>
                     <h1 class="fw-bold lh-1 text-info m-0" style="color: #00DBE7 !important; font-family: 'Inter', sans-serif; font-size: 1.4rem;">FinTech Corp</h1>
-                    <div class="text-uppercase fw-bold small tracking-wider mt-1" style="font-size: 0.65rem; letter-spacing: 0.6px; color: #B9CACB; opacity: 0.7; font-family: 'Inter', sans-serif;">
+                    <div class="text-uppercase fw-bold small tracking-wider mt-1" style="font-size: 0.65rem; letter-spacing: 0.6px; color: #BAC9CC !important; opacity: 1; font-family: 'Inter', sans-serif;">
                         Banca Institucional
                     </div>
                 </div>

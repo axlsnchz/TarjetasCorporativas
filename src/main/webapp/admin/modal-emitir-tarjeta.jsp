@@ -31,7 +31,7 @@
                 
                 <!-- Nombre del Empleado -->
                 <div class="mb-3">
-                  <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important; letter-spacing: 0.05em;">
+                  <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important; letter-spacing: 0.05em;">
                     NOMBRE DEL EMPLEADO
                   </label>
                   <select id="modalEmpleadoSelect" class="form-select form-figma-select py-2 border-0 shadow-none text-white" style="background-color: #1E2024 !important;" required>
@@ -48,7 +48,7 @@
 
                 <!-- Tipo de Cuenta del Empleado -->
                 <div>
-                  <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important; letter-spacing: 0.05em;">
+                  <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important; letter-spacing: 0.05em;">
                     TIPO DE CUENTA
                   </label>
                   <select id="modalCuentaSelect" name="idCuenta" class="form-select form-figma-select py-2 border-0 shadow-none text-white" style="background-color: #1E2024 !important;" required disabled>
@@ -77,7 +77,7 @@
                   <!-- Botón Option Física -->
                   <div class="col-6">
                     <button type="button" id="btnModeFisica" class="btn w-100 p-3 d-flex flex-column align-items-center justify-content-center gap-2 rounded-3 mode-card-btn"
-                            style="background: #0B0E11; border: 1px solid rgba(255, 255, 255, 0.08); color: #64748B; transition: all 0.2s ease;">
+                            style="background: #0B0E11; border: 1px solid rgba(255, 255, 255, 0.08); color: #BAC9CC; transition: all 0.2s ease;">
                       <i class="bi bi-credit-card-2-front fs-3"></i>
                       <span class="fw-bold tracking-wider" style="font-size: 0.75rem;">FÍSICA</span>
                     </button>
@@ -116,13 +116,13 @@
                   <!-- Bottom Row: Titular & Vence -->
                   <div class="d-flex justify-content-between align-items-end mt-4 pt-2">
                     <div>
-                      <span class="d-block text-uppercase text-muted fw-bold" style="font-size: 0.55rem; color: #64748B !important; letter-spacing: 0.08em;">TITULAR</span>
+                      <span class="d-block text-uppercase text-muted fw-bold" style="font-size: 0.55rem; color: #BAC9CC !important; letter-spacing: 0.08em;">TITULAR</span>
                       <span id="cardPreviewTitular" class="fw-bold text-white text-uppercase font-monospace" style="font-size: 0.825rem; letter-spacing: 0.05em;">
                         NOMBRE DEL EMPLEADO
                       </span>
                     </div>
                     <div class="text-end">
-                      <span class="d-block text-uppercase text-muted fw-bold" style="font-size: 0.55rem; color: #64748B !important; letter-spacing: 0.08em;">VENCE</span>
+                      <span class="d-block text-uppercase text-muted fw-bold" style="font-size: 0.55rem; color: #BAC9CC !important; letter-spacing: 0.08em;">VENCE</span>
                       <span id="cardPreviewVence" class="fw-bold text-white font-monospace" style="font-size: 0.825rem; letter-spacing: 0.05em;">
                         MM/AA
                       </span>
@@ -136,7 +136,7 @@
 
                   <!-- Alias -->
                   <div>
-                    <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important;">
+                    <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">
                       Alias de la tarjeta
                     </label>
                     <input type="text" id="inputAlias" name="alias" class="form-control form-figma-input py-2" placeholder="Ej. Tarjeta1" autocomplete="off" data-lpignore="true" style="background-color: #1E2024 !important; border: 1px solid rgba(255,255,255,0.08) !important; color: #FFFFFF !important; caret-color: #00DBE7 !important;">
@@ -144,7 +144,7 @@
 
                   <!-- Número de tarjeta -->
                   <div>
-                    <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important;">
+                    <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">
                       Número de tarjeta (16 dígitos)
                     </label>
                     <input type="text" id="inputNumeroTarjeta" name="numeroTarjeta" class="form-control form-figma-input py-2 font-monospace" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" autocomplete="off" data-lpignore="true" style="background-color: #1E2024 !important; border: 1px solid rgba(255,255,255,0.08) !important; color: #FFFFFF !important; caret-color: #00DBE7 !important;">
@@ -153,13 +153,13 @@
                   <!-- Row CVV + Vencimiento -->
                   <div class="row g-3">
                     <div class="col-6">
-                      <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important;">
+                      <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">
                         Código de seguridad (CVV)
                       </label>
                       <input type="text" id="inputCvv" name="cvv" class="form-control form-figma-input py-2 font-monospace" placeholder="XXX" maxlength="4" autocomplete="off" data-lpignore="true" style="background-color: #1E2024 !important; border: 1px solid rgba(255,255,255,0.08) !important; color: #FFFFFF !important; caret-color: #00DBE7 !important;">
                     </div>
                     <div class="col-6">
-                      <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #94A3B8 !important;">
+                      <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important;">
                         Fecha de vencimiento
                       </label>
                       <input type="text" id="inputVencimiento" name="fechaExpiracion" class="form-control form-figma-input py-2 font-monospace" placeholder="MM/YY" maxlength="5" autocomplete="off" data-lpignore="true" style="background-color: #1E2024 !important; border: 1px solid rgba(255,255,255,0.08) !important; color: #FFFFFF !important; caret-color: #00DBE7 !important;">
@@ -227,7 +227,7 @@
         btnVirtual.style.borderColor = "#00DBE7";
         btnVirtual.style.color = "#00DBE7";
         btnFisica.style.borderColor = "rgba(255, 255, 255, 0.08)";
-        btnFisica.style.color = "#64748B";
+        btnFisica.style.color = "#BAC9CC";
       });
 
       btnFisica.addEventListener("click", function() {
@@ -235,7 +235,7 @@
         btnFisica.style.borderColor = "#00DBE7";
         btnFisica.style.color = "#00DBE7";
         btnVirtual.style.borderColor = "rgba(255, 255, 255, 0.08)";
-        btnVirtual.style.color = "#64748B";
+        btnVirtual.style.color = "#BAC9CC";
       });
     }
 

@@ -107,8 +107,11 @@
             border-radius: 8px !important;
             font-size: 0.85rem;
         }
+        .text-muted {
+            color: #BAC9CC !important;
+        }
         .form-figma-search::placeholder {
-            color: #475569;
+            color: #8BACB4;
         }
         .form-figma-select {
             background: #1E2024 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center/10px 10px !important;
@@ -299,15 +302,15 @@
                 <div class="row g-3 align-items-center">
                     <!-- Buscador -->
                     <div class="col-12 col-md-8 col-lg-9 font-jakarta">
-                        <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Buscar Empleado</label>
+                        <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #BAC9CC !important;">Buscar Empleado</label>
                         <div class="position-relative">
-                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #475569;"></i>
+                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #BAC9CC;"></i>
                             <input type="text" id="searchEmpleadoInput" class="form-control form-figma-search ps-5 py-2" placeholder="Nombre o correo del empleado...">
                         </div>
                     </div>
                     <!-- Filtro Estado -->
                     <div class="col-12 col-md-4 col-lg-3 font-jakarta">
-                        <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #64748B;">Estado</label>
+                        <label class="d-block text-uppercase fw-bold mb-1 tracking-wider" style="font-size: 0.625rem; color: #BAC9CC !important;">Estado</label>
                         <select id="selectEstadoFilter" class="form-select form-figma-select py-2 shadow-none">
                             <option selected value="all">Todos los estados</option>
                             <option value="active">Activos</option>
@@ -324,7 +327,7 @@
 
                         <!-- ENCABEZADOS DE LA TABLA CONFIGURADOS EXACTAMENTE IGUAL A LA IMAGEN MUESTRA -->
                         <div class="row text-uppercase fw-bold pb-3 mb-4 border-bottom align-items-center d-none d-md-flex"
-                             style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; letter-spacing: 1.5px; border-color: rgba(255, 255, 255, 0.05) !important; color: #64748B !important; background-color: transparent;">
+                             style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10px; letter-spacing: 1.5px; border-color: rgba(255, 255, 255, 0.05) !important; color: #BAC9CC !important; background-color: transparent;">
                             <div class="col-md-3"><i class="bi bi-person me-1"></i>Empleado</div>
                             <div class="col-md-3"><i class="bi bi-envelope me-1"></i>Correo Electrónico</div>
                             <div class="col-md-2"><i class="bi bi-building me-1"></i>Departamento</div>
@@ -342,7 +345,7 @@
                                         <i class="bi bi-person-dash fs-4"></i>
                                     </div>
                                     <h5 class="fw-normal text-white mb-2" style="font-size: 1.4rem;">Aún no hay empleados registrados</h5>
-                                    <p class="small text-muted m-0 mx-auto" style="max-width: 440px; color: #737373 !important;">
+                                    <p class="small text-muted m-0 mx-auto" style="max-width: 440px; color: #BAC9CC !important;">
                                         Haz clic en "Registrar Empleado" para agregar nuevos miembros al equipo.
                                     </p>
                                 </div>
@@ -371,7 +374,7 @@
                                                 </div>
                                                 <div>
                                                     <div class="fw-semibold text-white" style="font-size: 0.95rem;">${emp.nombre}</div>
-                                                    <div class="small" style="font-size: 0.78rem; color: #64748B;">
+                                                    <div class="small" style="font-size: 0.78rem; color: #BAC9CC !important;">
                                                         ${empty emp.nombreCargo ? 'Empleado' : emp.nombreCargo}
                                                     </div>
                                                 </div>
@@ -417,12 +420,12 @@
                                                         data-cargo="<c:out value='${emp.nombreCargo}'/>"
                                                         data-foto="<c:out value='${emp.urlFoto}'/>"
                                                         onclick="prepararModalEditarEmpleadoDesdeElemento(this)">
-                                                    <i class="bi bi-pencil fs-6" style="color: #64748B;"></i>
+                                                    <i class="bi bi-pencil fs-6" style="color: #BAC9CC;"></i>
                                                 </button>
                                                 <!-- Dropdown de Acciones (3 puntos) -->
                                                 <div class="dropdown">
                                                     <button class="btn btn-sm text-muted p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="bi bi-three-dots-vertical fs-5" style="color: #64748B;"></i>
+                                                        <i class="bi bi-three-dots-vertical fs-5" style="color: #BAC9CC;"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-custom py-2">
                                                         <c:choose>
