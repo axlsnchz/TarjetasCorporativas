@@ -5,45 +5,45 @@
 <!-- Modal Bootstrap 5 para Depositar Fondos desde la Cuenta Concentradora a un Empleado -->
 <div class="modal fade" id="modalDepositarEmpleado" tabindex="-1" aria-labelledby="modalDepositarEmpleadoLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" style="background: #0d1117; border: 1px solid #30363d; border-radius: 20px; color: #E2E2E8;">
+        <div class="modal-content text-white border-0 shadow-lg" style="background: #0D0F14; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.08);">
             
             <!-- Encabezado del Modal -->
-            <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 align-items-center">
-                <h4 class="modal-title fw-bold text-white m-0 lh-sm" id="modalDepositarEmpleadoLabel" style="font-size: 1.8rem; color: #E1FDFF !important;">
+            <div class="modal-header border-0 px-4 pt-4 pb-2 d-flex justify-content-between align-items-center">
+                <h3 class="modal-title fw-bold text-white mb-0" id="modalDepositarEmpleadoLabel" style="font-size: 1.75rem; letter-spacing: -0.02em;">
                     Depositar Fondos
-                </h4>
-                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </h3>
+                <button type="button" class="btn-close btn-close-white bg-secondary bg-opacity-25 rounded-circle p-2" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <!-- Cuerpo del Modal -->
-            <div class="modal-body p-4">
+            <div class="modal-body px-4 py-3">
                 <form action="${pageContext.request.contextPath}/admin/depositar-cuenta" method="POST" id="formDepositarEmpleado">
                     <input type="hidden" id="depositoIdCuenta" name="idCuenta" value="">
 
                     <div class="row g-4">
                         <!-- Columna Izquierda: Selección de Cuenta -->
                         <div class="col-12 col-md-5">
-                            <div class="bg-figma-card p-4 rounded-4 h-100 d-flex flex-column" style="background: #14171C; border: 1px solid #30363d;">
-                                <h5 class="fw-semibold text-white mb-3 font-plus-jakarta" style="color: #C3F5FF !important;">
-                                    Selección de cuenta
-                                </h5>
+                            <div class="p-3 p-md-4 rounded-4 h-100 d-flex flex-column" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.04);">
+                                <span class="d-block fw-bold text-uppercase tracking-wider mb-3" style="font-size: 0.7rem; color: #00DBE7; letter-spacing: 0.1em;">
+                                    SELECCIÓN DE CUENTA
+                                </span>
 
                                 <!-- Nombre del empleado -->
                                 <div class="mb-3">
-                                    <label class="form-label-figma" style="color: #BAC9CC; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;">
+                                    <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important; letter-spacing: 0.05em;">
                                         NOMBRE DEL EMPLEADO
                                     </label>
-                                    <select id="depositoSelectEmpleado" class="form-select form-figma-input" style="background-color: #1e2024 !important;" onchange="onEmpleadoChange()">
+                                    <select id="depositoSelectEmpleado" class="form-select form-figma-select py-2 border-0 shadow-none text-white" style="background-color: #1E2024 !important;" onchange="onEmpleadoChange()">
                                         <option value="" disabled selected>Seleccionar empleado</option>
                                     </select>
                                 </div>
 
                                 <!-- Tipo de cuenta / Cuenta -->
                                 <div class="mb-3">
-                                    <label class="form-label-figma" style="color: #BAC9CC; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;">
+                                    <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important; letter-spacing: 0.05em;">
                                         TIPO DE CUENTA
                                     </label>
-                                    <select id="depositoSelectCuenta" class="form-select form-figma-input" style="background-color: #1e2024 !important;" onchange="onCuentaChange()" required disabled>
+                                    <select id="depositoSelectCuenta" class="form-select form-figma-select py-2 border-0 shadow-none text-white" style="background-color: #1E2024 !important;" onchange="onCuentaChange()" required disabled>
                                         <option value="" disabled selected>Seleccionar cuenta</option>
                                     </select>
                                 </div>
@@ -52,11 +52,11 @@
 
                         <!-- Columna Derecha: Detalles del Depósito -->
                         <div class="col-12 col-md-7">
-                            <div class="bg-figma-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: #14171C; border: 1px solid #30363d;">
+                            <div class="p-3 p-md-4 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: #14171C; border: 1px solid rgba(255, 255, 255, 0.04);">
                                 <div>
-                                    <h5 class="fw-semibold text-white mb-3 font-plus-jakarta" style="color: #C3F5FF !important;">
-                                        Detalles del Depósito
-                                    </h5>
+                                    <span class="d-block fw-bold text-uppercase tracking-wider mb-3" style="font-size: 0.7rem; color: #00DBE7; letter-spacing: 0.1em;">
+                                        DETALLES DEL DEPÓSITO
+                                    </span>
 
                                     <!-- Indicador de Saldo en Concentradora -->
                                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -68,12 +68,12 @@
 
                                     <!-- Monto a Depositar -->
                                     <div class="mb-3">
-                                        <label class="form-label-figma" style="color: #BAC9CC; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;">
+                                        <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important; letter-spacing: 0.05em;">
                                             MONTO A DEPOSITAR (MXN)
                                         </label>
                                         <div class="input-group">
-                                            <span class="input-group-text border-0" style="background: #1e2024; color: #00E5FF; font-weight: bold; border-top-left-radius: 8px; border-bottom-left-radius: 8px;">$</span>
-                                            <input type="number" step="0.01" min="0.01" id="depositoMonto" name="monto" class="form-control form-figma-input ps-2" placeholder="0.00" required>
+                                            <span class="input-group-text border-0 text-cyan-neon fw-bold" style="background-color: #1E2024;">$</span>
+                                            <input type="number" step="0.01" min="0.01" id="depositoMonto" name="monto" class="form-control form-figma-input py-2 border-0 shadow-none text-white ps-2" style="background-color: #1E2024 !important;" placeholder="0.00" required>
                                         </div>
                                         <div id="depositoWarningSaldo" class="alert alert-danger py-2 px-3 border-0 mt-2 d-none font-monospace small" style="background: rgba(239, 68, 68, 0.2); border-left: 4px solid #ef4444 !important; color: #f87171;">
                                             <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>No hay fondos suficientes</strong> (Disponible: $<fmt:formatNumber value="${saldoConcentradora}" pattern="#,##0.00"/> MXN)
@@ -82,14 +82,14 @@
 
                                     <!-- Concepto / Descripción -->
                                     <div class="mb-3">
-                                        <label class="form-label-figma" style="color: #BAC9CC; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;">
+                                        <label class="form-label text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; color: #BAC9CC !important; letter-spacing: 0.05em;">
                                             CONCEPTO (OPCIONAL)
                                         </label>
-                                        <textarea name="descripcion" id="depositoDescripcion" class="form-control form-figma-input" rows="2" placeholder="Ej. Bono de Gasolina Semanal">Depósito desde Cuenta Concentradora</textarea>
+                                        <textarea name="descripcion" id="depositoDescripcion" class="form-control form-figma-input py-2 border-0 shadow-none text-white" style="background-color: #1E2024 !important;" rows="2" placeholder="Ej. Bono de Gasolina Semanal">Depósito desde Cuenta Concentradora</textarea>
                                     </div>
 
                                     <!-- Diagrama de Flujo Visual -->
-                                    <div class="p-3 rounded-4 my-3 d-flex align-items-center justify-content-between" style="background: #0d0f14; border: 1px solid rgba(255, 255, 255, 0.05);">
+                                    <div class="p-3 rounded-4 my-3 d-flex align-items-center justify-content-between" style="background: #0B0E11; border: 1px solid rgba(255, 255, 255, 0.05);">
                                         <!-- Nodo Origen: Empresa -->
                                         <div class="d-flex flex-column align-items-center text-center">
                                             <div class="rounded-circle d-flex align-items-center justify-content-center mb-1"
@@ -118,11 +118,15 @@
                                     </div>
                                 </div>
 
-                                <!-- Botón de Confirmación de Depósito -->
-                                <div class="pt-2">
-                                    <button type="submit" id="btnSubmitDepositarEmpleado" class="btn btn-figma-neon w-100 py-3 rounded-pill fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2 shadow-sm" style="font-size: 0.95rem; letter-spacing: 0.5px;">
-                                        <i class="bi bi-file-earmark-plus-fill fs-5"></i>
-                                        <span>CONFIRMAR DEPÓSITO</span>
+                                <!-- Botones de Acción -->
+                                <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-3">
+                                    <button type="button" class="btn btn-outline-figma-neon px-4 py-2.5 d-inline-flex align-items-center justify-content-center gap-2 text-center rounded-pill font-inter fw-bold w-100 w-sm-auto text-nowrap" style="min-width: 160px; font-size: 0.875rem;" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle fs-6"></i>
+                                        <span>Cancelar</span>
+                                    </button>
+                                    <button type="submit" id="btnSubmitDepositarEmpleado" class="btn btn-figma-neon px-4 py-2.5 d-inline-flex align-items-center justify-content-center gap-2 text-center rounded-pill font-inter fw-bold shadow-sm w-100 w-sm-auto text-nowrap" style="min-width: 160px; font-size: 0.875rem; letter-spacing: 0.02em;">
+                                        <i class="bi bi-file-earmark-plus-fill fs-6"></i>
+                                        <span>Confirmar Depósito</span>
                                     </button>
                                 </div>
 

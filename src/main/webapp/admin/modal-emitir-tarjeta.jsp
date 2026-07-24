@@ -168,7 +168,7 @@
 
                   <!-- Submit Button -->
                   <div class="mt-3">
-                    <button type="submit" class="btn btn-figma-neon w-100 py-3 d-flex align-items-center justify-content-center gap-2 font-inter fw-bold shadow-sm" style="font-size: 0.9rem; letter-spacing: 0.04em;">
+                    <button type="submit" class="btn btn-figma-neon w-100 py-3 d-flex align-items-center justify-content-center gap-2 font-inter fw-bold shadow-sm text-nowrap" style="font-size: 0.9rem; letter-spacing: 0.04em;">
                       <i class="bi bi-credit-card-2-front-fill fs-5"></i>
                       <span id="btnSubmitTarjetaText">EMITIR NUEVA TARJETA</span>
                     </button>
