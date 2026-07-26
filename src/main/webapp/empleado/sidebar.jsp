@@ -9,8 +9,41 @@
   #sidebarUsuario {
     height: 100vh !important;
     width: 260px;
-    border-color: rgba(58, 73, 75, 0.15) !important;
+    background-color: #0C0E12 !important;
+    border-right: 1px solid rgba(58, 73, 75, 0.15) !important;
     z-index: 1050;
+    font-family: 'Inter', sans-serif !important;
+  }
+  .bg-figma-sidebar {
+    background-color: #0C0E12 !important;
+  }
+  .sidebar-link {
+    font-family: 'Inter', sans-serif !important;
+    color: #B9CACB !important;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+    font-weight: 500;
+  }
+  .sidebar-link:hover {
+    color: #00DBE7 !important;
+    background: rgba(0, 219, 231, 0.05);
+  }
+  .sidebar-link.active {
+    color: #00DBE7 !important;
+    background: rgba(112, 0, 255, 0.20) !important;
+    border-left: 4px solid #00DBE7 !important;
+    font-weight: 600 !important;
+  }
+  .btn-logout {
+    font-family: 'Inter', sans-serif !important;
+    color: #BAC9CC !important;
+    border: 1px solid #3B494C !important;
+    transition: all 0.15s ease;
+  }
+  .btn-logout:hover {
+    color: #FFFFFF !important;
+    border-color: #64748B !important;
+    background-color: rgba(255, 255, 255, 0.02);
   }
   @media (min-width: 768px) {
     #sidebarUsuario {
@@ -21,7 +54,7 @@
   }
 </style>
 
-<nav class="offcanvas-md offcanvas-start bg-figma-sidebar border-end d-flex flex-column py-4 backdrop-blur shadow"
+<nav class="offcanvas-md offcanvas-start bg-figma-sidebar border-end d-flex flex-column py-4 shadow"
      id="sidebarUsuario" tabindex="-1" aria-labelledby="sidebarUsuarioLabel">
 
   <!-- Botón de cierre para móvil -->
@@ -32,8 +65,8 @@
   <div class="w-100">
     <!-- Brand / Logo -->
     <div class="px-4 mb-5">
-      <h1 class="fw-bold lh-1 text-figma-cyan display-6">FinTech<br>Corp</h1>
-      <div class="text-uppercase text-figma-muted fw-bold small tracking-wider" style="font-size: 0.7rem; letter-spacing: 0.6px;">
+      <h1 class="fw-bold lh-1 display-6" style="color: #00DBE7 !important; font-family: 'Inter', sans-serif;">FinTech<br>Corp</h1>
+      <div class="text-uppercase fw-bold small tracking-wider mt-1" style="font-size: 0.7rem; letter-spacing: 0.6px; color: #BAC9CC !important; font-family: 'Inter', sans-serif;">
         Banca Institucional
       </div>
     </div>
@@ -69,9 +102,8 @@
 
   <!-- Botón de Cerrar Sesión empujado al fondo -->
   <div class="px-4 w-100 mt-auto">
-    <a href="${pageContext.request.contextPath}/login?accion=logout" class="btn w-100 py-2 text-center text-secondary border border-secondary bg-transparent rounded-3 text-decoration-none d-block"
-       style="color: #BAC9CC !important; border-color: #3B494C !important;">
-      Cerrar Sesión
+    <a href="${pageContext.request.contextPath}/login?accion=logout" class="btn w-100 py-2 text-center bg-transparent rounded-3 btn-logout text-decoration-none d-flex align-items-center justify-content-center gap-2">
+      <i class="bi bi-box-arrow-right fs-5"></i> <span>Cerrar Sesión</span>
     </a>
   </div>
 </nav>

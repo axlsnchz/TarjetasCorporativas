@@ -71,18 +71,10 @@
 
     <div class="w-100">
         <!-- Brand / Logo Corporativo -->
-        <div class="px-4 mb-4">
-            <div class="d-flex align-items-center gap-3 mb-1">
-                <div class="rounded-3 d-flex align-items-center justify-content-center text-dark flex-shrink-0"
-                     style="width: 44px; height: 44px; background-color: #00DBE7; box-shadow: 0px 0px 18px rgba(0, 242, 255, 0.6);">
-                    <i class="bi bi-building-columns-fill fs-3" style="color: #002022;"></i>
-                </div>
-                <div>
-                    <h1 class="fw-bold lh-1 text-info m-0" style="color: #00DBE7 !important; font-family: 'Inter', sans-serif; font-size: 1.4rem;">FinTech Corp</h1>
-                    <div class="text-uppercase fw-bold small tracking-wider mt-1" style="font-size: 0.65rem; letter-spacing: 0.6px; color: #BAC9CC !important; opacity: 1; font-family: 'Inter', sans-serif;">
-                        Banca Institucional
-                    </div>
-                </div>
+        <div class="px-4 mb-5">
+            <h1 class="fw-bold lh-1 display-6" style="color: #00DBE7 !important; font-family: 'Inter', sans-serif;">FinTech<br>Corp</h1>
+            <div class="text-uppercase fw-bold small tracking-wider mt-1" style="font-size: 0.7rem; letter-spacing: 0.6px; color: #BAC9CC !important; font-family: 'Inter', sans-serif;">
+                Banca Institucional
             </div>
         </div>
 

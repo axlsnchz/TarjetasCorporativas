@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinTech Corp - Transferencias</title>
 
-    <!-- Bootstrap 5 CSS LOCAL -->
-    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons LOCAL -->
-    <link href="../assets/icons/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN & Local -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Google Fonts: Inter & Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
