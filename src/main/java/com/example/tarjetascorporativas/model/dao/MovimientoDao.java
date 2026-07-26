@@ -18,7 +18,7 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     @Override
     public boolean create(Movimiento entidad) {
         String sql = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                "VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)";
+                     "VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -44,10 +44,10 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getAll() {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                "FROM MOVIMIENTOS m " +
-                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                "ORDER BY m.fecha_movimiento DESC";
+                     "FROM MOVIMIENTOS m " +
+                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                     "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -64,10 +64,10 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     @Override
     public Movimiento getById(Long id) {
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                "FROM MOVIMIENTOS m " +
-                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                "WHERE m.id_movimiento = ?";
+                     "FROM MOVIMIENTOS m " +
+                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                     "WHERE m.id_movimiento = ?";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -98,11 +98,11 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getByCuentaId(Long idCuenta) {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                "FROM MOVIMIENTOS m " +
-                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                "WHERE m.id_cuenta_origen = ? OR m.id_cuenta_destino = ? " +
-                "ORDER BY m.fecha_movimiento DESC";
+                     "FROM MOVIMIENTOS m " +
+                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                     "WHERE m.id_cuenta_origen = ? OR m.id_cuenta_destino = ? " +
+                     "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -122,11 +122,11 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getByEmpleadoId(Long idEmpleado) {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                "FROM MOVIMIENTOS m " +
-                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                "WHERE co.id_empleado = ? OR cd.id_empleado = ? " +
-                "ORDER BY m.fecha_movimiento DESC";
+                     "FROM MOVIMIENTOS m " +
+                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                     "WHERE co.id_empleado = ? OR cd.id_empleado = ? " +
+                     "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -146,11 +146,11 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
     public List<Movimiento> getByEstado(String estado) {
         List<Movimiento> lista = new ArrayList<>();
         String sql = "SELECT m.*, co.numero_cuenta AS numero_cuenta_origen, cd.numero_cuenta AS numero_cuenta_destino " +
-                "FROM MOVIMIENTOS m " +
-                "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
-                "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
-                "WHERE m.estado = ? " +
-                "ORDER BY m.fecha_movimiento DESC";
+                     "FROM MOVIMIENTOS m " +
+                     "LEFT JOIN CUENTAS co ON m.id_cuenta_origen = co.id_cuenta " +
+                     "JOIN CUENTAS cd ON m.id_cuenta_destino = cd.id_cuenta " +
+                     "WHERE m.estado = ? " +
+                     "ORDER BY m.fecha_movimiento DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -209,7 +209,7 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
 
             // 3. Insertar movimiento
             String sqlMov = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                    "VALUES(?, ?, ?, 'TRANSFERENCIA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
+                            "VALUES(?, ?, ?, 'TRANSFERENCIA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
             try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
                 ps.setLong(1, idCuentaOrigen);
                 ps.setLong(2, idCuentaDestino);
@@ -261,7 +261,7 @@ public class MovimientoDao implements Dao<Movimiento, Long> {
 
             // 2. Registrar movimiento de Depósito Inicial
             String sqlMov = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                    "VALUES(NULL, ?, ?, 'DEPOSITO_INICIAL', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
+                            "VALUES(NULL, ?, ?, 'DEPOSITO_INICIAL', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
             try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
                 ps.setLong(1, conservadora.getIdCuenta());
                 ps.setBigDecimal(2, monto);

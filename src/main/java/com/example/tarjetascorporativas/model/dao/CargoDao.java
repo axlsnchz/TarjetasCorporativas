@@ -91,7 +91,7 @@ public class CargoDao implements Dao<Cargo, Long> {
     }
 
     public Cargo getByNombre(String nombre) {
-        String sql = "SELECT * FROM CARGOS WHERE nombre = ?";
+        String sql = "SELECT * FROM CARGOS WHERE LOWER(nombre) = LOWER(?)";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 

@@ -14,10 +14,10 @@ import java.util.List;
 
 public class CuentaDao implements Dao<Cuenta, Long> {
 
-    private static final String BASE_SELECT =
+    private static final String BASE_SELECT = 
             "SELECT c.*, u.nombre AS nombre_empleado, u.url_foto AS url_foto " +
-                    "FROM CUENTAS c " +
-                    "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario ";
+            "FROM CUENTAS c " +
+            "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario ";
 
     @Override
     public boolean create(Cuenta entidad) {
@@ -79,12 +79,12 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
     public List<Cuenta> getCuentasEmpleados() {
         List<Cuenta> lista = new ArrayList<>();
-        String sql = BASE_SELECT +
-                "WHERE c.id_empleado IS NOT NULL " +
-                "AND c.numero_cuenta NOT IN ('ACCT-MATRIZ', 'ACCT-CONCENTRADORA') " +
-                "AND UPPER(c.nombre_cuenta) NOT LIKE '%MATRIZ%' " +
-                "AND UPPER(c.nombre_cuenta) NOT LIKE '%CONCENTRADORA%' " +
-                "ORDER BY c.id_cuenta DESC";
+        String sql = BASE_SELECT + 
+                     "WHERE c.id_empleado IS NOT NULL " +
+                     "AND c.numero_cuenta NOT IN ('ACCT-MATRIZ', 'ACCT-CONCENTRADORA') " +
+                     "AND UPPER(c.nombre_cuenta) NOT LIKE '%MATRIZ%' " +
+                     "AND UPPER(c.nombre_cuenta) NOT LIKE '%CONCENTRADORA%' " +
+                     "ORDER BY c.id_cuenta DESC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -119,10 +119,10 @@ public class CuentaDao implements Dao<Cuenta, Long> {
     @Override
     public boolean update(Cuenta entidad) {
         // La Cuenta Concentradora siempre se mantiene activa (nunca inactiva)
-        if (entidad.getIdEmpleado() == null ||
-                "ACCT-CONCENTRADORA".equalsIgnoreCase(entidad.getNumeroCuenta()) ||
-                "ACCT-MATRIZ".equalsIgnoreCase(entidad.getNumeroCuenta()) ||
-                (entidad.getNombreCuenta() != null && entidad.getNombreCuenta().toUpperCase().contains("CONCENTRADORA"))) {
+        if (entidad.getIdEmpleado() == null || 
+            "ACCT-CONCENTRADORA".equalsIgnoreCase(entidad.getNumeroCuenta()) || 
+            "ACCT-MATRIZ".equalsIgnoreCase(entidad.getNumeroCuenta()) ||
+            (entidad.getNombreCuenta() != null && entidad.getNombreCuenta().toUpperCase().contains("CONCENTRADORA"))) {
             entidad.setActivo(true);
         }
 
@@ -192,12 +192,12 @@ public class CuentaDao implements Dao<Cuenta, Long> {
     }
 
     public Cuenta getCuentaConcentradora() {
-        String sql = BASE_SELECT +
-                "WHERE (c.id_empleado IS NULL " +
-                "OR UPPER(c.nombre_cuenta) LIKE '%MATRIZ%' " +
-                "OR UPPER(c.nombre_cuenta) LIKE '%CONCENTRADORA%' " +
-                "OR c.numero_cuenta IN ('ACCT-MATRIZ', 'ACCT-CONCENTRADORA')) " +
-                "ORDER BY c.id_cuenta ASC";
+        String sql = BASE_SELECT + 
+                     "WHERE (c.id_empleado IS NULL " +
+                     "OR UPPER(c.nombre_cuenta) LIKE '%MATRIZ%' " +
+                     "OR UPPER(c.nombre_cuenta) LIKE '%CONCENTRADORA%' " +
+                     "OR c.numero_cuenta IN ('ACCT-MATRIZ', 'ACCT-CONCENTRADORA')) " +
+                     "ORDER BY c.id_cuenta ASC";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -305,7 +305,7 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
             // 3. Registrar el movimiento contable de Reintegro
             String sqlMov = "INSERT INTO MOVIMIENTOS(id_cuenta_origen, id_cuenta_destino, monto, tipo_movimiento, estado, fecha_movimiento, descripcion) " +
-                    "VALUES(?, ?, ?, 'REINTEGRO_CONSERVADORA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
+                            "VALUES(?, ?, ?, 'REINTEGRO_CONSERVADORA', 'COMPLETADO', CURRENT_TIMESTAMP, ?)";
             try (PreparedStatement ps = con.prepareStatement(sqlMov)) {
                 ps.setLong(1, idCuenta);
                 ps.setLong(2, concentradora.getIdCuenta());
@@ -335,10 +335,10 @@ public class CuentaDao implements Dao<Cuenta, Long> {
 
     public boolean deshabilitarCuenta(Long idCuenta) {
         Cuenta c = getById(idCuenta);
-        if (c != null && (c.getIdEmpleado() == null ||
-                "ACCT-CONCENTRADORA".equalsIgnoreCase(c.getNumeroCuenta()) ||
-                "ACCT-MATRIZ".equalsIgnoreCase(c.getNumeroCuenta()) ||
-                (c.getNombreCuenta() != null && (c.getNombreCuenta().toUpperCase().contains("CONCENTRADORA") || c.getNombreCuenta().toUpperCase().contains("MATRIZ"))))) {
+        if (c != null && (c.getIdEmpleado() == null || 
+                          "ACCT-CONCENTRADORA".equalsIgnoreCase(c.getNumeroCuenta()) || 
+                          "ACCT-MATRIZ".equalsIgnoreCase(c.getNumeroCuenta()) || 
+                          (c.getNombreCuenta() != null && (c.getNombreCuenta().toUpperCase().contains("CONCENTRADORA") || c.getNombreCuenta().toUpperCase().contains("MATRIZ"))))) {
             // La Cuenta Concentradora NUNCA se puede desactivar ni dar de baja
             return false;
         }
@@ -363,12 +363,12 @@ public class CuentaDao implements Dao<Cuenta, Long> {
         Cuenta c = new Cuenta();
         c.setIdCuenta(rs.getLong("id_cuenta"));
         c.setNumeroCuenta(rs.getString("numero_cuenta"));
-
+        
         long idEmp = rs.getLong("id_empleado");
         if (!rs.wasNull()) {
             c.setIdEmpleado(idEmp);
         }
-
+        
         c.setNombreCuenta(rs.getString("nombre_cuenta"));
         c.setDescripcion(rs.getString("descripcion"));
         c.setSaldo(rs.getBigDecimal("saldo"));

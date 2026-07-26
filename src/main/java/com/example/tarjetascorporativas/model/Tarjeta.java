@@ -22,6 +22,8 @@ public class Tarjeta implements Serializable {
     private String nombreCuenta;
     private Long idEmpleado;
     private String urlFoto;
+    private Double saldo;
+    private Double limiteAsignado;
 
     public Tarjeta() {
     }
@@ -174,5 +176,21 @@ public class Tarjeta implements Serializable {
 
     public void setUrlFoto(String urlFoto) {
         this.urlFoto = urlFoto;
+    }
+
+    public Double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
+    }
+
+    public Double getLimiteAsignado() {
+        return limiteAsignado;
+    }
+
+    public void setLimiteAsignado(Double limiteAsignado) {
+        this.limiteAsignado = limiteAsignado;
     }
 }

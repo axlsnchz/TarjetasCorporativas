@@ -13,13 +13,13 @@ import java.util.List;
 public class TarjetaDao implements Dao<Tarjeta, Long> {
 
     private static final String BASE_SELECT =
-            "SELECT t.*, c.numero_cuenta, c.nombre_cuenta, c.id_empleado, " +
-                    "u.nombre AS nombre_empleado, u.url_foto AS url_foto, ca.nombre AS nombre_cargo, d.nombre AS nombre_departamento " +
-                    "FROM TARJETAS t " +
-                    "JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta " +
-                    "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario " +
-                    "LEFT JOIN CARGOS ca ON u.id_cargo = ca.id_cargo " +
-                    "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento ";
+            "SELECT t.*, c.numero_cuenta, c.nombre_cuenta, c.id_empleado, c.saldo, c.limite_asignado, " +
+            "u.nombre AS nombre_empleado, u.url_foto AS url_foto, ca.nombre AS nombre_cargo, d.nombre AS nombre_departamento " +
+            "FROM TARJETAS t " +
+            "JOIN CUENTAS c ON t.id_cuenta = c.id_cuenta " +
+            "LEFT JOIN USUARIOS u ON c.id_empleado = u.id_usuario " +
+            "LEFT JOIN CARGOS ca ON u.id_cargo = ca.id_cargo " +
+            "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento ";
 
     @Override
     public boolean create(Tarjeta entidad) {
@@ -169,6 +169,24 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
         return delete(idTarjeta);
     }
 
+    public List<Tarjeta> getByEmpleadoId(Long idEmpleado) {
+        List<Tarjeta> lista = new ArrayList<>();
+        String sql = BASE_SELECT + "WHERE c.id_empleado = ? ORDER BY t.id_tarjeta DESC";
+        try (Connection con = SQLConnector.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setLong(1, idEmpleado);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapResultSetToTarjeta(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     private Tarjeta mapResultSetToTarjeta(ResultSet rs) throws SQLException {
         Tarjeta t = new Tarjeta();
         t.setIdTarjeta(rs.getLong("id_tarjeta"));
@@ -213,6 +231,14 @@ public class TarjetaDao implements Dao<Tarjeta, Long> {
 
         try {
             t.setUrlFoto(rs.getString("url_foto"));
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setSaldo(rs.getDouble("saldo"));
+        } catch (SQLException ignored) {}
+
+        try {
+            t.setLimiteAsignado(rs.getDouble("limite_asignado"));
         } catch (SQLException ignored) {}
 
         return t;

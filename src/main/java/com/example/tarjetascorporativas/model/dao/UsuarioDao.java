@@ -13,11 +13,11 @@ import java.util.List;
 
 public class UsuarioDao implements Dao<Usuario, Long> {
 
-    private static final String BASE_SELECT =
+    private static final String BASE_SELECT = 
             "SELECT u.*, d.nombre AS nombre_departamento, c.nombre AS nombre_cargo " +
-                    "FROM USUARIOS u " +
-                    "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento " +
-                    "LEFT JOIN CARGOS c ON u.id_cargo = c.id_cargo ";
+            "FROM USUARIOS u " +
+            "LEFT JOIN DEPARTAMENTOS d ON u.id_departamento = d.id_departamento " +
+            "LEFT JOIN CARGOS c ON u.id_cargo = c.id_cargo ";
 
     @Override
     public boolean create(Usuario entidad) {

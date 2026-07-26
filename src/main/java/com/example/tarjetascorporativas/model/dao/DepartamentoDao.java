@@ -91,7 +91,7 @@ public class DepartamentoDao implements Dao<Departamento, Long> {
     }
 
     public Departamento getByNombre(String nombre) {
-        String sql = "SELECT * FROM DEPARTAMENTOS WHERE nombre = ?";
+        String sql = "SELECT * FROM DEPARTAMENTOS WHERE LOWER(nombre) = LOWER(?)";
         try (Connection con = SQLConnector.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
