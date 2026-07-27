@@ -1,4 +1,37 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<%
+    com.example.tarjetascorporativas.model.Usuario uLogueado = (com.example.tarjetascorporativas.model.Usuario) session.getAttribute("usuarioLogueado");
+    if (uLogueado == null) {
+        com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
+        java.util.List<com.example.tarjetascorporativas.model.Usuario> emps = uDao.getEmpleados();
+        if (!emps.isEmpty()) {
+            uLogueado = emps.get(0);
+        } else {
+            uLogueado = new com.example.tarjetascorporativas.model.Usuario();
+            uLogueado.setIdUsuario(1L);
+            uLogueado.setNombre("Empleado General");
+            uLogueado.setCorreo("empleado@fintechcorp.com");
+            uLogueado.setNombreCargo("Analista Corporativo");
+            uLogueado.setNombreDepartamento("Finanzas");
+            uLogueado.setRol("EMPLEADO");
+        }
+        session.setAttribute("usuarioLogueado", uLogueado);
+    } else {
+        // Garantizar que los nombres de Cargo y Departamento estén actualizados desde la BD
+        if (uLogueado.getNombreCargo() == null || uLogueado.getNombreDepartamento() == null) {
+            com.example.tarjetascorporativas.model.dao.UsuarioDao uDao = new com.example.tarjetascorporativas.model.dao.UsuarioDao();
+            com.example.tarjetascorporativas.model.Usuario uCompleto = uDao.getById(uLogueado.getIdUsuario());
+            if (uCompleto != null) {
+                uLogueado = uCompleto;
+                session.setAttribute("usuarioLogueado", uLogueado);
+            }
+        }
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,27 +41,24 @@
 
     <!-- Bootstrap 5 CSS -->
     <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Bootstrap Icons CDN & Local -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
-
     <!-- Google Fonts: Inter & Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Estilos base indispensables (Colores y fuentes Figma) */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0C0E12;
             color: #E2E2E8;
+            min-height: 100vh;
         }
 
         .font-jakarta {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Paleta de colores específicos de Figma unificados */
         .bg-figma-card { background-color: #14171C !important; }
         .bg-figma-sidebar { background-color: #0C0E12 !important; }
         .bg-figma-input { background-color: #0D0F14 !important; }
@@ -38,13 +68,11 @@
         .text-figma-muted { color: #B9CACB !important; }
         .text-figma-gray { color: #BAC9CC !important; }
 
-        /* Efecto de desenfoque Figma */
         .backdrop-blur {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
 
-        /* Luces ambientales traseras */
         .dashboard-glow {
             position: absolute;
             width: 500px;
@@ -54,24 +82,6 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-        }
-
-        /* Ajustes de navegación estandarizados */
-        .sidebar-link {
-            color: #B9CACB;
-            border-left: 4px solid transparent;
-            transition: all 0.2s ease;
-        }
-        .sidebar-link:hover {
-            color: #00DBE7;
-            background: rgba(255, 255, 255, 0.02);
-        }
-        .sidebar-link.active {
-            background: rgba(112, 0, 255, 0.12);
-            border-left-color: #00DBE7;
-            color: #00DBE7;
-            font-weight: 500;
-            box-shadow: -4px 0px 15px -2px rgba(0, 219, 231, 0.2);
         }
 
         /* Estilización de Inputs oscuros */
@@ -88,9 +98,9 @@
         }
         .form-control-dark:disabled, .form-control-dark[readonly] {
             background-color: #141619;
-            color: #8A999A;
-            border-color: rgba(255, 255, 255, 0.02);
-            opacity: 0.8;
+            color: #E2E2E8;
+            border-color: rgba(255, 255, 255, 0.04);
+            opacity: 0.9;
         }
 
         /* Botón de acción principal Cyan */
@@ -112,31 +122,24 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Responsividad para Header y Main Content en Móviles */
         @media (max-width: 767.98px) {
-            .top-header {
-                left: 0 !important;
-            }
-            main {
-                margin-left: 0 !important;
-                padding: 95px 20px 40px 20px !important;
-            }
+            .top-header { left: 0 !important; }
+            main { margin-left: 0 !important; padding: 95px 20px 40px 20px !important; }
         }
     </style>
 </head>
 <body class="overflow-x-hidden min-vh-100">
 
 <div class="d-flex min-vh-100 position-relative">
-    <!-- Luz de fondo ambiental -->
     <div class="dashboard-glow" style="left: 30%; top: 20%;"></div>
 
-    <!-- BARRA LATERAL (SIDEBAR) - Estandarizada y Responsiva -->
+    <!-- SIDEBAR -->
     <jsp:include page="sidebar.jsp" />
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="flex-grow-1 position-relative" style="margin-left: 260px; padding: 115px 40px 40px 40px; z-index: 1;">
 
-        <!-- HEADER FIJO (Con botón de hamburguesa responsivo integrado) -->
+        <!-- HEADER FIJO -->
         <div class="position-fixed top-0 end-0 top-header d-flex justify-content-between justify-content-md-end align-items-center px-4 backdrop-blur"
              style="left: 260px; height: 75px; background: rgba(12, 14, 18, 0.75); border-bottom: 1px solid rgba(58, 73, 75, 0.15); z-index: 99;">
             <button class="btn d-md-none text-figma-cyan fs-3 p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarUsuario" aria-controls="sidebarUsuario" aria-label="Abrir menú">
@@ -146,57 +149,112 @@
         </div>
 
         <!-- CABECERA DE LA VISTA -->
-        <div class="row mb-5 font-jakarta">
+        <div class="row mb-4 font-jakarta">
             <div class="col-12">
                 <h2 class="fw-bold display-6 text-white mb-2">Configuración</h2>
                 <p class="text-figma-muted m-0 fs-6">Administra tu identidad digital y protocolos de seguridad institucional.</p>
             </div>
         </div>
 
+        <!-- MENSAJES DE ALERTA (ÉXITO / ERROR) -->
+        <c:if test="${not empty sessionScope.mensajeExito}">
+            <div class="alert alert-success alert-dismissible fade show bg-success bg-opacity-10 text-success border-success border-opacity-25 rounded-3 mb-4 font-jakarta" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> ${sessionScope.mensajeExito}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% session.removeAttribute("mensajeExito"); %>
+        </c:if>
+
+        <c:if test="${not empty sessionScope.mensajeError}">
+            <div class="alert alert-danger alert-dismissible fade show bg-danger bg-opacity-10 text-danger border-danger border-opacity-25 rounded-3 mb-4 font-jakarta" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> ${sessionScope.mensajeError}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% session.removeAttribute("mensajeError"); %>
+        </c:if>
+
         <!-- CONTENEDOR DE OPCIONES EN REJILLA -->
         <div class="row g-4 font-jakarta">
 
-            <!-- COLUMNA IZQUIERDA: IDENTIDAD DIGITAL (READ-ONLY) -->
+            <!-- COLUMNA IZQUIERDA: IDENTIDAD DIGITAL (DATOS REGISTRADOS DEL EMPLEADO) -->
             <div class="col-12 col-xl-7">
                 <div class="card bg-figma-card rounded-4 p-4 h-100 border" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
 
-                    <!-- Bloque de Perfil / Avatar -->
+                    <!-- Bloque de Perfil / Avatar con Datos Dinámicos -->
                     <div class="d-flex align-items-center gap-4 mb-5">
-                        <div class="position-relative d-flex align-items-center justify-content-center bg-opacity-10 rounded-circle border border-2 border-info"
-                             style="width: 80px; height: 80px; background-color: rgba(0, 219, 231, 0.1);">
-                            <i class="bi bi-person text-figma-cyan" style="font-size: 2.5rem;"></i>
-                        </div>
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.usuarioLogueado.urlFoto}">
+                                <img src="${sessionScope.usuarioLogueado.urlFoto}" alt="Avatar" class="rounded-circle border border-2 border-info object-fit-cover" style="width: 80px; height: 80px;">
+                            </c:when>
+                            <c:otherwise>
+                                <div class="position-relative d-flex align-items-center justify-content-center bg-opacity-10 rounded-circle border border-2 border-info"
+                                     style="width: 80px; height: 80px; background-color: rgba(0, 219, 231, 0.1);">
+                                    <i class="bi bi-person text-figma-cyan" style="font-size: 2.5rem;"></i>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+
                         <div>
-                            <h3 class="text-white h5 fw-semibold mb-1">Nombre del empleado</h3>
-                            <span class="text-figma-cyan small fw-medium">Cargo / Rol Institucional</span>
+                            <h3 class="text-white h5 fw-semibold mb-1">${sessionScope.usuarioLogueado.nombre}</h3>
+                            <span class="text-figma-cyan small fw-medium">
+                                ${empty sessionScope.usuarioLogueado.nombreCargo ? 'Empleado' : sessionScope.usuarioLogueado.nombreCargo}
+                                ${empty sessionScope.usuarioLogueado.nombreDepartamento ? '' : ' • '.concat(sessionScope.usuarioLogueado.nombreDepartamento)}
+                            </span>
                         </div>
                     </div>
 
-                    <!-- Campos de Identidad Fijos -->
+                    <!-- Campos de Identidad Dinámicos del Empleado (Read-Only) -->
                     <div class="row g-4">
                         <!-- Nombre Completo -->
                         <div class="col-12 col-md-6">
                             <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Nombre Completo</label>
                             <div class="input-group rounded-2 overflow-hidden">
-                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none" value="Nombre Completo Registrado" readonly>
+                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none" value="${sessionScope.usuarioLogueado.nombre}" readonly>
                                 <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
                             </div>
                         </div>
 
                         <!-- Correo Electrónico -->
                         <div class="col-12 col-md-6">
-                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Corro Electrónico</label>
+                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Correo Electrónico</label>
                             <div class="input-group rounded-2 overflow-hidden">
-                                <input type="email" class="form-control form-control-dark py-2.5 shadow-none" value="ej.correo@gmail.com" readonly>
+                                <input type="email" class="form-control form-control-dark py-2.5 shadow-none" value="${sessionScope.usuarioLogueado.correo}" readonly>
                                 <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
                             </div>
                         </div>
 
-                        <!-- Número de Identificación -->
-                        <div class="col-12">
+                        <!-- Número de Identificación (ID Empleado) -->
+                        <div class="col-12 col-md-6">
                             <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Número de Identificación</label>
                             <div class="input-group rounded-2 overflow-hidden">
-                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none" value="ID generada automáticamente por el sistema" readonly>
+                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none font-monospace" value="EMP-<fmt:formatNumber value='${sessionScope.usuarioLogueado.idUsuario}' pattern='000' />" readonly>
+                                <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Rol Institucional -->
+                        <div class="col-12 col-md-6">
+                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Rol Institucional</label>
+                            <div class="input-group rounded-2 overflow-hidden">
+                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none" value="${empty sessionScope.usuarioLogueado.rol ? 'EMPLEADO' : sessionScope.usuarioLogueado.rol}" readonly>
+                                <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Cargo -->
+                        <div class="col-12 col-md-6">
+                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Cargo</label>
+                            <div class="input-group rounded-2 overflow-hidden">
+                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none" value="${empty sessionScope.usuarioLogueado.nombreCargo ? 'Sin cargo asignado' : sessionScope.usuarioLogueado.nombreCargo}" readonly>
+                                <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- Departamento -->
+                        <div class="col-12 col-md-6">
+                            <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Departamento</label>
+                            <div class="input-group rounded-2 overflow-hidden">
+                                <input type="text" class="form-control form-control-dark py-2.5 shadow-none" value="${empty sessionScope.usuarioLogueado.nombreDepartamento ? 'Sin departamento asignado' : sessionScope.usuarioLogueado.nombreDepartamento}" readonly>
                                 <span class="input-group-text bg-figma-input border-0 text-figma-gray px-3"><i class="bi bi-lock-fill"></i></span>
                             </div>
                         </div>
@@ -214,12 +272,15 @@
                         <h3 class="text-white h5 fw-semibold m-0">Cambiar Contraseña</h3>
                     </div>
 
-                    <form class="d-flex flex-column gap-3">
+                    <form class="d-flex flex-column gap-3" action="${pageContext.request.contextPath}/empleado/cambiar-password" method="POST">
                         <!-- Contraseña Actual -->
                         <div>
                             <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Contraseña Actual</label>
                             <div class="input-group rounded-2 overflow-hidden">
-                                <input type="password" class="form-control form-control-dark py-2.5 shadow-none border-end-0" placeholder="••••••••••••">
+                                <input type="password" id="inputPassActual" name="passActual" class="form-control form-control-dark py-2.5 shadow-none border-end-0" placeholder="••••••••••••" required>
+                                <button class="btn bg-figma-select text-figma-gray border-0 px-3" type="button" onclick="togglePassVisibility('inputPassActual', this)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -227,8 +288,8 @@
                         <div>
                             <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Nueva Contraseña</label>
                             <div class="input-group rounded-2 overflow-hidden">
-                                <input type="password" class="form-control form-control-dark py-2.5 shadow-none border-end-0" placeholder="••••••••••••">
-                                <button class="btn bg-figma-select text-figma-gray border-0 px-3" type="button">
+                                <input type="password" id="inputPassNueva" name="nuevaPassword" class="form-control form-control-dark py-2.5 shadow-none border-end-0" placeholder="••••••••••••" required>
+                                <button class="btn bg-figma-select text-figma-gray border-0 px-3" type="button" onclick="togglePassVisibility('inputPassNueva', this)">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -238,8 +299,8 @@
                         <div>
                             <label class="text-figma-muted fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 11px;">Confirmar Nueva Contraseña</label>
                             <div class="input-group rounded-2 overflow-hidden">
-                                <input type="password" class="form-control form-control-dark py-2.5 shadow-none border-end-0" placeholder="••••••••••••">
-                                <button class="btn bg-figma-select text-figma-gray border-0 px-3" type="button">
+                                <input type="password" id="inputPassConfirm" name="confirmPassword" class="form-control form-control-dark py-2.5 shadow-none border-end-0" placeholder="••••••••••••" required>
+                                <button class="btn bg-figma-select text-figma-gray border-0 px-3" type="button" onclick="togglePassVisibility('inputPassConfirm', this)">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -271,5 +332,19 @@
 
 <!-- Bootstrap Bundle JS LOCAL -->
 <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function togglePassVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+</script>
 </body>
 </html>
