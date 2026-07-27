@@ -75,8 +75,8 @@
             z-index: 0;
         }
 
-        /* Estilizado de Tarjetas interactivos (misma estética que Mis Cuentas) */
-        .card-item-box {
+        /* Estilizado de las Tarjetas (Idéntico a Mis Cuentas) */
+        .account-card {
             background: #14171C;
             border: 1px solid #30363d;
             border-radius: 16px;
@@ -85,12 +85,12 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
-        .card-item-box:hover {
+        .account-card:hover {
             border-color: rgba(0, 219, 231, 0.5);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         }
-        .card-item-box.active-selected {
+        .account-card.active-selected {
             border: 2px solid #00DBE7 !important;
             box-shadow: 0 0 20px rgba(0, 219, 231, 0.25), inset 0 0 15px rgba(0, 219, 231, 0.05);
             background: linear-gradient(145deg, #161a22, #11141a);
@@ -180,33 +180,20 @@
             height: 100%;
         }
 
-        /* Mockup Visual de Tarjeta de Crédito / Débito */
-        .credit-card-preview {
-            background: linear-gradient(135deg, #1b2028 0%, #0d0f14 100%);
-            border: 1px solid rgba(0, 219, 231, 0.25);
-            border-radius: 16px;
-            padding: 20px;
-            position: relative;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
+        /* Scrollbar personalizado para el contenedor de tarjetas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        .credit-card-preview::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -20%;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(0,219,231,0.08) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
         }
-        .credit-card-chip {
-            width: 36px;
-            height: 26px;
-            background: linear-gradient(135deg, #e6c666, #997819);
-            border-radius: 5px;
-            border: 1px solid rgba(255,255,255,0.2);
-            position: relative;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 219, 231, 0.25);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 219, 231, 0.5);
         }
 
         @media (max-width: 767.98px) {
@@ -247,24 +234,15 @@
         <div class="bg-figma-card rounded-4 p-3 mb-4 border backdrop-blur font-jakarta" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
             <div class="row g-3 align-items-end">
                 <!-- Buscar Tarjeta -->
-                <div class="col-12 col-md-6 col-lg-6">
+                <div class="col-12 col-md-8 col-lg-9">
                     <label class="text-figma-gray fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 10px; letter-spacing: 1px;">BUSCAR TARJETA</label>
                     <div class="input-group rounded-2 overflow-hidden">
-                        <span class="input-group-text bg-figma-input border-0 text-secondary px-3"><i class="bi bi-search"></i></span>
-                        <input type="text" id="userSearchInput" class="form-control form-control-dark bg-figma-input py-2 text-figma-muted border-0 shadow-none" placeholder="Buscar por alias, tarjeta o cuenta...">
+                        <span class="input-group-text bg-figma-input border-0 text-secondary px-3"><i class="bi bi-credit-card"></i></span>
+                        <input type="text" id="userSearchInput" class="form-control form-control-dark bg-figma-input py-2 text-figma-muted border-0 shadow-none" placeholder="Alias de la tarjeta...">
                     </div>
                 </div>
-                <!-- Tipo Select -->
-                <div class="col-12 col-md-3 col-lg-3">
-                    <label class="text-figma-gray fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 10px; letter-spacing: 1px;">TIPO</label>
-                    <select id="userSelectTipo" class="form-select form-select-dark bg-figma-select py-2 border-0 text-white shadow-none">
-                        <option selected value="all">Todos los tipos</option>
-                        <option value="virtual">Virtual</option>
-                        <option value="fisica">Física</option>
-                    </select>
-                </div>
                 <!-- Estado Select -->
-                <div class="col-12 col-md-3 col-lg-3">
+                <div class="col-12 col-md-4 col-lg-3">
                     <label class="text-figma-gray fw-bold small text-uppercase mb-2 d-block tracking-wider" style="font-size: 10px; letter-spacing: 1px;">ESTADO</label>
                     <select id="userSelectEstado" class="form-select form-select-dark bg-figma-select py-2 border-0 text-white shadow-none">
                         <option selected value="all">Todos los estados</option>
@@ -278,106 +256,87 @@
         <!-- REJILLA PRINCIPAL DE CONTENIDO -->
         <div class="row g-4 font-jakarta">
 
-            <!-- COLUMNA IZQUIERDA: Grid de Tarjetas -->
+            <!-- COLUMNA IZQUIERDA: Contenedor Original con Lista de Tarjetas -->
             <div class="col-12 col-xl-8">
-                <c:choose>
-                    <c:when test="${empty listaTarjetas}">
-                        <!-- Estado Vacío -->
-                        <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 min-vh-50 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
-                            <h3 class="fw-semibold text-white mb-5 fs-5">Mis tarjetas</h3>
+                <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 min-vh-50 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
+                    <h3 class="fw-semibold text-white mb-4 fs-5">Mis tarjetas</h3>
+
+                    <c:choose>
+                        <c:when test="${empty listaTarjetas}">
+                            <!-- Estado Vacío -->
                             <div class="d-flex flex-column align-items-center justify-content-center text-center my-auto py-5">
-                                <div class="position-relative mb-4 text-secondary opacity-25">
-                                    <i class="bi bi-credit-card-2-front" style="font-size: 5.5rem;"></i>
-                                    <i class="bi bi-wallet2 position-absolute text-figma-cyan fs-4" style="bottom: 12px; right: 22px;"></i>
+                                <div class="position-relative mb-4 text-secondary opacity-50">
+                                    <i class="bi bi-wallet2 display-1"></i>
+                                    <i class="bi bi-plus-circle-fill position-absolute bottom-0 end-0 text-figma-cyan fs-3 bg-dark rounded-circle"></i>
                                 </div>
                                 <h4 class="h5 text-light fw-normal mb-2">No tienes tarjetas registradas aún.</h4>
-                                <p class="text-figma-muted small mx-auto" style="max-width: 380px;">Solicita a tu administrador la emisión de una tarjeta para tus cuentas asignadas.</p>
+                                <p class="text-figma-muted small mx-auto" style="max-width: 380px;">Dales de alta para empezar a gestionar tus gastos institucionales.</p>
                             </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="row g-3" id="cardsGridContainer">
-                            <c:forEach var="tarjeta" items="${listaTarjetas}" varStatus="status">
-                                <!-- Cálculo de números enmascarados -->
-                                <c:set var="numRaw" value="${tarjeta.numeroTarjeta}" />
-                                <c:set var="lastFour" value="${fn:length(numRaw) >= 4 ? fn:substring(numRaw, fn:length(numRaw) - 4, fn:length(numRaw)) : '0000'}" />
+                        </c:when>
+                        <c:otherwise>
+                            <div class="row g-3 overflow-y-auto custom-scrollbar pe-1" id="cardsGridContainer" style="max-height: 620px;">
+                                <c:forEach var="tarjeta" items="${listaTarjetas}" varStatus="status">
+                                    <!-- Cálculo de números enmascarados -->
+                                    <c:set var="numRaw" value="${tarjeta.numeroTarjeta}" />
+                                    <c:set var="lastFour" value="${fn:length(numRaw) >= 4 ? fn:substring(numRaw, fn:length(numRaw) - 4, fn:length(numRaw)) : '0000'}" />
 
-                                <c:set var="saldo" value="${tarjeta.saldo ne null ? tarjeta.saldo : 0}" />
-                                <c:set var="limite" value="${tarjeta.limiteAsignado ne null ? tarjeta.limiteAsignado : 0}" />
+                                    <c:set var="saldo" value="${tarjeta.saldo ne null ? tarjeta.saldo : 0}" />
+                                    <c:set var="limite" value="${tarjeta.limiteAsignado ne null ? tarjeta.limiteAsignado : 0}" />
 
-                                <div class="col-12 col-md-6 col-lg-4 card-tarjeta-item"
-                                     data-alias="${tarjeta.alias.toLowerCase()}"
-                                     data-cuenta="${tarjeta.nombreCuenta ne null ? tarjeta.nombreCuenta.toLowerCase() : ''}"
-                                     data-numero="${tarjeta.numeroTarjeta}"
-                                     data-estado="${tarjeta.activo ? 'active' : 'inactive'}"
-                                     data-tipo="${tarjeta.tipoTarjeta.toLowerCase()}">
+                                    <div class="col-12 col-md-6 col-lg-4 card-tarjeta-item"
+                                         data-alias="${tarjeta.alias.toLowerCase()}"
+                                         data-estado="${tarjeta.activo ? 'active' : 'inactive'}">
 
-                                    <div class="card-item-box ${status.first ? 'active-selected' : ''}"
-                                         onclick="selectCard(this)"
-                                         data-id="${tarjeta.idTarjeta}"
-                                         data-alias="${tarjeta.alias}"
-                                         data-numfull="${tarjeta.numeroTarjeta}"
-                                         data-nummasked="•••• •••• •••• ${lastFour}"
-                                         data-expiracion="${tarjeta.fechaExpiracion}"
-                                         data-cvv="${tarjeta.cvv}"
-                                         data-tipo="${tarjeta.tipoTarjeta}"
-                                         data-idcuenta="${tarjeta.idCuenta}"
-                                         data-nombrecuenta="${empty tarjeta.nombreCuenta ? 'Cuenta Corporativa' : tarjeta.nombreCuenta}"
-                                         data-numcuenta="${tarjeta.numeroCuenta}"
-                                         data-titular="${empty tarjeta.nombreEmpleado ? (sessionScope.usuarioLogueado ne null ? sessionScope.usuarioLogueado.nombre : 'Empleado') : tarjeta.nombreEmpleado}"
-                                         data-cargo="${empty tarjeta.nombreCargo ? 'Sin cargo' : tarjeta.nombreCargo}"
-                                         data-departamento="${empty tarjeta.nombreDepartamento ? 'General' : tarjeta.nombreDepartamento}"
-                                         data-estado="${tarjeta.activo ? 'Activa' : 'Inactiva'}"
-                                         data-isactive="${tarjeta.activo}"
-                                         data-saldo="${saldo}"
-                                         data-limite="${limite}">
+                                        <div class="account-card ${status.first ? 'active-selected' : ''}"
+                                             onclick="selectCard(this)"
+                                             data-id="${tarjeta.idTarjeta}"
+                                             data-alias="${tarjeta.alias}"
+                                             data-nummasked="CARD •••• ${lastFour}"
+                                             data-expiracion="${tarjeta.fechaExpiracion}"
+                                             data-tipo="${tarjeta.tipoTarjeta}"
+                                             data-nombrecuenta="${empty tarjeta.nombreCuenta ? 'Cuenta Corporativa' : tarjeta.nombreCuenta}"
+                                             data-titular="${empty tarjeta.nombreEmpleado ? (sessionScope.usuarioLogueado ne null ? sessionScope.usuarioLogueado.nombre : 'Empleado') : tarjeta.nombreEmpleado}"
+                                             data-estado="${tarjeta.activo ? 'Activa' : 'Inactiva'}"
+                                             data-isactive="${tarjeta.activo}"
+                                             data-saldo="${saldo}"
+                                             data-limite="${limite}">
 
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div class="icon-box-cyan">
-                                                <i class="bi bi-credit-card-2-front-fill fs-5"></i>
-                                            </div>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <span class="badge-tipo">${tarjeta.tipoTarjeta}</span>
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="icon-box-cyan">
+                                                    <i class="bi bi-credit-card-2-front-fill fs-5"></i>
+                                                </div>
                                                 <span class="${tarjeta.activo ? 'badge-activa' : 'badge-inactiva'}">
                                                     ${tarjeta.activo ? 'ACTIVA' : 'INACTIVA'}
                                                 </span>
                                             </div>
-                                        </div>
 
-                                        <h4 class="fw-semibold text-white mb-1 fs-5">${tarjeta.alias}</h4>
-                                        <div class="text-secondary small font-monospace mb-3" style="font-size: 12px;">•••• •••• •••• ${lastFour}</div>
+                                            <h4 class="fw-semibold text-white mb-1 fs-5">${tarjeta.alias}</h4>
+                                            <div class="text-secondary small font-monospace mb-3" style="font-size: 11px;">CARD •••• ${lastFour}</div>
 
-                                        <div class="mb-3">
-                                            <span class="fs-5 fw-bold text-figma-cyan">$<fmt:formatNumber value="${saldo}" pattern="#,##0.00" /></span>
-                                            <span class="small text-secondary font-monospace ms-1">MXN</span>
-                                        </div>
+                                            <div class="mb-3">
+                                                <span class="fs-4 fw-bold text-figma-cyan">$<fmt:formatNumber value="${saldo}" pattern="#,##0.00" /></span>
+                                                <span class="small text-secondary font-monospace ms-1">MXN</span>
+                                            </div>
 
-                                        <div class="text-figma-muted small d-flex justify-content-between align-items-center" style="font-size: 11px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
-                                            <span class="text-truncate me-2"><i class="bi bi-bank me-1"></i>${empty tarjeta.nombreCuenta ? 'Cuenta' : tarjeta.nombreCuenta}</span>
-                                            <span class="font-monospace">EXP ${tarjeta.fechaExpiracion}</span>
+                                            <div class="text-figma-muted small text-truncate" style="font-size: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
+                                                ${empty tarjeta.nombreCuenta ? 'Cuenta Corporativa' : tarjeta.nombreCuenta}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </c:forEach>
-                        </div>
+                                </c:forEach>
+                            </div>
 
-                        <!-- Bloque filtro sin resultados -->
-                        <div id="noUserResults" class="text-center py-5 d-none">
-                            <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
-                            <h6 class="text-muted">No se encontraron tarjetas que coincidan con la búsqueda</h6>
-                        </div>
-
-                        <!-- Paginas UI Inferior -->
-                        <div class="d-flex justify-content-center align-items-center gap-2 mt-4">
-                            <button class="btn btn-sm btn-outline-secondary rounded-circle px-2 py-1" style="width: 32px; height: 32px;"><i class="bi bi-chevron-left"></i></button>
-                            <button class="btn btn-sm btn-figma-cyan text-dark fw-bold rounded-circle" style="width: 32px; height: 32px; background: #00DBE7;">1</button>
-                            <button class="btn btn-sm btn-outline-secondary rounded-circle px-2 py-1" style="width: 32px; height: 32px;"><i class="bi bi-chevron-right"></i></button>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                            <!-- Bloque filtro sin resultados -->
+                            <div id="noUserResults" class="text-center py-5 d-none">
+                                <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
+                                <h6 class="text-muted">No se encontraron tarjetas que coincidan con la búsqueda</h6>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
 
-            <!-- COLUMNA DERECHA: Detalle Lateral (Panel de Tarjeta Seleccionada) -->
+            <!-- COLUMNA DERECHA: Detalle Lateral (Contenedor Original) -->
             <div class="col-12 col-xl-4">
                 <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
 
@@ -388,68 +347,40 @@
                         </span>
                     </div>
 
-                    <!-- Mini vista previa de la Tarjeta Corporativa (Mockup) -->
-                    <div class="credit-card-preview mb-4" id="previewCardBox">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-bold text-figma-cyan font-jakarta" style="font-size: 13px; letter-spacing: 1px;">FINTECH CORP</span>
-                            <div class="d-flex gap-1 align-items-center">
-                                <span id="previewTipoBadge" class="badge-tipo">VIRTUAL</span>
-                                <span id="previewBadge" class="badge-activa">ACTIVA</span>
+                    <!-- Mini vista previa de la tarjeta seleccionada (Estilo similar a Mis Cuentas) -->
+                    <div class="p-3 mb-4 rounded-3" style="background: #0d0f14; border: 1px solid #30363d;" id="previewCardBox">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="icon-box-cyan" style="width: 36px; height: 36px;">
+                                <i class="bi bi-credit-card-2-front-fill fs-6"></i>
                             </div>
+                            <span id="previewBadge" class="badge-activa">ACTIVA</span>
                         </div>
-
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="credit-card-chip"></div>
-                            <i class="bi bi-wifi text-secondary fs-4" style="transform: rotate(90deg);"></i>
+                        <h5 id="previewTitle" class="fw-bold text-white mb-1 fs-5">Tarjeta</h5>
+                        <div id="previewMasked" class="text-secondary small font-monospace mb-2" style="font-size: 11px;">CARD •••• 0000</div>
+                        <div class="mb-2">
+                            <span id="previewSaldo" class="fs-4 fw-bold text-figma-cyan">$0.00</span>
+                            <span class="small text-secondary font-monospace ms-1">MXN</span>
                         </div>
-
-                        <div class="mb-3">
-                            <div class="text-secondary small text-uppercase mb-1" style="font-size: 9px; letter-spacing: 1px;">Número de Tarjeta</div>
-                            <div id="previewNumMasked" class="fs-5 fw-bold text-white font-monospace" style="letter-spacing: 2px;">
-                                •••• •••• •••• 0000
-                            </div>
-                        </div>
-
-                        <div class="row g-2 align-items-end">
-                            <div class="col-6">
-                                <div class="text-secondary small text-uppercase" style="font-size: 8px; letter-spacing: 1px;">Titular</div>
-                                <div id="previewTitular" class="text-white small fw-semibold text-truncate" style="font-size: 11px;">Empleado</div>
-                            </div>
-                            <div class="col-3 text-center">
-                                <div class="text-secondary small text-uppercase" style="font-size: 8px; letter-spacing: 1px;">Vence</div>
-                                <div id="previewExp" class="text-white small font-monospace" style="font-size: 11px;">MM/YY</div>
-                            </div>
-                            <div class="col-3 text-end">
-                                <div class="text-secondary small text-uppercase" style="font-size: 8px; letter-spacing: 1px;">CVV</div>
-                                <div id="previewCvv" class="text-figma-cyan small font-monospace" style="font-size: 11px;">***</div>
-                            </div>
-                        </div>
+                        <div id="previewCuenta" class="text-figma-muted small" style="font-size: 12px;">Cuenta Corporativa</div>
                     </div>
 
-                    <!-- Botón interactivo para ver/ocultar CVV y datos confidenciales -->
-                    <div class="mb-4">
-                        <button type="button" id="btnToggleDetails" class="btn btn-sm w-100 btn-outline-info text-figma-cyan border-opacity-25 rounded-3 py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #00DBE7;" onclick="toggleCardDetailsVisibility()">
-                            <i class="bi bi-eye" id="toggleDetailsIcon"></i> <span id="toggleDetailsText">Mostrar número completo y CVV</span>
-                        </button>
-                    </div>
-
-                    <!-- Lista detallada de atributos -->
+                    <!-- Lista simplificada de atributos de la tarjeta -->
                     <div class="d-flex flex-column gap-1" id="detailsListContainer">
                         <div class="detail-row">
-                            <span class="detail-label">Alias</span>
-                            <span id="detailAlias" class="detail-value text-white">Tarjeta</span>
+                            <span class="detail-label">Número de tarjeta</span>
+                            <span id="detailNumMasked" class="detail-value font-monospace">CARD •••• 0000</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Número de Tarjeta</span>
-                            <span id="detailNumFull" class="detail-value font-monospace">•••• •••• •••• 0000</span>
+                            <span class="detail-label">Alias / Tarjeta</span>
+                            <span id="detailAlias" class="detail-value">Tarjeta</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Tipo</span>
                             <span id="detailTipo" class="detail-value">VIRTUAL</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Cuenta Asociada</span>
-                            <span id="detailCuenta" class="detail-value">Viáticos</span>
+                            <span class="detail-label">Cuenta asociada</span>
+                            <span id="detailNombreCuenta" class="detail-value">Cuenta Corporativa</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Estado</span>
@@ -460,24 +391,16 @@
                             <span id="detailTitular" class="detail-value">${sessionScope.usuarioLogueado ne null ? sessionScope.usuarioLogueado.nombre : 'Empleado'}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Cargo / Depto</span>
-                            <span id="detailCargoDepto" class="detail-value font-monospace">General</span>
+                            <span class="detail-label">Fecha de expiración</span>
+                            <span id="detailExpiracion" class="detail-value font-monospace">MM/YY</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Fecha de Expiración</span>
-                            <span id="detailExp" class="detail-value font-monospace">MM/YY</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">CVV</span>
-                            <span id="detailCvv" class="detail-value font-monospace text-figma-cyan">***</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Saldo Disponible</span>
-                            <span id="detailSaldoDispon" class="detail-value text-figma-cyan font-monospace">$0.00</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Límite Asignado</span>
+                            <span class="detail-label">Límite asignado</span>
                             <span id="detailLimite" class="detail-value font-monospace">$0.00</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Saldo disponible</span>
+                            <span id="detailSaldoDispon" class="detail-value text-figma-cyan font-monospace">$0.00</span>
                         </div>
 
                         <!-- Barra de Uso de Límite -->
@@ -505,89 +428,47 @@
 
 <!-- Script interactivo de Selección de Tarjetas y Filtrado -->
 <script>
-    let showFullDetails = false;
-    let currentSelectedCard = null;
-
     function formatMoney(amount) {
         const num = parseFloat(amount) || 0;
         return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    function formatCardNumber(num) {
-        if (!num) return '•••• •••• •••• 0000';
-        const clean = num.replace(/\s+/g, '');
-        if (clean.length === 16) {
-            return clean.match(/.{1,4}/g).join(' ');
-        }
-        return num;
-    }
-
-    function toggleCardDetailsVisibility() {
-        showFullDetails = !showFullDetails;
-        const icon = document.getElementById('toggleDetailsIcon');
-        const text = document.getElementById('toggleDetailsText');
-
-        if (showFullDetails) {
-            icon.className = 'bi bi-eye-slash';
-            text.textContent = 'Ocultar datos confidenciales';
-        } else {
-            icon.className = 'bi bi-eye';
-            text.textContent = 'Mostrar número completo y CVV';
-        }
-
-        if (currentSelectedCard) {
-            selectCard(currentSelectedCard);
-        }
-    }
-
     function selectCard(cardElement) {
-        currentSelectedCard = cardElement;
-
         // Quitar clase seleccionada de todas las tarjetas
-        document.querySelectorAll('.card-item-box').forEach(c => c.classList.remove('active-selected'));
+        document.querySelectorAll('.account-card').forEach(c => c.classList.remove('active-selected'));
         // Marcar la tarjeta actual como seleccionada
         cardElement.classList.add('active-selected');
 
         // Extraer atributos data
         const id = cardElement.getAttribute('data-id');
         const alias = cardElement.getAttribute('data-alias') || 'Tarjeta';
-        const numfull = cardElement.getAttribute('data-numfull') || '';
-        const nummasked = cardElement.getAttribute('data-nummasked') || '•••• •••• •••• 0000';
+        const nummasked = cardElement.getAttribute('data-nummasked') || 'CARD •••• 0000';
         const expiracion = cardElement.getAttribute('data-expiracion') || 'MM/YY';
-        const cvv = cardElement.getAttribute('data-cvv') || '***';
         const tipo = cardElement.getAttribute('data-tipo') || 'VIRTUAL';
         const nombrecuenta = cardElement.getAttribute('data-nombrecuenta') || 'Cuenta Corporativa';
-        const numcuenta = cardElement.getAttribute('data-numcuenta') || '';
         const titular = cardElement.getAttribute('data-titular') || '';
-        const cargo = cardElement.getAttribute('data-cargo') || '';
-        const departamento = cardElement.getAttribute('data-departamento') || '';
         const estado = cardElement.getAttribute('data-estado') || 'Activa';
         const isActive = cardElement.getAttribute('data-isactive') === 'true';
         const saldo = parseFloat(cardElement.getAttribute('data-saldo')) || 0;
         const limite = parseFloat(cardElement.getAttribute('data-limite')) || 0;
 
-        // Actualizar vista previa en el mockup de la tarjeta
+        // Actualizar vista previa en el panel derecho (similar a Mis Cuentas)
         const previewBadge = document.getElementById('previewBadge');
         if (previewBadge) {
             previewBadge.textContent = isActive ? 'ACTIVA' : 'INACTIVA';
             previewBadge.className = isActive ? 'badge-activa' : 'badge-inactiva';
         }
 
-        const previewTipoBadge = document.getElementById('previewTipoBadge');
-        if (previewTipoBadge) {
-            previewTipoBadge.textContent = tipo;
-        }
-
-        document.getElementById('previewNumMasked').textContent = showFullDetails ? formatCardNumber(numfull) : nummasked;
-        document.getElementById('previewTitular').textContent = titular;
-        document.getElementById('previewExp').textContent = expiracion;
-        document.getElementById('previewCvv').textContent = showFullDetails ? cvv : '***';
+        document.getElementById('previewTitle').textContent = alias;
+        document.getElementById('previewMasked').textContent = nummasked;
+        document.getElementById('previewSaldo').textContent = formatMoney(saldo);
+        document.getElementById('previewCuenta').textContent = nombrecuenta;
 
         // Actualizar filas detalladas
+        document.getElementById('detailNumMasked').textContent = nummasked;
         document.getElementById('detailAlias').textContent = alias;
-        document.getElementById('detailNumFull').textContent = showFullDetails ? formatCardNumber(numfull) : nummasked;
         document.getElementById('detailTipo').textContent = tipo;
-        document.getElementById('detailCuenta').textContent = nombrecuenta + (numcuenta ? ' (' + numcuenta + ')' : '');
+        document.getElementById('detailNombreCuenta').textContent = nombrecuenta;
 
         const detailEstado = document.getElementById('detailEstado');
         if (detailEstado) {
@@ -596,19 +477,9 @@
         }
 
         document.getElementById('detailTitular').textContent = titular;
-        
-        let cargoDeptoText = '';
-        if (cargo && cargo !== 'Sin cargo') cargoDeptoText += cargo;
-        if (departamento && departamento !== 'General') {
-            if (cargoDeptoText) cargoDeptoText += ' / ';
-            cargoDeptoText += departamento;
-        }
-        document.getElementById('detailCargoDepto').textContent = cargoDeptoText || 'General';
-
-        document.getElementById('detailExp').textContent = expiracion;
-        document.getElementById('detailCvv').textContent = showFullDetails ? cvv : '***';
-        document.getElementById('detailSaldoDispon').textContent = formatMoney(saldo);
+        document.getElementById('detailExpiracion').textContent = expiracion;
         document.getElementById('detailLimite').textContent = formatMoney(limite);
+        document.getElementById('detailSaldoDispon').textContent = formatMoney(saldo);
 
         // Calcular porcentaje de uso del límite (spent = limite - saldo)
         let percent = 0;
@@ -629,7 +500,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         // Seleccionar automáticamente la primera tarjeta disponible
-        const firstCard = document.querySelector('.card-item-box');
+        const firstCard = document.querySelector('.account-card');
         if (firstCard) {
             selectCard(firstCard);
         }
@@ -637,28 +508,22 @@
         // Lógica de Filtrado
         const searchInput = document.getElementById("userSearchInput");
         const selectEstado = document.getElementById("userSelectEstado");
-        const selectTipo = document.getElementById("userSelectTipo");
         const cardItems = document.querySelectorAll(".card-tarjeta-item");
         const noResults = document.getElementById("noUserResults");
 
         function filterUserCards() {
             const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
             const selectedState = selectEstado ? selectEstado.value : "all";
-            const selectedTipo = selectTipo ? selectTipo.value : "all";
             let visibleCount = 0;
 
             cardItems.forEach(item => {
                 const alias = item.getAttribute("data-alias") || "";
-                const cuenta = item.getAttribute("data-cuenta") || "";
-                const numero = item.getAttribute("data-numero") || "";
                 const estado = item.getAttribute("data-estado") || "";
-                const tipo = item.getAttribute("data-tipo") || "";
 
-                const matchesSearch = alias.includes(searchTerm) || cuenta.includes(searchTerm) || numero.includes(searchTerm);
+                const matchesSearch = alias.includes(searchTerm);
                 const matchesState = selectedState === "all" || estado === selectedState;
-                const matchesTipo = selectedTipo === "all" || tipo === selectedTipo;
 
-                if (matchesSearch && matchesState && matchesTipo) {
+                if (matchesSearch && matchesState) {
                     item.style.display = "";
                     visibleCount++;
                 } else {
@@ -677,7 +542,6 @@
 
         if (searchInput) searchInput.addEventListener("input", filterUserCards);
         if (selectEstado) selectEstado.addEventListener("change", filterUserCards);
-        if (selectTipo) selectTipo.addEventListener("change", filterUserCards);
     });
 </script>
 </body>

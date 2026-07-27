@@ -169,6 +169,22 @@
             height: 100%;
         }
 
+        /* Scrollbar personalizado para el contenedor de cuentas */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 219, 231, 0.25);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 219, 231, 0.5);
+        }
+
         @media (max-width: 767.98px) {
             .top-header { left: 0 !important; }
             main { margin-left: 0 !important; padding: 95px 20px 40px 20px !important; }
@@ -229,13 +245,14 @@
         <!-- REJILLA PRINCIPAL DE CONTENIDO -->
         <div class="row g-4 font-jakarta">
 
-            <!-- COLUMNA IZQUIERDA: Grid de Tarjetas de Cuentas -->
+            <!-- COLUMNA IZQUIERDA: Grid de Tarjetas de Cuentas dentro de Contenedor -->
             <div class="col-12 col-xl-8">
-                <c:choose>
-                    <c:when test="${empty listaCuentas}">
-                        <!-- Estado Vacío -->
-                        <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 min-vh-50 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
-                            <h3 class="fw-semibold text-white mb-5 fs-5">Mis cuentas</h3>
+                <div class="card bg-figma-card border-0 rounded-4 p-4 h-100 min-vh-50 backdrop-blur" style="border: 1px solid rgba(255, 255, 255, 0.06) !important;">
+                    <h3 class="fw-semibold text-white mb-4 fs-5">Mis cuentas</h3>
+
+                    <c:choose>
+                        <c:when test="${empty listaCuentas}">
+                            <!-- Estado Vacío -->
                             <div class="d-flex flex-column align-items-center justify-content-center text-center my-auto py-5">
                                 <div class="position-relative mb-4 text-secondary opacity-25">
                                     <i class="bi bi-folder-fill" style="font-size: 5.5rem;"></i>
@@ -244,74 +261,67 @@
                                 <h4 class="h5 text-light fw-normal mb-2">Aún no tienes cuentas asignadas.</h4>
                                 <p class="text-figma-muted small mx-auto" style="max-width: 380px;">Ponte en contacto con el administrador para que asigne tus fondos corporativos.</p>
                             </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="row g-3" id="cardsGridContainer">
-                            <c:forEach var="cta" items="${listaCuentas}" varStatus="status">
-                                <!-- Cálculo de números enmascarados e indicadores -->
-                                <c:set var="numRaw" value="${cta.numeroCuenta}" />
-                                <c:set var="lastFour" value="${fn:length(numRaw) >= 4 ? fn:substring(numRaw, fn:length(numRaw) - 4, fn:length(numRaw)) : '0000'}" />
+                        </c:when>
+                        <c:otherwise>
+                            <div class="row g-3 overflow-y-auto custom-scrollbar pe-1" id="cardsGridContainer" style="max-height: 620px;">
+                                <c:forEach var="cta" items="${listaCuentas}" varStatus="status">
+                                    <!-- Cálculo de números enmascarados e indicadores -->
+                                    <c:set var="numRaw" value="${cta.numeroCuenta}" />
+                                    <c:set var="lastFour" value="${fn:length(numRaw) >= 4 ? fn:substring(numRaw, fn:length(numRaw) - 4, fn:length(numRaw)) : '0000'}" />
 
-                                <c:set var="limite" value="${cta.limiteAsignado ne null ? cta.limiteAsignado : 0}" />
-                                <c:set var="saldo" value="${cta.saldo ne null ? cta.saldo : 0}" />
+                                    <c:set var="limite" value="${cta.limiteAsignado ne null ? cta.limiteAsignado : 0}" />
+                                    <c:set var="saldo" value="${cta.saldo ne null ? cta.saldo : 0}" />
 
-                                <div class="col-12 col-md-6 col-lg-4 account-card-item"
-                                     data-nombre="${cta.nombreCuenta.toLowerCase()}"
-                                     data-estado="${cta.activo ? 'active' : 'inactive'}">
+                                    <div class="col-12 col-md-6 col-lg-4 account-card-item"
+                                         data-nombre="${cta.nombreCuenta.toLowerCase()}"
+                                         data-estado="${cta.activo ? 'active' : 'inactive'}">
 
-                                    <div class="account-card ${status.first ? 'active-selected' : ''}"
-                                         onclick="selectAccountCard(this)"
-                                         data-id="${cta.idCuenta}"
-                                         data-numfull="${cta.numeroCuenta}"
-                                         data-nummasked="ACCT •••• ${lastFour}"
-                                         data-nombre="${cta.nombreCuenta}"
-                                         data-descripcion="${cta.descripcion}"
-                                         data-estado="${cta.activo ? 'Activa' : 'Inactiva'}"
-                                         data-isactive="${cta.activo}"
-                                         data-titular="${empty cta.nombreEmpleado ? sessionScope.usuarioLogueado.nombre : cta.nombreEmpleado}"
-                                         data-limite="${limite}"
-                                         data-saldo="${saldo}">
+                                        <div class="account-card ${status.first ? 'active-selected' : ''}"
+                                             onclick="selectAccountCard(this)"
+                                             data-id="${cta.idCuenta}"
+                                             data-numfull="${cta.numeroCuenta}"
+                                             data-nummasked="ACCT •••• ${lastFour}"
+                                             data-nombre="${cta.nombreCuenta}"
+                                             data-descripcion="${cta.descripcion}"
+                                             data-estado="${cta.activo ? 'Activa' : 'Inactiva'}"
+                                             data-isactive="${cta.activo}"
+                                             data-titular="${empty cta.nombreEmpleado ? sessionScope.usuarioLogueado.nombre : cta.nombreEmpleado}"
+                                             data-limite="${limite}"
+                                             data-saldo="${saldo}">
 
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div class="icon-box-cyan">
-                                                <i class="bi bi-person-fill fs-5"></i>
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div class="icon-box-cyan">
+                                                    <i class="bi bi-person-fill fs-5"></i>
+                                                </div>
+                                                <span class="${cta.activo ? 'badge-activa' : 'badge-inactiva'}">
+                                                        ${cta.activo ? 'ACTIVA' : 'INACTIVA'}
+                                                </span>
                                             </div>
-                                            <span class="${cta.activo ? 'badge-activa' : 'badge-inactiva'}">
-                                                    ${cta.activo ? 'ACTIVA' : 'INACTIVA'}
-                                            </span>
-                                        </div>
 
-                                        <h4 class="fw-semibold text-white mb-1 fs-5">${cta.nombreCuenta}</h4>
-                                        <div class="text-secondary small font-monospace mb-3" style="font-size: 11px;">ACCT •••• ${lastFour}</div>
+                                            <h4 class="fw-semibold text-white mb-1 fs-5">${cta.nombreCuenta}</h4>
+                                            <div class="text-secondary small font-monospace mb-3" style="font-size: 11px;">ACCT •••• ${lastFour}</div>
 
-                                        <div class="mb-3">
-                                            <span class="fs-4 fw-bold text-figma-cyan">$<fmt:formatNumber value="${saldo}" pattern="#,##0.00" /></span>
-                                            <span class="small text-secondary font-monospace ms-1">MXN</span>
-                                        </div>
+                                            <div class="mb-3">
+                                                <span class="fs-4 fw-bold text-figma-cyan">$<fmt:formatNumber value="${saldo}" pattern="#,##0.00" /></span>
+                                                <span class="small text-secondary font-monospace ms-1">MXN</span>
+                                            </div>
 
-                                        <div class="text-figma-muted small" style="font-size: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
-                                                ${cta.descripcion}
+                                            <div class="text-figma-muted small" style="font-size: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
+                                                    ${cta.descripcion}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </c:forEach>
-                        </div>
+                                </c:forEach>
+                            </div>
 
-                        <!-- Bloque filtro sin resultados -->
-                        <div id="noUserResults" class="text-center py-5 d-none">
-                            <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
-                            <h6 class="text-muted">No se encontraron cuentas que coincidan con la búsqueda</h6>
-                        </div>
-
-                        <!-- Paginas UI Inferior -->
-                        <div class="d-flex justify-content-center align-items-center gap-2 mt-4">
-                            <button class="btn btn-sm btn-outline-secondary rounded-circle px-2 py-1" style="width: 32px; height: 32px;"><i class="bi bi-chevron-left"></i></button>
-                            <button class="btn btn-sm btn-figma-cyan text-dark fw-bold rounded-circle" style="width: 32px; height: 32px; background: #00DBE7;">1</button>
-                            <button class="btn btn-sm btn-outline-secondary rounded-circle px-2 py-1" style="width: 32px; height: 32px;"><i class="bi bi-chevron-right"></i></button>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                            <!-- Bloque filtro sin resultados -->
+                            <div id="noUserResults" class="text-center py-5 d-none">
+                                <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
+                                <h6 class="text-muted">No se encontraron cuentas que coincidan con la búsqueda</h6>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
 
             <!-- COLUMNA DERECHA: Detalle Lateral (Panel de Cuenta Seleccionada) -->
@@ -333,13 +343,13 @@
                             </div>
                             <span id="previewBadge" class="badge-activa">ACTIVA</span>
                         </div>
-                        <h5 id="previewTitle" class="fw-bold text-white mb-1 fs-5">Viáticos</h5>
-                        <div id="previewMasked" class="text-secondary small font-monospace mb-2" style="font-size: 11px;">ACCT •••• 4920</div>
+                        <h5 id="previewTitle" class="fw-bold text-white mb-1 fs-5">Cuenta</h5>
+                        <div id="previewMasked" class="text-secondary small font-monospace mb-2" style="font-size: 11px;">ACCT •••• 0000</div>
                         <div class="mb-2">
-                            <span id="previewSaldo" class="fs-4 fw-bold text-figma-cyan">$1,450.00</span>
+                            <span id="previewSaldo" class="fs-4 fw-bold text-figma-cyan">$0.00</span>
                             <span class="small text-secondary font-monospace ms-1">MXN</span>
                         </div>
-                        <div id="previewDesc" class="text-figma-muted small" style="font-size: 12px;">Cuenta de gastos</div>
+                        <div id="previewDesc" class="text-figma-muted small" style="font-size: 12px;">Descripción</div>
                     </div>
 
                     <!-- Lista detallada de atributos -->
@@ -350,7 +360,7 @@
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Cuenta</span>
-                            <span id="detailNombre" class="detail-value">Viáticos</span>
+                            <span id="detailNombre" class="detail-value">Cuenta</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Estado</span>
@@ -362,21 +372,21 @@
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Límite asignado</span>
-                            <span id="detailLimite" class="detail-value font-monospace">$10,000.00</span>
+                            <span id="detailLimite" class="detail-value font-monospace">$0.00</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Saldo disponible</span>
-                            <span id="detailSaldoDispon" class="detail-value text-figma-cyan font-monospace">$8,450.00</span>
+                            <span id="detailSaldoDispon" class="detail-value text-figma-cyan font-monospace">$0.00</span>
                         </div>
 
                         <!-- Barra de Uso de Límite -->
                         <div class="pt-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="detail-label">Uso de límite</span>
-                                <span id="detailUsoPercent" class="detail-value text-figma-cyan font-monospace">15.5%</span>
+                                <span id="detailUsoPercent" class="detail-value text-figma-cyan font-monospace">0.0%</span>
                             </div>
                             <div class="progress-cyan">
-                                <div id="detailProgressBar" class="progress-bar-cyan" style="width: 15.5%;"></div>
+                                <div id="detailProgressBar" class="progress-bar-cyan" style="width: 0.0%;"></div>
                             </div>
                         </div>
                     </div>
