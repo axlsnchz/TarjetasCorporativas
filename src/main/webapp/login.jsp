@@ -1,182 +1,112 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinTech Corp - Inicio de Sesi&oacute;n</title>
-
-    <!-- Bootstrap 5 CSS LOCAL -->
-    <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons (CDN + Fallback Local) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="${pageContext.request.contextPath}/assets/icons/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        /* Estilos estructurales y tipografía base */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0C0E12;
-        }
-
-        /* Paleta de colores específicos del Figma */
-        .bg-figma-dark { background-color: #0C0E12 !important; }
-        .bg-figma-card { background-color: rgba(30, 32, 36, 0.50) !important; }
-        .bg-figma-form { background-color: #111318 !important; }
-        .bg-figma-input { background-color: #1A1C20 !important; }
-        .text-figma-cyan { color: #00DBE7 !important; }
-        .text-figma-muted { color: #B9CACB !important; }
-
-        /* Efectos Figma avanzados (No nativos en Bootstrap) */
-        .backdrop-blur {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-
-        /* Resplandores y luces ambientales traseras */
-        .bg-glow-purple {
-            position: absolute; width: 600px; height: 600px; left: 50%; top: 10%;
-            background: rgba(112, 0, 255, 0.04); filter: blur(120px); border-radius: 50%; z-index: 0;
-        }
-        .bg-glow-cyan {
-            position: absolute; width: 500px; height: 500px; left: 20%; top: 30%;
-            background: rgba(0, 242, 255, 0.04); filter: blur(120px); border-radius: 50%; z-index: 0;
-        }
-        .banner-glow-1 {
-            position: absolute; width: 300px; height: 300px; left: -100px; top: -100px;
-            background: rgba(0, 242, 255, 0.08); filter: blur(70px); border-radius: 50%;
-        }
-        .banner-glow-2 {
-            position: absolute; width: 300px; height: 300px; right: -100px; bottom: -100px;
-            background: rgba(112, 0, 255, 0.08); filter: blur(70px); border-radius: 50%;
-        }
-    </style>
+    <title>Iniciar Sesión - FinTech Corp</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
-<body class="d-flex justify-content-center align-items-center min-vh-100 p-3 p-md-4 overflow-x-hidden position-relative">
-
-<!-- Efectos de Fondo Ambientales -->
-<div class="bg-glow-purple"></div>
-<div class="bg-glow-cyan"></div>
-
-<!-- Contenedor de la Tarjeta Principal (Totalmente Bootstrap) -->
-<div class="row g-0 rounded-5 overflow-hidden w-100 position-relative backdrop-blur bg-figma-card border border-white border-opacity-10"
-     style="max-width: 1100px; box-shadow: 0px 25px 50px -12px rgba(0, 242, 255, 0.05); z-index: 1;">
-
-    <!-- COLUMNA IZQUIERDA: Branding e Info -->
-    <div class="col-lg-6 bg-figma-dark position-relative overflow-hidden d-flex flex-column justify-content-between p-5 text-center">
-        <div class="banner-glow-1"></div>
-        <div class="banner-glow-2"></div>
-
-        <div class="my-auto position-relative" style="z-index: 1;">
-            <!-- Logo Principal con Brillo Figma -->
-            <div class="rounded-3 d-flex align-items-center justify-content-center mx-auto mb-4 text-dark fs-1"
-                 style="width: 80px; height: 80px; background-color: #00DBE7; box-shadow: 0px 0px 25px rgba(0, 242, 255, 0.6);">
-                <i class="bi bi-building-columns-fill"></i>
-            </div>
-
-            <h1 class="display-5 fw-bold mb-3 text-figma-cyan">FinTech Corp</h1>
-            <p class="mx-auto mb-5 text-figma-muted style-normal" style="max-width: 380px; font-size: 0.95rem; line-height: 1.6;">
-                Administraci&oacute;n y control centralizado de fondos corporativos para equipos de trabajo.
-            </p>
+<body>
+<div class="login-page">
+    <div class="login-brand">
+        <div class="brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18"/>
+                <path d="M3 10h18"/>
+                <path d="M5 6l7-3 7 3"/>
+                <path d="M4 10v11"/>
+                <path d="M20 10v11"/>
+                <path d="M8 14v3"/>
+                <path d="M12 14v3"/>
+                <path d="M16 14v3"/>
+            </svg>
         </div>
-
-        <!-- Fila de Características (Usando Cards de Bootstrap limpias) -->
-        <div class="row g-2 position-relative w-100 mx-0 mt-4" style="z-index: 1;">
-            <div class="col-4">
-                <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
-                    <i class="bi bi-shield-lock mb-1 fs-5 d-block"></i> CONTROL
-                </div>
+        <h1>FinTech Corp</h1>
+        <p>Gestión institucional de activos con precisión de grado militar y transparencia total.</p>
+        <div class="brand-features">
+            <div class="brand-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+                <span>Seguridad</span>
             </div>
-            <div class="col-4">
-                <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
-                    <i class="bi bi-sliders mb-1 fs-5 d-block"></i> FLEXIBLE
-                </div>
+            <div class="brand-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                <span>Velocidad</span>
             </div>
-            <div class="col-4">
-                <div class="card border border-info border-opacity-25 bg-transparent text-figma-cyan rounded-3 p-3 text-center fw-bold small" style="letter-spacing: 1px; font-size: 0.75rem;">
-                    <i class="bi bi-check-circle mb-1 fs-5 d-block"></i> EFICIENCIA
-                </div>
+            <div class="brand-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <span>Global</span>
             </div>
         </div>
     </div>
+    <div class="login-form-section">
+        <h2>Bienvenido</h2>
+        <p class="subtitle">Ingrese sus credenciales para acceder a su portal institucional.</p>
 
-    <!-- COLUMNA DERECHA: Formulario de Login -->
-    <div class="col-lg-6 bg-figma-form p-4 p-sm-5 d-flex flex-column justify-content-center">
-        <div class="mx-auto w-100" style="max-width: 400px;">
-
-            <div class="mb-4">
-                <h2 class="fw-semibold mb-2 text-light" style="font-size: 1.5rem;">Bienvenido</h2>
-                <p class="text-figma-muted small" style="line-height: 1.5;">
-                    Ingrese sus credenciales para acceder a su portal de gesti&oacute;n empresarial.
-                </p>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <div>
+                    <strong>Credenciales incorrectas.</strong> Por favor, inténtalo de nuevo.
+                    Asegúrese de colocar la contraseña correcta o el usuario correcto.
+                </div>
             </div>
+        </c:if>
 
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger border-0 bg-danger bg-opacity-25 text-danger rounded-3 p-3 mb-4 small d-flex align-items-center gap-2">
-                    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
-                    <span>${error}</span>
+        <form method="post" action="${pageContext.request.contextPath}/login">
+            <div class="form-group">
+                <label class="form-label" style="text-transform:uppercase;letter-spacing:1px;font-size:0.72rem;">Correo Electrónico</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </span>
+                    <input type="email" name="email" placeholder="nombre@fintechcorp.com" required>
                 </div>
-            </c:if>
-
-            <form action="login" method="POST">
-                <!-- Input Correo Electrónico -->
-                <div class="mb-4">
-                    <label class="text-figma-muted fw-bold small mb-2 d-block" style="letter-spacing: 0.8px; font-size: 0.75rem;">CORREO ELECTR&Oacute;NICO</label>
-                    <div class="input-group rounded-2 overflow-hidden border-0 border-bottom border-2" style="border-color: #3A494B !important;">
-                        <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted"><i class="bi bi-envelope"></i></span>
-                        <input type="email" name="correo" value="${param.correo}" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="nombre@ejemplo.com" required style="font-size: 0.95rem;">
-                    </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" style="text-transform:uppercase;letter-spacing:1px;font-size:0.72rem;">
+                    Contraseña
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </span>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                    <button type="button" class="toggle-password">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
                 </div>
-
-                <!-- Input Contraseña -->
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label class="text-figma-muted fw-bold small m-0" style="letter-spacing: 0.8px; font-size: 0.75rem;">CONTRASE&Ntilde;A</label>
-                        <a href="recucontrasena.jsp" class="text-figma-cyan fw-bold text-decoration-none small" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Olvid&eacute; mi contrase&ntilde;a</a>
-                    </div>
-                    <div class="input-group rounded-2 overflow-hidden border-0 border-bottom border-2" style="border-color: #3A494B !important;">
-                        <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted"><i class="bi bi-lock"></i></span>
-                        <input type="password" id="passwordInput" name="password" class="form-control border-0 py-3 bg-figma-input text-white shadow-none" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required style="font-size: 0.95rem;">
-                        <span class="input-group-text border-0 px-3 bg-figma-input text-figma-muted" style="cursor: pointer;" onclick="togglePassword()"><i class="bi bi-eye" id="togglePasswordIcon"></i></span>
-                    </div>
-                </div>
-
-                <!-- Botón de Acción Principal Cyan -->
-                <button type="submit" class="btn btn-info rounded-pill w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 mt-4 text-dark"
-                        style="background-color: #00F2FF; border: none; box-shadow: 0px 0px 20px rgba(0, 242, 255, 0.4);">
-                    Iniciar Sesi&oacute;n <i class="bi bi-arrow-right"></i>
-                </button>
-            </form>
-
-            <script>
-                function togglePassword() {
-                    var input = document.getElementById('passwordInput');
-                    var icon = document.getElementById('togglePasswordIcon');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        icon.classList.remove('bi-eye');
-                        icon.classList.add('bi-eye-slash');
-                    } else {
-                        input.type = 'password';
-                        icon.classList.remove('bi-eye-slash');
-                        icon.classList.add('bi-eye');
-                    }
-                }
-            </script>
-
-            <div class="mt-5 pt-3 border-top border-secondary border-opacity-25"></div>
-
-        </div>
+                <a href="${pageContext.request.contextPath}/recuperar-password" style="display:block;margin-top:0.5rem;font-size:0.75rem;color:#0ff;text-decoration:none;">Olvidé mi contraseña</a>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">
+                Iniciar Sesión &rarr;
+            </button>
+        </form>
     </div>
-
 </div>
-
-<!-- Bootstrap Bundle JS LOCAL -->
-<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/app.js"></script>
 </body>
 </html>
