@@ -1,7 +1,5 @@
 package com.example.tarjetascorporativas.controller.filters;
 
-import com.example.tarjetascorporativas.model.Usuario;
-
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;

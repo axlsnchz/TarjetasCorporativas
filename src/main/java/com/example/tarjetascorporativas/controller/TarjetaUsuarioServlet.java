@@ -1,7 +1,5 @@
 package com.example.tarjetascorporativas.controller;
 
-import com.example.tarjetascorporativas.model.Tarjeta;
-import com.example.tarjetascorporativas.model.Usuario;
 import com.example.tarjetascorporativas.model.dao.TarjetaDao;
 import com.example.tarjetascorporativas.model.dao.UsuarioDao;
 

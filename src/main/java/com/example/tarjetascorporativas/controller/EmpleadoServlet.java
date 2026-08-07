@@ -1,8 +1,5 @@
 package com.example.tarjetascorporativas.controller;
 
-import com.example.tarjetascorporativas.model.Cargo;
-import com.example.tarjetascorporativas.model.Departamento;
-import com.example.tarjetascorporativas.model.Usuario;
 import com.example.tarjetascorporativas.model.dao.CargoDao;
 import com.example.tarjetascorporativas.model.dao.DepartamentoDao;
 import com.example.tarjetascorporativas.model.dao.UsuarioDao;

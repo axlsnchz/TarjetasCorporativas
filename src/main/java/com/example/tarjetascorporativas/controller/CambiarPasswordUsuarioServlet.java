@@ -1,6 +1,5 @@
 package com.example.tarjetascorporativas.controller;
 
-import com.example.tarjetascorporativas.model.Usuario;
 import com.example.tarjetascorporativas.model.dao.UsuarioDao;
 
 import jakarta.servlet.ServletException;
